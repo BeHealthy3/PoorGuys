@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct LoginView: View {
+    @EnvironmentObject var loginViewModel: LoginViewModel
+    
     var body: some View {
         VStack {
             Spacer()
@@ -28,7 +31,8 @@ struct LoginView: View {
     @ViewBuilder
     func googleLoginButton() -> some View {
         Button {
-           /* TODO : google authentication */
+            /* TODO : google authentication */
+            loginViewModel.signInWithGoogle()
         } label: {
             Text("구글로 로그인하기")
                 .font(.system(size: 18, weight: .bold))
@@ -43,7 +47,7 @@ struct LoginView: View {
     @ViewBuilder
     func appleLoginButton() -> some View {
         Button {
-           /* TODO : apple authentication*/
+            /* TODO : apple authentication*/
         } label: {
             Text("애플로 로그인하기")
                 .font(.system(size: 18, weight: .bold))
@@ -59,5 +63,6 @@ struct LoginView: View {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         LoginView()
+            .environmentObject(LoginViewModel())
     }
 }
