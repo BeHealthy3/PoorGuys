@@ -107,3 +107,6 @@ xcuserdata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/firebase,swiftpackagemanager,swift,xcode
+
+### Secret Constants ###
+PoorGuys/Utilities/Constants/SecretConstants.swift
