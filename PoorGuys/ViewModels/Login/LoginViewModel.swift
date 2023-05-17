@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseCore
 import FirebaseAuth
+import FirebaseFirestore
 import GoogleSignIn
 
 enum LoginState {
@@ -19,7 +20,7 @@ class LoginViewModel: ObservableObject {
     @Published var signInState: LoginState = .signedOut
     
     // MARK: - 로그인 / 로그아웃
-    /// 구글로 로그인
+    /// 구글로 로그인 및 firestore 유저 정보 등록
     func signInWithGoogle() {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         
@@ -55,6 +56,33 @@ class LoginViewModel: ObservableObject {
                 } else {
                     self.signInState = .signedIn
                     print("유저 로그인 완료 / uid : \(result?.user.uid ?? "")")
+                    
+                    // 구글 인증은 로그인과 회원가입 구분이 없기 때문에
+                    // firestore에 이미 있는 회원인지 확인 후, 없으면 firestore DB에 등록
+                    let db = Firestore.firestore()
+                    let docRef = db.collection("users").document((result?.user.uid)!)
+                    
+                    docRef.getDocument { document, error in
+                        if let document = document, document.exists {
+                            let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                            print("해당하는 유저 있음 : \(dataDescription)")
+                        } else {
+                            print("해당하는 유저 없음")
+                            // 유저 추가
+                            db.collection("users").document((result?.user.uid)!).setData([
+                                // 이 두가지만 사용하면 사실 firestore에 등록하지 않아도 firebase authentication에서 모두 처리 가능
+                                // 그러나 확장성 생각해서 등록하면 좋을 듯..
+                                "nickName" : "",
+                                "profileImageURL" : "",
+                            ]) { error in
+                                if let error = error {
+                                    print("유저 등록 중 오류 : \(error)")
+                                } else {
+                                    print("새로운 유저 firestore에 등록 완료")
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -77,6 +105,7 @@ class LoginViewModel: ObservableObject {
         print("유저 로그아웃 완료")
     }
     
+    /// 유저 로그인 / 로그아웃 시 호출되는 리스너 생성
     func authDidChangeListener() {
         Auth.auth().addStateDidChangeListener({ auth, user in
             if let user = user {

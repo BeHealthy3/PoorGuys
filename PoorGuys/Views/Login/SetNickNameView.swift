@@ -21,6 +21,9 @@ struct SetNickNameView: View {
                     .font(.system(size: 22, weight: .bold))
                 Spacer()
                 Button {
+                    /* TODO : 다음 버튼 탭 시 username 등록 */
+                    // 빈칸은 하지 못하게
+                    // 중복 거르기?
                     
                 } label: {
                     Text("다음")
