@@ -17,7 +17,6 @@ enum LoginState {
 
 class LoginViewModel: ObservableObject {
     @Published var signInState: LoginState = .signedOut
-    private var authListener: AuthStateDidChangeListenerHandle?
     
     // MARK: - 로그인 / 로그아웃
     /// 구글로 로그인
@@ -79,7 +78,7 @@ class LoginViewModel: ObservableObject {
     }
     
     func authDidChangeListener() {
-        authListener = Auth.auth().addStateDidChangeListener({ auth, user in
+        Auth.auth().addStateDidChangeListener({ auth, user in
             if let user = user {
                 print("In authDidChangeListener... 유저 로그인 완료 : \(user.uid)")
             } else {
