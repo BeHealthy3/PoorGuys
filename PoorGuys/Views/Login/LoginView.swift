@@ -31,7 +31,6 @@ struct LoginView: View {
     @ViewBuilder
     func googleLoginButton() -> some View {
         Button {
-            /* TODO : google authentication */
             loginViewModel.signInWithGoogle()
         } label: {
             Text("구글로 로그인하기")
