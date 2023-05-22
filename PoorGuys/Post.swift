@@ -25,13 +25,14 @@ struct Post: Identifiable, Equatable {
         let imageURL: [String]? = ["https://picsum.photos/200/300"]
         let comments: [Comment]? = nil
     
-        return Post(id: dummyID, userID: dummyUserId, nickName: nickName, profileImageURL: profileImageURL, title: title, body: body, timeStamp: timeStamp, likeCount: likeCount, commentCount: commentCount, imageURL: imageURL, comments: comments)
+        return Post(id: dummyID, userID: dummyUserId, nickName: nickName, profileImageURL: profileImageURL, isAboutMoney: true, title: title, body: body, timeStamp: timeStamp, likeCount: likeCount, commentCount: commentCount, imageURL: imageURL, comments: comments)
     }
     
     var id: String
     var userID: String
     var nickName: String
     var profileImageURL: String?
+    var isAboutMoney: Bool
     var title: String
     var body: String
     var timeStamp: Date

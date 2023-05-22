@@ -99,7 +99,6 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                 PostView(post: post)
                     .task {
                         if viewModel.thisIsTheThirdLast(post) {
-                            print("🛑")
                             await viewModel.fetchNext10Posts(after: post)
                         }
                     }
