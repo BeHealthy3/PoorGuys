@@ -9,18 +9,27 @@ import SwiftUI
 
 struct PostView: View {
 
-    let imageURL = URL(string: "https://picsum.photos/200/300")!
+//    let imageURL = URL(string: "https://picsum.photos/200/300")!
+    
+    let post: Post
 
+    init(post: Post) {
+        self.post = post
+    }
+    
     var body: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Title")
-                        .font(.title3)
-                    Text("Description")
+                    Text(post.title)
+                        .font(.title)
+                    Text(post.body)
                         .font(.subheadline)
                 }
                 Spacer()
+                
+                let imageURL = URL(string: post.imageURL?.first ?? "")
+                
                 AsyncImage(url: imageURL) { image in
                     image.resizable()
                 } placeholder: {
@@ -34,21 +43,6 @@ struct PostView: View {
 
 struct PostView_Previews: PreviewProvider {
     static var previews: some View {
-        PostView()
-    }
-}
-
-class ddfsa {
-    func dfd() -> any Equatable {
-        return 1
-    }
-    
-    func dfd1() -> some Equatable {
-        return 1
-    }
-    
-    func `do`() {
-        let dsf = dfd()
-        let afqew = dfd1()
+        PostView(post: Post.dummyPost())
     }
 }
