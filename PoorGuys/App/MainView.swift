@@ -13,20 +13,24 @@ struct MainView: View {
     
     var body: some View {
         Group {
-            // 유저가 로그인되어 있지 않으면 로그인 뷰 보이기
-            if logInViewModel.signInState == .signedOut {
+            // 유저 로그인 x 또는 유저데이터 firebase에 없음 또는 유저 닉네임 설정하지 않았으면...
+            // 로그인 뷰 보이기
+            if logInViewModel.signInState == .signedOut ||
+                logInViewModel.isUserInFirestore == false ||
+                logInViewModel.didSetNickName == false {
                 LoginView()
-                // 유저가 로그인되어 있으면?
-                /* TODO : 커뮤니티 화면을 보일 것인가, 아낌내역 화면을 보일 것인가? */
             } else {
-                // 임시로 마이페이지 보이도록 하기
-                MyPageView()
+                // 유저 로그인 및 닉네임 설정 완료했다면 메인 페이지 보이기
+                MyPageView() // 임시로 mypage 보이기
             }
         }
         .onAppear {
             // 유저가 로그인했으면 signInState 변경
             if Auth.auth().currentUser?.uid != nil {
                 logInViewModel.signInState = .signedIn
+                
+                // firestore에 유저 데이터 저장되어있는지 확인
+                logInViewModel.checkIfUserDataIsInFirestore(of: Auth.auth().currentUser!.uid)
             }
             
             // auth 상태 변경을 감지하는 리스너 추가
