@@ -21,11 +21,13 @@ struct PostView: View {
         VStack {
             
             VStack(alignment: .leading, spacing: 16) {
-                HStack() {
+                HStack(alignment: .top) {
                     
                     VStack(alignment: .leading, spacing: 9) {
                         HStack(spacing: 8) {
-                            Image("stamp")
+                            if post.isAboutMoney {
+                                Image("stamp")
+                            }
 
                             Text(post.title)
                                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
@@ -50,6 +52,7 @@ struct PostView: View {
                         }
                     }
                 }
+                .padding(EdgeInsets(top: 18, leading: 16, bottom: 16, trailing: 16))
                 HStack() {
                     HStack(spacing: 4) {
                         Text(post.nickName)
@@ -69,67 +72,13 @@ struct PostView: View {
                         }
                     }
                 }
+                .padding(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
                 .font(.system(size: 11))
                 .foregroundColor(.gray)
             }
         }
     }
 }
-
-//struct PostView: View {
-//    let post: Post
-//
-//    var body: some View {
-//        HStack(alignment: .top, spacing: 10) {
-//            Image(systemName: "circle")
-//                .resizable()
-//                .frame(width: 10, height: 10)
-//                .foregroundColor(.blue)
-//
-//            VStack(alignment: .leading, spacing: 4) {
-//                Text(post.title)
-//                    .font(.headline)
-//
-//                Text(post.content)
-//                    .lineLimit(2)
-//                    .font(.body)
-//
-//                if let image = post.image {
-//                    AsyncImage(image: image)
-//                        .frame(width: 80, height: 80)
-//                        .cornerRadius(8)
-//                }
-//            }
-//
-//            Spacer()
-//
-//            VStack(alignment: .trailing, spacing: 4) {
-//                Text(post.author)
-//                    .font(.subheadline)
-//                    .foregroundColor(.gray)
-//
-//                Text(post.timestamp, style: .relative)
-//                    .font(.caption)
-//                    .foregroundColor(.gray)
-//
-//                HStack(spacing: 4) {
-//                    Image(systemName: "hand.thumbsup")
-//                        .foregroundColor(.green)
-//                    Text("\(post.likes)")
-//                        .font(.caption)
-//                        .foregroundColor(.gray)
-//
-//                    Image(systemName: "bubble.right")
-//                        .foregroundColor(.blue)
-//                    Text("\(post.comments)")
-//                        .font(.caption)
-//                        .foregroundColor(.gray)
-//                }
-//            }
-//        }
-//        .padding(.vertical, 8)
-//    }
-//}
 
 struct PostView_Previews: PreviewProvider {
     static var previews: some View {

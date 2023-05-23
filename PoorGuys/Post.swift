@@ -20,12 +20,12 @@ struct Post: Identifiable, Equatable {
         let title = "dummyTitle\(Int.random(in: (10...90)))"
         let body = "dummyBody\(Int.random(in: (10...90)))"
         let timeStamp = Date()
-        let likeCount = 0
-        let commentCount = 0
+        let likeCount = Int.random(in: 0...10)
+        let commentCount = Int.random(in: 0...10)
         let imageURL: [String]? = ["https://picsum.photos/200/300"]
         let comments: [Comment]? = nil
     
-        return Post(id: dummyID, userID: dummyUserId, nickName: nickName, profileImageURL: profileImageURL, isAboutMoney: true, title: title, body: body, timeStamp: timeStamp, likeCount: likeCount, commentCount: commentCount, imageURL: imageURL, comments: comments)
+        return Post(id: dummyID, userID: dummyUserId, nickName: nickName, profileImageURL: profileImageURL, isAboutMoney: likeCount.isMultiple(of: 3) ? true : false, title: title, body: body, timeStamp: timeStamp, likeCount: likeCount, commentCount: commentCount, imageURL: imageURL, comments: comments)
     }
     
     var id: String
