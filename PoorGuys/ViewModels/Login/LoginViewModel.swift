@@ -16,13 +16,14 @@ enum SignInState {
     case signedOut
 }
 
-class LoginViewModel: ObservableObject {
+final class LoginViewModel: ObservableObject {
     @Published var signInState: SignInState = .signedOut // Auth 로그인 상태
     @Published var isUserInFirestore: Bool = false // 유저가 firestore에 저장되어있는지
     @Published var didSetNickName: Bool = false // firestore에 저장되어있는 유저 데이터에 닉네임 저장되어있는지
     @Published var signUpCompleted: Bool = false
     
     @Published var nickName: String = ""
+    @Published var isValidatingNickName = false
     
     // MARK: - 로그인 / 로그아웃
     /// 구글로 로그인 및 firestore 유저 정보 등록
@@ -154,40 +155,48 @@ class LoginViewModel: ObservableObject {
     /// 닉네임 유효성을 확인합니다
     /// - Parameter nickName: 유효성을 확인할 닉네임
     /// - Returns: 닉네임 유효성 확인 결과
-    func isValidNickName(_ nickName: String) -> Bool {
+    func isValidNickName(_ nickName: String) async throws -> Bool {
         // 닉네임 유효성 체크
         var isNickNameValid = false
-        let regex = try! NSRegularExpression(pattern: "^[a-zA-Z0-9가-힣]{2,14}$")
+        var regex = try! NSRegularExpression(pattern: "^[a-zA-Z0-9가-힣]{2,14}$")
         isNickNameValid = regex.firstMatch(in: nickName, range: NSRange(location: 0, length: nickName.count)) != nil
+        // 닉네임 숫자만인지 체크
+        regex = try! NSRegularExpression(pattern: "^[0-9]+$")
+        isNickNameValid = !(regex.firstMatch(in: nickName, range: NSRange(location: 0, length: nickName.count)) != nil)
         if isNickNameValid {
+            let isUnique = try await isNickNameUnique(nickName)
             // 닉네임 중복 체크
-            return isNickNameUnique(nickName)
+            if try await isUnique.value {
+                DispatchQueue.main.async {
+                    self.signUpCompleted = true
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.signUpCompleted = false
+                }
+            }
         } else {
             return false
         }
+        return signUpCompleted
     }
     
     /// 닉네임 중복을 확인합니다
     /// - Parameter nickName: 중복을 확인할 닉네임
     /// - Returns: 닉네임 중복 확인 결과
-    func isNickNameUnique(_ nickName: String) -> Bool {
-        let db = Firestore.firestore()
-        let docRef = db.collection("users").whereField("nickName", isEqualTo: nickName)
-        docRef.getDocuments { snapshot, error in
-            if let error = error {
+    private func isNickNameUnique(_ nickName: String) async throws -> Task<Bool, Error> {
+        Task {
+            let db = Firestore.firestore()
+            let docRef = db.collection("users").whereField("nickName", isEqualTo: nickName)
+            var isUnique = false
+            do {
+                let snapshot = try await docRef.getDocuments()
+                isUnique = snapshot.isEmpty
+            } catch {
                 print("닉네임 중복 확인 중 오류 : \(error)")
-            } else {
-                if let snapshot = snapshot {
-                    if snapshot.isEmpty {
-                        print("닉네임 중복 없음")
-                        self.signUpCompleted = true
-                    } else {
-                        print("닉네임 중복 있음")
-                        self.signUpCompleted = false
-                    }
-                }
+                throw error
             }
+            return isUnique
         }
-        return signUpCompleted
     }
 }

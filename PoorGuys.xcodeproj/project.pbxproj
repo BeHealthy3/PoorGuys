@@ -170,6 +170,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		601A6D582A1F95FC0066D5CD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				609D05342A12AE3D0092A8E2 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		60558D042A14BA11007581AD /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
@@ -239,11 +247,11 @@
 				6001EFDC2A13698600A9A2EF /* GoogleService-Info.plist */,
 				6001EFF52A1488E100A9A2EF /* Info.plist */,
 				606782E82A14C52100BF1E12 /* App */,
+				601A6D582A1F95FC0066D5CD /* Resources */,
 				606782EE2A14D34B00BF1E12 /* Utilities */,
 				606782F42A14D4FA00BF1E12 /* Models */,
 				6001EFE52A1390DD00A9A2EF /* ViewModels */,
 				6001EFCE2A135FF200A9A2EF /* Views */,
-				609D05342A12AE3D0092A8E2 /* Assets.xcassets */,
 				609D05362A12AE3D0092A8E2 /* Preview Content */,
 			);
 			path = PoorGuys;
