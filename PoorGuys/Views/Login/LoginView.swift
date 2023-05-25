@@ -8,8 +8,10 @@
 import SwiftUI
 import FirebaseAuth
 
+/// 유저 로그인 화면
 struct LoginView: View {
     @EnvironmentObject var loginViewModel: LoginViewModel
+    @State private var isPresentingSetNickNameView = false
     
     var body: some View {
         VStack {
@@ -25,7 +27,22 @@ struct LoginView: View {
             }
             .padding(.bottom, 40)
             .padding(.horizontal, 16)
+            
         }
+        .onChange(of: loginViewModel.signInState) { signInState in
+            if signInState == .signedIn {
+                self.isPresentingSetNickNameView = true
+            }
+        }
+        .onAppear {
+            self.isPresentingSetNickNameView = false
+            if loginViewModel.signInState == .signedIn {
+                self.isPresentingSetNickNameView = true
+            }
+        }
+        .fullScreenCover(isPresented: $isPresentingSetNickNameView, content: {
+            SetNickNameView()
+        })
     }
     
     @ViewBuilder
@@ -47,6 +64,7 @@ struct LoginView: View {
     func appleLoginButton() -> some View {
         Button {
             /* TODO : apple authentication*/
+            self.isPresentingSetNickNameView = true // 테스트 목적
         } label: {
             Text("애플로 로그인하기")
                 .font(.system(size: 18, weight: .bold))
