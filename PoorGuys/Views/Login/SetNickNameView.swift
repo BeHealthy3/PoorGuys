@@ -13,57 +13,61 @@ struct SetNickNameView: View {
     
     @State private var nickName: String = ""
     @State private var isValidNickName = false
+    @State private var isValidatingNickName = false
     @State private var isNavigationLinkActive = false
+    @FocusState private var isFocused: Bool
     
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationView {
-            ZStack {
-                VStack {
-                    Spacer()
-                        .frame(height: 200)
-                    description()
-                    Spacer()
-                    nextButton()
-                }
-                setNickName()
-                    .padding(.horizontal, 16)
-                NavigationLink(destination: SetProfileImageView(), isActive: $isNavigationLinkActive) {
-                    EmptyView()
-                }
-                .hidden()
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            loginViewModel.signOut()
-                            dismiss()
-                        } label: {
-                            Image(systemName: "xmark")
-                        }
+            VStack(spacing: 0) {
+                HStack {
+                    Button {
+                        loginViewModel.signOut()
+                        dismiss()
+                    } label: {
+                        Image("xmark")
                     }
+                    .padding(.leading, 16)
+                    .padding(.vertical, 12)
+                    Spacer()
                 }
+                description()
+                    .padding(.top, 76)
+                setNickName()
+                    .padding(.vertical, 40)
+                nextButton()
+                    .padding(.top, 24)
+                Spacer()
             }
+            NavigationLink(destination: SetProfileImageView(), isActive: $isNavigationLinkActive) {
+                EmptyView()
+            }
+            .hidden()
         }
     }
     
     @ViewBuilder
     func description() -> some View {
-        Text("거지방에 오신 걸 환영합니다!")
+        Text("어푸어푸에 오신 걸 환영합니다!\n사용하실 닉네임을 알려주세요.")
             .font(.system(size: 22, weight: .bold))
-        Text("사용하실 닉네임을 알려주세요.")
-            .font(.system(size: 22, weight: .bold))
+            .lineSpacing(8)
     }
     
     @ViewBuilder
     func setNickName() -> some View {
-        TextField("닉네임", text: $nickName)
+        VStack {
+            TextField("", text: $nickName,
+                      prompt: Text("닉네임을 입력해 주세요")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(Color("neutral_500")))
             .font(.system(size: 16, weight: .semibold))
-            .padding(.vertical)
-            .padding(.horizontal)
+            .padding(.vertical, 16)
+            .padding(.horizontal, 16)
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color("neutral_050"))
             }
             .onReceive(Just(nickName)) { _ in
                 // 최대 닉네임 글자 수 까지만 입력 가능
@@ -72,9 +76,23 @@ struct SetNickNameView: View {
                 }
             }
             .onDebouncedChange(of: $nickName, debounceFor: 1) { nickName in
-                isValidNickName = loginViewModel.isValidNickName(nickName)
-                print(isValidNickName)
+                // 사용자 입력 1초 후 닉네임 유효성 검증
+                Task {
+                    isValidatingNickName = true
+                    isValidNickName = try await loginViewModel.isValidNickName(nickName)
+                    print(isValidNickName)
+                    isValidatingNickName = false
+                }
             }
+            HStack {
+                Text("한글, 영어, 숫자 이용하여 8글자 이내, 숫자만은 불가능")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(Color("neutral_600"))
+                    .padding(.leading, 32)
+                Spacer()
+            }
+        }
+        .padding(.horizontal, 16)
     }
     
     @ViewBuilder
@@ -83,23 +101,32 @@ struct SetNickNameView: View {
             /* TODO : 다음 버튼 탭 시 username 등록 */
             // 빈칸은 하지 못하게
             // 중복 거르기?
-            if loginViewModel.isValidNickName(nickName) {
-            } else {
-                
-            }
             self.isNavigationLinkActive = true
             loginViewModel.didSetNickName = true
         } label: {
-            Text("다음")
-                .font(.system(size: 18, weight: .bold))
-                .foregroundColor(.white)
-                .padding(.vertical)
-                .frame(maxWidth: .infinity)
-                .background {
-                    RoundedRectangle(cornerRadius: 12)
-                        .foregroundColor(.blue)
-                }
-                .padding(.horizontal, 16)
+            if isValidNickName {
+                Text("다음")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(Color("title.loginButtons"))
+                    .padding(.vertical)
+                    .frame(maxWidth: .infinity)
+                    .background {
+                        RoundedRectangle(cornerRadius: 12)
+                            .foregroundColor(Color("primary_500"))
+                    }
+                    .padding(.horizontal, 16)
+            } else {
+                Text("다음")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(Color("title.loginButtons"))
+                    .padding(.vertical)
+                    .frame(maxWidth: .infinity)
+                    .background {
+                        RoundedRectangle(cornerRadius: 12)
+                            .foregroundColor(Color("primary_100"))
+                    }
+                    .padding(.horizontal, 16)
+            }
         }
         .padding(.bottom, 40)
     }
