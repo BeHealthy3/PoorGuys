@@ -69,54 +69,53 @@ class MockCommunityViewModel: CommunityPostsManagable {
 struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     
     @StateObject private var viewModel: ViewModel
-    @State private var hasAppeared = false
     
     init(viewModel: ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Button(action: {
-                    
-                }, label: {
-                    Image("edit")
-                        .imageScale(.large)
-                        .foregroundColor(.accentColor)
-                })
-                Button(action: {
-                    
-                }, label: {
-                    Image("profile")
-                        .imageScale(.large)
-                        .foregroundColor(.accentColor)
-                })
-            }
+        
+        NavigationView {
             
-            if #available(iOS 16.0, *) {
-                List(viewModel.posts, id: \.id) { post in
-                    PostView(post: post)
-                        .task {
-                            if viewModel.thisIsTheThirdLast(post) {
-                                await viewModel.fetchNext10Posts(after: post)
-                            }
-                        }
-                        .listRowInsets(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-                        .listRowSeparator(.hidden)
-                        .background(Color.white)
-                        .cornerRadius(12)
-                        .shadow(color: post.isAboutMoney ? Color("primary500").opacity(0.1) : Color.black.opacity(0.1), radius: 5, x: 0, y: 0)
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        
+                    }, label: {
+                        Image("edit")
+                            .imageScale(.large)
+                            .foregroundColor(.accentColor)
+                    })
+                    Button(action: {
+                        
+                    }, label: {
+                        Image("profile")
+                            .imageScale(.large)
+                            .foregroundColor(.accentColor)
+                    })
                 }
-                .padding(EdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16))
-                .listStyle(.plain)
-                .scrollIndicators(.hidden)
-            } else {
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack {
                         ForEach(viewModel.posts, id: \.id) { post in
-                            PostView(post: post)
+                            if post.isWeirdPost {
+                                PostView(post: post)
+                                    .task {
+                                        if viewModel.thisIsTheThirdLast(post) {
+                                            await viewModel.fetchNext10Posts(after: post)
+                                        }
+                                    }
+                                    .padding(5)
+                                    .background(Color.white)
+                                    .cornerRadius(12)
+                                    .shadow(color: post.isAboutMoney ? Color("primary500").opacity(0.1) : Color.black.opacity(0.1
+                                                                                                                             ), radius: 7, x: 0, y: 0)
+                                    .buttonStyle(.automatic)
+                            } else {
+                                NavigationLink(destination: PostDetailView(post: post), label: {
+                                    PostView(post: post)
+                                })
                                 .task {
                                     if viewModel.thisIsTheThirdLast(post) {
                                         await viewModel.fetchNext10Posts(after: post)
@@ -125,16 +124,18 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                                 .padding(5)
                                 .background(Color.white)
                                 .cornerRadius(12)
-                                .shadow(color: post.isAboutMoney ? Color("primary500").opacity(0.1) : Color.black.opacity(0.1), radius: 5, x: 0, y: 0)
+                                .shadow(color: post.isAboutMoney ? Color("primary500").opacity(0.2) : Color.black.opacity(0.2), radius: 7, x: 0, y: 0)
+                                .buttonStyle(.automatic)
+                            }
                         }
                     }
                     .padding(EdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16))
                 }
             }
-        }
-        .onAppear {
-            Task {
-                await viewModel.fetch20Posts()
+            .onAppear {
+                Task {
+                    await viewModel.fetch20Posts()
+                }
             }
         }
     }
@@ -147,25 +148,17 @@ struct CommunityView_Previews: PreviewProvider {
     }
 }
 
-extension CALayer {
-    func applySketchShadow(
-        color: UIColor,
-        alpha: Float,
-        x: CGFloat,
-        y: CGFloat,
-        blur: CGFloat,
-        spread: CGFloat
-    ) {
-        masksToBounds = false
-        shadowColor = color.cgColor
-        shadowOpacity = alpha
-        shadowOffset = CGSize(width: x, height: y)
-        shadowRadius = blur / UIScreen.main.scale
-        if spread == 0 {
-            shadowPath = nil
-        } else {
-            let rect = bounds.insetBy(dx: -spread, dy: -spread)
-            shadowPath = UIBezierPath(rect: rect).cgPath
-        }
+struct EmptyView: View {
+    var body: some View {
+        Text("")
+            .buttonStyle(PlainButtonStyle())
+    }
+}
+
+
+struct ListSelectionStyle: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .background(configuration.isPressed ? Color.gray : Color.clear)
     }
 }
