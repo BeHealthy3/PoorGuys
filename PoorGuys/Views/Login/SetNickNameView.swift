@@ -31,6 +31,7 @@ struct SetNickNameView: View {
                         // 빈칸은 하지 못하게
                         // 중복 거르기?
                         self.isNavigationLinkActive = true
+                        loginViewModel.didSetNickName = true
                     } label: {
                         Text("다음")
                             .font(.system(size: 18, weight: .bold))

@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct SignUpCompletedView: View {
+    @EnvironmentObject var loginViewModel: LoginViewModel
+    
     var body: some View {
+        /* 디졸브로 사라짐 */
         VStack {
             Spacer()
             Text("가입이 완료되었습니다!")
@@ -23,8 +26,7 @@ struct SignUpCompletedView: View {
     func toMainViewButton() -> some View {
         Button {
             /* TODO : 첫 로그인 완료 */
-            /* 디졸브로 사라짐 */
-            
+            loginViewModel.signUpCompleted = true
         } label: {
             Text("완료")
                 .font(.system(size: 18, weight: .bold))

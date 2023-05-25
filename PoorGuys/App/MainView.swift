@@ -16,8 +16,9 @@ struct MainView: View {
             // 유저 로그인 x 또는 유저데이터 firebase에 없음 또는 유저 닉네임 설정하지 않았으면...
             // 로그인 뷰 보이기
             if logInViewModel.signInState == .signedOut ||
-                logInViewModel.isUserInFirestore == false ||
-                logInViewModel.didSetNickName == false {
+                !logInViewModel.isUserInFirestore ||
+                !logInViewModel.didSetNickName ||
+                !logInViewModel.signUpCompleted {
                 LoginView()
             } else {
                 // 유저 로그인 및 닉네임 설정 완료했다면 메인 페이지 보이기

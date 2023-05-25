@@ -20,6 +20,7 @@ class LoginViewModel: ObservableObject {
     @Published var signInState: SignInState = .signedOut // Auth 로그인 상태
     @Published var isUserInFirestore: Bool = false // 유저가 firestore에 저장되어있는지
     @Published var didSetNickName: Bool = false // firestore에 저장되어있는 유저 데이터에 닉네임 저장되어있는지
+    @Published var signUpCompleted: Bool = false
     
     // MARK: - 로그인 / 로그아웃
     /// 구글로 로그인 및 firestore 유저 정보 등록
@@ -83,6 +84,10 @@ class LoginViewModel: ObservableObject {
             print("Error signing out: %@", signOutError)
         }
         
+        isUserInFirestore = false
+        didSetNickName = false
+        signUpCompleted = false
+        
         self.signInState = .signedOut
         print("유저 로그아웃 완료")
     }
@@ -121,6 +126,7 @@ class LoginViewModel: ObservableObject {
                     }
                     else {
                         self.didSetNickName = true
+                        self.signUpCompleted = true
                     }
                 }
             } else {
