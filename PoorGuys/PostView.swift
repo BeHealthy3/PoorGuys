@@ -36,14 +36,14 @@ struct PostView: View {
                                     Text(post.title)
                                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                         .font(.system(size: 14, weight: .bold))
-                                        .foregroundColor(Color.black)
+                                        .foregroundColor(.appColor(.neutral900))
                                         
                                 }
                                 Text(post.body)
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                     .lineLimit(2)
                                     .font(.system(size: 12))
-                                    .foregroundColor(Color.black)
+                                    .foregroundColor(.appColor(.neutral800))
                             }
                             
                             if let strImageURL = post.imageURL?.first, strImageURL != "", let imageURL = URL(string: strImageURL) {
@@ -71,13 +71,13 @@ struct PostView: View {
                                 HStack(spacing: 2) {
                                     Image("comments")
                                     Text(String(post.commentCount))
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(.appColor(.secondary))
                                 }
                                 
                                 HStack(spacing: 2) {
                                     Image("thumbsUp")
                                     Text(String(post.likeCount))
-                                        .foregroundColor(.appColor(.primary))
+                                        .foregroundColor(.appColor(.primary300))
                                 }
                             }
                         }
