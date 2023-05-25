@@ -23,6 +23,8 @@ struct SignUpCompletedView: View {
     func toMainViewButton() -> some View {
         Button {
             /* TODO : 첫 로그인 완료 */
+            /* 디졸브로 사라짐 */
+            
         } label: {
             Text("완료")
                 .font(.system(size: 18, weight: .bold))

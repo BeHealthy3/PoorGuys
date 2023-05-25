@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SetProfileImageView: View {
+    @State private var isNavigationLinkActive = false
+    
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
@@ -26,6 +28,10 @@ struct SetProfileImageView: View {
                 completeButton()
             }
             .padding(.bottom, 40)
+            NavigationLink(destination: SignUpCompletedView(), isActive: $isNavigationLinkActive) {
+                EmptyView()
+            }
+            .hidden()
         }
     }
     
@@ -33,6 +39,7 @@ struct SetProfileImageView: View {
     func skipButton() -> some View {
         Button {
             /* TODO : 프로필 사진 업로드 건너뛰기 */
+            self.isNavigationLinkActive = true
         } label: {
             Text("건너뛰기")
                 .font(.system(size: 18, weight: .bold))
@@ -51,6 +58,7 @@ struct SetProfileImageView: View {
     func completeButton() -> some View {
         Button {
             /* TODO : 첫 로그인 완료 */
+            self.isNavigationLinkActive = true
         } label: {
             Text("완료")
                 .font(.system(size: 18, weight: .bold))
