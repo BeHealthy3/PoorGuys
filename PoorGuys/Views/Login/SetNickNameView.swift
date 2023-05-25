@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import Combine
 
 struct SetNickNameView: View {
     @EnvironmentObject var loginViewModel: LoginViewModel
     
     @State private var nickName: String = ""
+    @State private var isValidNickName = false
     @State private var isNavigationLinkActive = false
     
     @Environment(\.dismiss) private var dismiss
@@ -21,30 +23,9 @@ struct SetNickNameView: View {
                 VStack {
                     Spacer()
                         .frame(height: 200)
-                    Text("거지방에 오신 걸 환영합니다!")
-                        .font(.system(size: 22, weight: .bold))
-                    Text("사용하실 닉네임을 알려주세요.")
-                        .font(.system(size: 22, weight: .bold))
+                    description()
                     Spacer()
-                    Button {
-                        /* TODO : 다음 버튼 탭 시 username 등록 */
-                        // 빈칸은 하지 못하게
-                        // 중복 거르기?
-                        self.isNavigationLinkActive = true
-                        loginViewModel.didSetNickName = true
-                    } label: {
-                        Text("다음")
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(.white)
-                            .padding(.vertical)
-                            .frame(maxWidth: .infinity)
-                            .background {
-                                RoundedRectangle(cornerRadius: 12)
-                                    .foregroundColor(.blue)
-                            }
-                            .padding(.horizontal, 16)
-                    }
-                    .padding(.bottom, 40)
+                    nextButton()
                 }
                 setNickName()
                     .padding(.horizontal, 16)
@@ -67,15 +48,60 @@ struct SetNickNameView: View {
     }
     
     @ViewBuilder
+    func description() -> some View {
+        Text("거지방에 오신 걸 환영합니다!")
+            .font(.system(size: 22, weight: .bold))
+        Text("사용하실 닉네임을 알려주세요.")
+            .font(.system(size: 22, weight: .bold))
+    }
+    
+    @ViewBuilder
     func setNickName() -> some View {
         TextField("닉네임", text: $nickName)
             .font(.system(size: 16, weight: .semibold))
             .padding(.vertical)
             .padding(.horizontal)
-            .background{
+            .background {
                 RoundedRectangle(cornerRadius: 12)
                     .foregroundColor(.gray)
             }
+            .onReceive(Just(nickName)) { _ in
+                // 최대 닉네임 글자 수 까지만 입력 가능
+                if nickName.count > Constants.maxNickNameLength {
+                    nickName = String(nickName.prefix(Constants.maxNickNameLength))
+                }
+            }
+            .onDebouncedChange(of: $nickName, debounceFor: 1) { nickName in
+                isValidNickName = loginViewModel.isValidNickName(nickName)
+                print(isValidNickName)
+            }
+    }
+    
+    @ViewBuilder
+    func nextButton() -> some View {
+        Button {
+            /* TODO : 다음 버튼 탭 시 username 등록 */
+            // 빈칸은 하지 못하게
+            // 중복 거르기?
+            if loginViewModel.isValidNickName(nickName) {
+            } else {
+                
+            }
+            self.isNavigationLinkActive = true
+            loginViewModel.didSetNickName = true
+        } label: {
+            Text("다음")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundColor(.white)
+                .padding(.vertical)
+                .frame(maxWidth: .infinity)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .foregroundColor(.blue)
+                }
+                .padding(.horizontal, 16)
+        }
+        .padding(.bottom, 40)
     }
 }
 
