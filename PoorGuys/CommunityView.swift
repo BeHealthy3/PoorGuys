@@ -69,6 +69,7 @@ class MockCommunityViewModel: CommunityPostsManagable {
 struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     
     @StateObject private var viewModel: ViewModel
+    @State private var isViewDidLoad: Bool = false
     
     init(viewModel: ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -109,8 +110,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                                     .padding(5)
                                     .background(Color.white)
                                     .cornerRadius(12)
-                                    .shadow(color: post.isAboutMoney ? Color("primary500").opacity(0.1) : Color.black.opacity(0.1
-                                                                                                                             ), radius: 7, x: 0, y: 0)
+                                    .shadow(color: post.isAboutMoney ? .appColor(.primary).opacity(0.1) : .black.opacity(0.1), radius: 7, x: 0, y: 0)
                                     .buttonStyle(.automatic)
                             } else {
                                 NavigationLink(destination: PostDetailView(post: post), label: {
@@ -124,7 +124,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                                 .padding(5)
                                 .background(Color.white)
                                 .cornerRadius(12)
-                                .shadow(color: post.isAboutMoney ? Color("primary500").opacity(0.2) : Color.black.opacity(0.2), radius: 7, x: 0, y: 0)
+                                .shadow(color: post.isAboutMoney ? .appColor(.primary).opacity(0.2) : .black.opacity(0.2), radius: 7, x: 0, y: 0)
                                 .buttonStyle(.automatic)
                             }
                         }
@@ -133,8 +133,11 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                 }
             }
             .onAppear {
-                Task {
-                    await viewModel.fetch20Posts()
+                if !isViewDidLoad {
+                    Task {
+                        await viewModel.fetch20Posts()
+                        isViewDidLoad = true
+                    }
                 }
             }
         }
