@@ -20,12 +20,14 @@ struct PostView: View {
             if post.isWeirdPost {
                 Color.white
                 Text("신고에 의해 관리자가 가린 게시글 입니다.")
-                    .foregroundColor(.black)
-                    .frame(idealHeight: 126)
+                    .foregroundColor(.appColor(.neutral600))
+                    .font(.system(size: 14, weight: .bold))
+                    .position(x: 125, y: 22)
+                    .frame(height: 78)
             } else {
                 VStack {
                     VStack(alignment: .leading, spacing: 16) {
-                        HStack(alignment: .top) {
+                        HStack(alignment: .top, spacing: 20) {
                             
                             VStack(alignment: .leading, spacing: 9) {
                                 HStack(spacing: 8) {
@@ -35,6 +37,7 @@ struct PostView: View {
 
                                     Text(post.title)
                                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                        .lineLimit(1)
                                         .font(.system(size: 14, weight: .bold))
                                         .foregroundColor(.appColor(.neutral900))
                                         

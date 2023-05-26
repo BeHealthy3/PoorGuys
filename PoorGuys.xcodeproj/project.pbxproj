@@ -42,12 +42,16 @@
 		D39AAE452A19F7D5003F9A85 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE442A19F7D5003F9A85 /* PostManager.swift */; };
 		D39AAE462A19F7D5003F9A85 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE442A19F7D5003F9A85 /* PostManager.swift */; };
 		D39AAE472A19F7D5003F9A85 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE442A19F7D5003F9A85 /* PostManager.swift */; };
+		D3AA15072A209DE60091DC61 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15062A209DE60091DC61 /* DateFormatter.swift */; };
+		D3AA15092A20AD040091DC61 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15082A20AD040091DC61 /* Shape.swift */; };
 		D3D310782A13D4D900085887 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310772A13D4D900085887 /* CommunityView.swift */; };
 		D3D3107A2A13D4EE00085887 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310792A13D4EE00085887 /* PostView.swift */; };
 		D3F3DF9C2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
 		D3F3DF9D2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
 		D3F3DF9E2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
 		D3F8B5BC2A1F6D9000A4D440 /* AppColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8B5BB2A1F6D9000A4D440 /* AppColor.swift */; };
+		D3F8B5C02A1FBD2C00A4D440 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8B5BF2A1FBD2C00A4D440 /* BackButton.swift */; };
+		D3F8B5C22A1FCED100A4D440 /* PostDetailUpperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8B5C12A1FCED100A4D440 /* PostDetailUpperView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,10 +88,14 @@
 		D39AAE3C2A18F29F003F9A85 /* Reply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reply.swift; sourceTree = "<group>"; };
 		D39AAE402A18F746003F9A85 /* PostManagable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManagable.swift; sourceTree = "<group>"; };
 		D39AAE442A19F7D5003F9A85 /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
+		D3AA15062A209DE60091DC61 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		D3AA15082A20AD040091DC61 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		D3D310772A13D4D900085887 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
 		D3D310792A13D4EE00085887 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D3F8B5BB2A1F6D9000A4D440 /* AppColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColor.swift; sourceTree = "<group>"; };
+		D3F8B5BF2A1FBD2C00A4D440 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
+		D3F8B5C12A1FCED100A4D440 /* PostDetailUpperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailUpperView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,8 +166,12 @@
 				D3F8B5BB2A1F6D9000A4D440 /* AppColor.swift */,
 				609D05322A12AE3C0092A8E2 /* ContentView.swift */,
 				D3D310792A13D4EE00085887 /* PostView.swift */,
+				D3F8B5BF2A1FBD2C00A4D440 /* BackButton.swift */,
+				D3AA15082A20AD040091DC61 /* Shape.swift */,
 				D3D310772A13D4D900085887 /* CommunityView.swift */,
 				D34868B02A1E49ED0035FB2A /* PostDetailView.swift */,
+				D3F8B5C12A1FCED100A4D440 /* PostDetailUpperView.swift */,
+				D3AA15062A209DE60091DC61 /* DateFormatter.swift */,
 				609D05342A12AE3D0092A8E2 /* Assets.xcassets */,
 				609D05362A12AE3D0092A8E2 /* Preview Content */,
 			);
@@ -370,7 +382,11 @@
 				D39AAE412A18F746003F9A85 /* PostManagable.swift in Sources */,
 				D3D3107A2A13D4EE00085887 /* PostView.swift in Sources */,
 				D3D310782A13D4D900085887 /* CommunityView.swift in Sources */,
+				D3F8B5C02A1FBD2C00A4D440 /* BackButton.swift in Sources */,
 				D39AAE452A19F7D5003F9A85 /* PostManager.swift in Sources */,
+				D3AA15092A20AD040091DC61 /* Shape.swift in Sources */,
+				D3AA15072A209DE60091DC61 /* DateFormatter.swift in Sources */,
+				D3F8B5C22A1FCED100A4D440 /* PostDetailUpperView.swift in Sources */,
 				D3F8B5BC2A1F6D9000A4D440 /* AppColor.swift in Sources */,
 				D39AAE3D2A18F29F003F9A85 /* Reply.swift in Sources */,
 			);

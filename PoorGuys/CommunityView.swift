@@ -96,7 +96,9 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                             .imageScale(.large)
                             .foregroundColor(.accentColor)
                     })
+                    .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 16))
                 }
+                
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack {
                         ForEach(viewModel.posts, id: \.id) { post in
@@ -110,9 +112,9 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                                     .padding(5)
                                     .background(Color.white)
                                     .cornerRadius(12)
-                                    .shadow(color: post.isAboutMoney ? Color.appColor(.primary500).opacity(0.1) : Color.black.opacity(0.1
-                                                                                                                             ), radius: 7, x: 0, y: 0)
-                                    .buttonStyle(.automatic)
+                                    .shadow(color: post.isAboutMoney && !post.isWeirdPost ?
+                                            Color.appColor(.primary500).opacity(0.1) : Color.black.opacity(0.1), radius: 7, x: 0, y: 0)
+//                                    .buttonStyle(.automatic)
                             } else {
                                 NavigationLink(destination: PostDetailView(post: post), label: {
                                     PostView(post: post)
@@ -125,7 +127,8 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                                 .padding(5)
                                 .background(Color.white)
                                 .cornerRadius(12)
-                                .shadow(color: post.isAboutMoney ? Color("primary500").opacity(0.2) : Color.black.opacity(0.2), radius: 7, x: 0, y: 0)
+                                .shadow(color: post.isAboutMoney ?
+                                        Color("primary500").opacity(0.1) : Color.black.opacity(0.1), radius: 7, x: 0, y: 0)
                                 .buttonStyle(.automatic)
                             }
                         }
