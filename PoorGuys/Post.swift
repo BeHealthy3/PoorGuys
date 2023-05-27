@@ -27,7 +27,7 @@ struct Post: Identifiable, Equatable {
         let isAboutMoney = likeCount.isMultiple(of: 3) ? true : false
         let isWeirdPost = likeCount.isMultiple(of: 7) ? true : false
     
-        return Post(id: dummyID, userID: dummyUserId, nickName: nickName, profileImageURL: profileImageURL, isAboutMoney: isAboutMoney, title: title, body: body, timeStamp: timeStamp, likeCount: likeCount, commentCount: commentCount, isWeirdPost: isWeirdPost, imageURL: imageURL, comments: likeCount.isMultiple(of: 2) ? Comment.multipleDummies(number: 10) : nil)
+        return Post(id: dummyID, userID: dummyUserId, nickName: nickName, profileImageURL: profileImageURL, isAboutMoney: isAboutMoney, title: title, body: body, timeStamp: timeStamp, likeCount: likeCount, commentCount: commentCount, isWeirdPost: isWeirdPost, imageURL: imageURL, comments: likeCount.isMultiple(of: 1) ? Comment.multipleDummies(number: 10) : nil)
     }
     
     static func multipleDummies(number: Int) -> [Post] {

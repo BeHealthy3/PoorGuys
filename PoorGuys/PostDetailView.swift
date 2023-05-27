@@ -27,8 +27,9 @@ struct PostDetailView: View {
         VStack {
             if let post = post {
                 ScrollView(.vertical, showsIndicators: false) {
-                    PostDetailUpperView(post: post)
-                        .overlay(
+                    VStack {
+                        PostDetailUpperView(post: post)
+                            .overlay(
                                 RoundedRectangle(cornerRadius: 10)
                                     .strokeShadow(
                                         color: post.isAboutMoney && !post.isWeirdPost ?
@@ -38,7 +39,22 @@ struct PostDetailView: View {
                                         y: 0
                                     )
                             )
+                    }
+                    
+                    if let comments = post.comments {
+                        LazyVStack {
+                            ForEach(comments) { comment in
+                                CommentView(comment: comment)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Rectangle()
+                                    .frame(height: 1)
+                                    .foregroundColor(.appColor(.neutral100))
+                            }
+                        
+                        }
+                    }
                 }
+                
                 PostDetailLowerView(post: post)
             } else {
                 ProgressView()

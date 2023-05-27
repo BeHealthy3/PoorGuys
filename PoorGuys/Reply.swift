@@ -8,10 +8,10 @@
 import Foundation
 import LoremSwiftum
 
-struct Reply {
+struct Reply: Identifiable {
     
     static func dummy() -> Reply {
-        let id: String = "dummyID\(String.randomString(length: 10))"
+        let id: String = "\(UUID())"
         let nickName: String = Lorem.word
         let profileImageURL: String? = "https://picsum.photos/200/300"
         let userID: String = "dummyUserID\(String.randomString(length: 10))"
