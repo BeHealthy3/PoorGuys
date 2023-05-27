@@ -6,26 +6,38 @@
 //
 
 import Foundation
+import LoremSwiftum
 
 struct Post: Identifiable, Equatable {
     static func == (lhs: Post, rhs: Post) -> Bool {
         lhs.id == rhs.id
     }
     
-    static func dummyPost() -> Post {
+    static func dummy() -> Post {
         let dummyID = "\(UUID())"
-        let dummyUserId = "dummyUserId"
-        let nickName = "dummyNickname\(Int.random(in: (10...90)))"
+        let dummyUserId = "dummyID\(String.randomString(length: 8))"
+        let nickName = "dummyNickname\(String.randomString(length: 8))"
         let profileImageURL: String? = "https://picsum.photos/200/300"
-        let title = "dummyTitle\(Int.random(in: (10...90)))"
-        let body = "dummyBody\(Int.random(in: (10...90)))"
-        let timeStamp = Date()
         let likeCount = Int.random(in: 0...10)
         let commentCount = Int.random(in: 0...10)
+        let title = Lorem.sentence
+        let body = likeCount.isMultiple(of: 5) ? Lorem.paragraph : Lorem.sentence
+        let timeStamp = Date()
         let imageURL: [String]? = ["https://picsum.photos/200/300"]
-        let comments: [Comment]? = nil
+        let isAboutMoney = likeCount.isMultiple(of: 3) ? true : false
+        let isWeirdPost = likeCount.isMultiple(of: 7) ? true : false
     
-        return Post(id: dummyID, userID: dummyUserId, nickName: nickName, profileImageURL: profileImageURL, isAboutMoney: likeCount.isMultiple(of: 3) ? true : false, title: title, body: body, timeStamp: timeStamp, likeCount: likeCount, commentCount: commentCount, isWeirdPost: likeCount.isMultiple(of: 7) ? true : false, imageURL: imageURL, comments: comments)
+        return Post(id: dummyID, userID: dummyUserId, nickName: nickName, profileImageURL: profileImageURL, isAboutMoney: isAboutMoney, title: title, body: body, timeStamp: timeStamp, likeCount: likeCount, commentCount: commentCount, isWeirdPost: isWeirdPost, imageURL: imageURL, comments: likeCount.isMultiple(of: 2) ? Comment.multipleDummies(number: 10) : nil)
+    }
+    
+    static func multipleDummies(number: Int) -> [Post] {
+        var posts = [Post]()
+        
+        for _ in (1...number) {
+            posts.append(Post.dummy())
+        }
+        
+        return posts
     }
     
     var id: String

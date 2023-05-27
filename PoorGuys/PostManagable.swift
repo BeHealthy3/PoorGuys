@@ -13,4 +13,5 @@ protocol PostManagable {
     func fetch20Posts() async throws -> [Post]
     func fetchNext10Posts(from: Post) async throws -> [Post]
     func fetchPrevious10Posts(from: Post) async throws -> [Post]
+    func fetchPost(postID: String) async throws -> Post
 }

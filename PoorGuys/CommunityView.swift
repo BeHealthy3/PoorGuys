@@ -114,9 +114,8 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                                     .cornerRadius(12)
                                     .shadow(color: post.isAboutMoney && !post.isWeirdPost ?
                                             Color.appColor(.primary500).opacity(0.1) : Color.black.opacity(0.1), radius: 7, x: 0, y: 0)
-//                                    .buttonStyle(.automatic)
                             } else {
-                                NavigationLink(destination: PostDetailView(post: post), label: {
+                                NavigationLink(destination: PostDetailView(postID: post.id), label: {
                                     PostView(post: post)
                                 })
                                 .task {
@@ -129,7 +128,6 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                                 .cornerRadius(12)
                                 .shadow(color: post.isAboutMoney ?
                                         Color("primary500").opacity(0.1) : Color.black.opacity(0.1), radius: 7, x: 0, y: 0)
-                                .buttonStyle(.automatic)
                             }
                         }
                     }

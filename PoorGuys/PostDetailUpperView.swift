@@ -49,9 +49,10 @@ struct PostDetailUpperView: View {
                     }
             }
             VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 8) {
+                HStack(alignment: .top, spacing: 8) {
                     if post.isAboutMoney {
                         Image("stamp")
+                            .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 0))
                     }
                     
                     Text(post.title)
@@ -100,6 +101,6 @@ struct PostDetailUpperView: View {
 
 struct PostDetailUpperView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailUpperView(post: Post.dummyPost())
+        PostDetailUpperView(post: Post.dummy())
     }
 }

@@ -36,15 +36,16 @@ struct PostView: View {
                                     }
 
                                     Text(post.title)
-                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                        .frame(alignment: .leading)
                                         .lineLimit(1)
                                         .font(.system(size: 14, weight: .bold))
                                         .foregroundColor(.appColor(.neutral900))
                                         
                                 }
                                 Text(post.body)
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    .frame(minWidth: 0, maxHeight: .infinity, alignment: .leading)
                                     .lineLimit(2)
+                                    .multilineTextAlignment(.leading)
                                     .font(.system(size: 12))
                                     .foregroundColor(.appColor(.neutral800))
                             }
@@ -96,6 +97,6 @@ struct PostView: View {
 
 struct PostView_Previews: PreviewProvider {
     static var previews: some View {
-        PostView(post: Post.dummyPost())
+        PostView(post: Post.dummy())
     }
 }

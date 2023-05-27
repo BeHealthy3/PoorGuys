@@ -49,6 +49,6 @@ struct PostDetailLowerView: View {
 
 struct PostDetailLowerView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailLowerView(post: Post.dummyPost())
+        PostDetailLowerView(post: Post.dummy())
     }
 }
