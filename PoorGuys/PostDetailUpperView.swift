@@ -23,6 +23,7 @@ struct PostDetailUpperView: View {
                     
                 } placeholder: {
                     ProgressView()
+                        .frame(width: 40, height: 40)
                 }
 
                 Text(post.nickName)
@@ -71,6 +72,7 @@ struct PostDetailUpperView: View {
                     .frame(width: 311, height: 311)
             } placeholder: {
                 ProgressView()
+                    .frame(width: 311, height: 311)
             }
 
             

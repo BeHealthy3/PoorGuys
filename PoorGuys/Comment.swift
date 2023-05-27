@@ -20,7 +20,7 @@ struct Comment: Identifiable {
         let timeStamp: Date = Date()
         let content: String = likeCount.isMultiple(of: 4) ? Lorem.paragraph : Lorem.sentence
         
-        return Comment(id: id, nickName: nickName, profileImageURL: profileImageURL, userID: userID, postID: postID, content: content, likeCount: likeCount, timeStamp: timeStamp, isDeletedComment: likeCount.isMultiple(of: 7) ? true : false, replies: likeCount.isMultiple(of: 3) ? Reply.multipleDummies(number: 10) : nil)
+        return Comment(id: id, nickName: nickName, profileImageURL: profileImageURL, userID: userID, postID: postID, content: content, likeCount: likeCount, timeStamp: timeStamp, isDeletedComment: likeCount.isMultiple(of: 7) ? true : false, replies: likeCount.isMultiple(of: 1) ? Reply.multipleDummies(number: 3) : nil)
     }
     
     static func multipleDummies(number: Int) -> [Comment] {

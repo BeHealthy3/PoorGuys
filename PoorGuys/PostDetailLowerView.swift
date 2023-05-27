@@ -22,6 +22,7 @@ struct PostDetailLowerView: View {
                 
             } placeholder: {
                 ProgressView()
+                    .frame(width: 40, height: 40)
             }
 
             HStack(spacing: 8) {

@@ -48,6 +48,7 @@
 		D3AA15122A21F3570091DC61 /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = D3AA15112A21F3570091DC61 /* LoremSwiftum */; };
 		D3AA15142A21F46C0091DC61 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15132A21F46C0091DC61 /* String.swift */; };
 		D3AA15182A2253D40091DC61 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15172A2253D40091DC61 /* CommentView.swift */; };
+		D3AA151A2A22600A0091DC61 /* ReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15192A22600A0091DC61 /* ReplyView.swift */; };
 		D3D310782A13D4D900085887 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310772A13D4D900085887 /* CommunityView.swift */; };
 		D3D3107A2A13D4EE00085887 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310792A13D4EE00085887 /* PostView.swift */; };
 		D3F3DF9C2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
@@ -97,6 +98,7 @@
 		D3AA150A2A20CE930091DC61 /* PostDetailLowerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailLowerView.swift; sourceTree = "<group>"; };
 		D3AA15132A21F46C0091DC61 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D3AA15172A2253D40091DC61 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
+		D3AA15192A22600A0091DC61 /* ReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyView.swift; sourceTree = "<group>"; };
 		D3D310772A13D4D900085887 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
 		D3D310792A13D4EE00085887 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				D3D310772A13D4D900085887 /* CommunityView.swift */,
 				D34868B02A1E49ED0035FB2A /* PostDetailView.swift */,
 				D3AA15172A2253D40091DC61 /* CommentView.swift */,
+				D3AA15192A22600A0091DC61 /* ReplyView.swift */,
 				D3F8B5C12A1FCED100A4D440 /* PostDetailUpperView.swift */,
 				D3AA150A2A20CE930091DC61 /* PostDetailLowerView.swift */,
 				D3AA15062A209DE60091DC61 /* DateFormatter.swift */,
@@ -397,6 +400,7 @@
 				D39AAE412A18F746003F9A85 /* PostManagable.swift in Sources */,
 				D3D3107A2A13D4EE00085887 /* PostView.swift in Sources */,
 				D3D310782A13D4D900085887 /* CommunityView.swift in Sources */,
+				D3AA151A2A22600A0091DC61 /* ReplyView.swift in Sources */,
 				D3F8B5C02A1FBD2C00A4D440 /* BackButton.swift in Sources */,
 				D39AAE452A19F7D5003F9A85 /* PostManager.swift in Sources */,
 				D3AA15142A21F46C0091DC61 /* String.swift in Sources */,

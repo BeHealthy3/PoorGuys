@@ -42,10 +42,10 @@ struct PostDetailView: View {
                     }
                     
                     if let comments = post.comments {
-                        LazyVStack {
+                        VStack {
                             ForEach(comments) { comment in
                                 CommentView(comment: comment)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                 Rectangle()
                                     .frame(height: 1)
                                     .foregroundColor(.appColor(.neutral100))
