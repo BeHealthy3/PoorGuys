@@ -14,8 +14,7 @@ struct Comment {
     var userID: String
     var postID: String
     var content: String
-    var isFirstLevelComment: Bool
     var likeCount: Int
     var timeStamp: Date
-    var reply: [Reply]?
+    var replies: [Reply]?
 }

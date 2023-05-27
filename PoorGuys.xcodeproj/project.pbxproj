@@ -45,6 +45,8 @@
 		D3AA15072A209DE60091DC61 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15062A209DE60091DC61 /* DateFormatter.swift */; };
 		D3AA15092A20AD040091DC61 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15082A20AD040091DC61 /* Shape.swift */; };
 		D3AA150B2A20CE930091DC61 /* PostDetailLowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA150A2A20CE930091DC61 /* PostDetailLowerView.swift */; };
+		D3AA15122A21F3570091DC61 /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = D3AA15112A21F3570091DC61 /* LoremSwiftum */; };
+		D3AA15142A21F46C0091DC61 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15132A21F46C0091DC61 /* String.swift */; };
 		D3D310782A13D4D900085887 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310772A13D4D900085887 /* CommunityView.swift */; };
 		D3D3107A2A13D4EE00085887 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310792A13D4EE00085887 /* PostView.swift */; };
 		D3F3DF9C2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
@@ -92,6 +94,7 @@
 		D3AA15062A209DE60091DC61 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		D3AA15082A20AD040091DC61 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		D3AA150A2A20CE930091DC61 /* PostDetailLowerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailLowerView.swift; sourceTree = "<group>"; };
+		D3AA15132A21F46C0091DC61 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D3D310772A13D4D900085887 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
 		D3D310792A13D4EE00085887 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -114,6 +117,7 @@
 				609D05622A12B04B0092A8E2 /* FirebaseAuthCombine-Community in Frameworks */,
 				609D05662A12B04B0092A8E2 /* FirebaseFirestore in Frameworks */,
 				609D05682A12B04B0092A8E2 /* FirebaseFirestoreCombine-Community in Frameworks */,
+				D3AA15122A21F3570091DC61 /* LoremSwiftum in Frameworks */,
 				609D056A2A12B04B0092A8E2 /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -164,6 +168,7 @@
 				D39AAE402A18F746003F9A85 /* PostManagable.swift */,
 				D39AAE442A19F7D5003F9A85 /* PostManager.swift */,
 				D39AAE382A18F25C003F9A85 /* Comment.swift */,
+				D3AA15132A21F46C0091DC61 /* String.swift */,
 				D39AAE3C2A18F29F003F9A85 /* Reply.swift */,
 				D3F8B5BB2A1F6D9000A4D440 /* AppColor.swift */,
 				609D05322A12AE3C0092A8E2 /* ContentView.swift */,
@@ -234,6 +239,7 @@
 				609D05692A12B04B0092A8E2 /* FirebaseFirestoreSwift */,
 				609D056B2A12B04B0092A8E2 /* FirebaseStorage */,
 				609D056D2A12B04B0092A8E2 /* FirebaseStorageCombine-Community */,
+				D3AA15112A21F3570091DC61 /* LoremSwiftum */,
 			);
 			productName = PoorGuys;
 			productReference = 609D052D2A12AE3C0092A8E2 /* PoorGuys.app */;
@@ -309,6 +315,7 @@
 			mainGroup = 609D05242A12AE3C0092A8E2;
 			packageReferences = (
 				609D055A2A12B04B0092A8E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				D3AA15102A21F3570091DC61 /* XCRemoteSwiftPackageReference "LoremSwiftum" */,
 			);
 			productRefGroup = 609D052E2A12AE3C0092A8E2 /* Products */;
 			projectDirPath = "";
@@ -388,6 +395,7 @@
 				D3D310782A13D4D900085887 /* CommunityView.swift in Sources */,
 				D3F8B5C02A1FBD2C00A4D440 /* BackButton.swift in Sources */,
 				D39AAE452A19F7D5003F9A85 /* PostManager.swift in Sources */,
+				D3AA15142A21F46C0091DC61 /* String.swift in Sources */,
 				D3AA15092A20AD040091DC61 /* Shape.swift in Sources */,
 				D3AA15072A209DE60091DC61 /* DateFormatter.swift in Sources */,
 				D3F8B5C22A1FCED100A4D440 /* PostDetailUpperView.swift in Sources */,
@@ -749,6 +757,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		D3AA15102A21F3570091DC61 /* XCRemoteSwiftPackageReference "LoremSwiftum" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lukaskubanek/LoremSwiftum";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -801,6 +817,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 609D055A2A12B04B0092A8E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		D3AA15112A21F3570091DC61 /* LoremSwiftum */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3AA15102A21F3570091DC61 /* XCRemoteSwiftPackageReference "LoremSwiftum" */;
+			productName = LoremSwiftum;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
