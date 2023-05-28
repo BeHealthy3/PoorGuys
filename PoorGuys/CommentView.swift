@@ -77,7 +77,7 @@ struct CommentView: View {
                             HStack(spacing: 10) {
                                 Text("답글 쓰기")
                                     .onTapGesture {
-                                        print("답글쓰기")
+                                        NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
                                     }
                                 HStack(spacing: 4) {
                                     Image("thumbsUp")

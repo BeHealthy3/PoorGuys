@@ -75,8 +75,6 @@ struct PostDetailUpperView: View {
                     .frame(width: 311, height: 311)
             }
 
-            
-                
             HStack() {
                 Text(DateFormatter().excludeYear(from: post.timeStamp))
                 Spacer()
