@@ -33,8 +33,9 @@ struct SetNickNameView: View {
                     .padding(.vertical, 12)
                     Spacer()
                 }
+                Spacer()
+                    .frame(maxHeight: 76)
                 description()
-                    .padding(.top, 76)
                 setNickName()
                     .padding(.vertical, 40)
                 nextButton()
@@ -50,9 +51,12 @@ struct SetNickNameView: View {
     
     @ViewBuilder
     func description() -> some View {
-        Text("어푸어푸에 오신 걸 환영합니다!\n사용하실 닉네임을 알려주세요.")
-            .font(.system(size: 22, weight: .bold))
-            .lineSpacing(8)
+        VStack(spacing: 8) {
+            Text("어푸어푸에 오신 걸 환영합니다!")
+                .font(.system(size: 22, weight: .bold))
+            Text("사용하실 닉네임을 알려주세요.")
+                .font(.system(size: 22, weight: .bold))
+        }
     }
     
     @ViewBuilder
