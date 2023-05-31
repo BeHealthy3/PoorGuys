@@ -21,7 +21,7 @@ struct LoginView: View {
                 .padding(.horizontal, 16)
                 .aspectRatio(1, contentMode: .fit)
             Spacer()
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 googleLoginButton()
                 appleLoginButton()
             }
@@ -50,14 +50,11 @@ struct LoginView: View {
         Button {
             loginViewModel.signInWithGoogle()
         } label: {
-            Text("구글로 로그인하기")
-                .font(.system(size: 18, weight: .bold))
-                .foregroundColor(.black)
-                .padding(.vertical, 16)
+            Image("login.google")
+                .resizable()
+                .scaledToFit()
+                .padding(.horizontal, 16)
         }
-        .frame(maxWidth: .infinity)
-        .background(.gray)
-        .cornerRadius(12)
     }
     
     @ViewBuilder
@@ -66,14 +63,11 @@ struct LoginView: View {
             /* TODO : apple authentication*/
             self.isPresentingSetNickNameView = true // 테스트 목적
         } label: {
-            Text("애플로 로그인하기")
-                .font(.system(size: 18, weight: .bold))
-                .foregroundColor(.black)
-                .padding(.vertical, 16)
+            Image("login.apple")
+                .resizable()
+                .scaledToFit()
+                .padding(.horizontal, 16)
         }
-        .frame(maxWidth: .infinity)
-        .background(.gray)
-        .cornerRadius(12)
     }
 }
 
