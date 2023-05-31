@@ -8,22 +8,32 @@
 import SwiftUI
 
 struct SetProfileImageView: View {
+    @State private var pickedPhoto: UIImage = UIImage()
     @State private var isNavigationLinkActive = false
+    @State private var isPhotoPickerPresented = false
     
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-                .frame(height: 200)
-            Text("000님이 거지방에서 사용하실 프로필 사진을 등록해 주세요.")
-                .lineLimit(2)
-                .font(.system(size: 22, weight: .bold))
-                .padding(.horizontal)
-            Rectangle()
+                .frame(height: 111)
+            VStack(spacing: 28 ) {
+                Text("000님이 거지방에서 사용하실")
+                    .font(.system(size: 22, weight: .bold))
+                    .padding(.horizontal, 49)
+                Text("프로필 사진을 등록해 주세요.")
+                    .font(.system(size: 22, weight: .bold))
+                    .padding(.horizontal, 49)
+            }
+            Image(uiImage: pickedPhoto)
+                .resizable()
+                .scaledToFit()
+                .clipShape(Circle())
                 .frame(width: 200, height: 200)
-                .foregroundColor(.gray)
-                .padding(.top, 24)
+                .onTapGesture {
+                    isPhotoPickerPresented = true
+                }
             Spacer()
-            VStack {
+            VStack(spacing: 8) {
                 skipButton()
                 completeButton()
             }
@@ -32,6 +42,9 @@ struct SetProfileImageView: View {
                 EmptyView()
             }
             .hidden()
+        }
+        .sheet(isPresented: $isPhotoPickerPresented) {
+            PhotoPicker(pickerResult: $pickedPhoto, isPresented: $isPhotoPickerPresented)
         }
     }
     
