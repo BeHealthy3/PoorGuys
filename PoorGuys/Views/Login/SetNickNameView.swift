@@ -16,9 +16,12 @@ struct SetNickNameView: View {
     
     @State private var nickName: String = ""
     @State private var isValidNickName = false
+    @State private var isNickNameUnique = false
+    @State private var isNickNameValid = false
     @State private var isValidatingNickName = false
     @State private var isNavigationLinkActive = false
-    @FocusState private var isFocused: Bool
+    @State private var showNickNameNotValidated = false
+    @State private var showNickNameNotUnique = false
     
     @FocusState private var focusedField: FocusedField?
     @Environment(\.dismiss) private var dismiss
@@ -81,9 +84,27 @@ struct SetNickNameView: View {
             .padding(.vertical, 16)
             .padding(.horizontal, 16)
             .background {
-                RoundedRectangle(cornerRadius: 12)
-                    .foregroundColor(Color("neutral_050"))
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .foregroundColor(showNickNameNotValidated || showNickNameNotUnique ? Color("lightred") : Color("neutral_050"))
+                    if focusedField == .nickName {
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(showNickNameNotValidated || showNickNameNotUnique ? Color("red") : Color("primary_500"), lineWidth: 1)
+                            .animation(.easeInOut(duration: 0.5) , value: showNickNameNotValidated || showNickNameNotUnique)
+                    }
+                    HStack {
+                        Spacer()
+                        if isValidatingNickName {
+                            ProgressView()
+                                .padding(.trailing, 16)
+                        }
+                    }
+                }
             }
+            .onChange(of: nickName, perform: { newValue in
+                // 입력 중이면 isValidate false
+                isValidNickName = false
+            })
             .onReceive(Just(nickName)) { _ in
                 // 최대 닉네임 글자 수 까지만 입력 가능
                 if nickName.count > Constants.maxNickNameLength {
@@ -94,30 +115,61 @@ struct SetNickNameView: View {
                 // 사용자 입력 1초 후 닉네임 유효성 검증
                 Task {
                     isValidatingNickName = true
-                    isValidNickName = try await loginViewModel.isValidNickName(nickName)
-                    print(isValidNickName)
+                    isNickNameValid = loginViewModel.isNickNameValid(nickName)
+                    if isNickNameValid {
+                        isNickNameUnique = try await loginViewModel.isNickNameUnique(nickName).value
+                        if isNickNameUnique {
+                            isValidNickName = true
+                        }
+                    }
+                    try await Task.sleep(nanoseconds: 100_000_000)
                     isValidatingNickName = false
                 }
             }
             HStack {
-                Text("한글, 영어, 숫자 이용하여 8글자 이내, 숫자만은 불가능")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(Color("neutral_600"))
-                    .padding(.leading, 32)
+                if isValidNickName {
+                    Text("사용 가능한 닉네임입니다")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(Color("neutral_600"))
+                        .padding(.leading, 32)
+                } else {
+                    Text(showNickNameNotUnique ? "이미 사용 중인 닉네임입니다" : "한글, 영어, 숫자 이용하여 8글자 이내, 숫자만은 불가능")
+                        .font(.system(size: 12, weight: showNickNameNotValidated || showNickNameNotUnique ? .bold : .semibold))
+                        .foregroundColor(showNickNameNotValidated || showNickNameNotUnique ? Color("red") : Color("neutral_600"))
+                        .padding(.leading, 32)
+                        .animation(.easeInOut(duration: 0.5) , value: showNickNameNotValidated || showNickNameNotUnique)
+                }
                 Spacer()
             }
         }
         .padding(.horizontal, 16)
+        .onChange(of: isValidatingNickName) { isValidating in
+            if !isValidating {
+                if !isNickNameValid {
+                    showNickNameNotValidated = true
+                } else {
+                    showNickNameNotValidated = false
+                    if !isNickNameUnique {
+                        showNickNameNotUnique = true
+                    } else {
+                        showNickNameNotUnique = false
+                    }
+                }
+            }
+        }
     }
     
     @ViewBuilder
     func nextButton() -> some View {
         Button {
             /* TODO : 다음 버튼 탭 시 username 등록 */
-            // 빈칸은 하지 못하게
-            // 중복 거르기?
-            self.isNavigationLinkActive = true
-            loginViewModel.didSetNickName = true
+            // 닉네임 유효할 때만
+            if isValidNickName {
+                // firestore에 닉네임 저장 후 저장 완료되면 다음으로 넘어가기
+                
+                self.isNavigationLinkActive = true
+                loginViewModel.didSetNickName = true
+            }
         } label: {
             if isValidNickName {
                 Text("다음")
@@ -144,6 +196,7 @@ struct SetNickNameView: View {
             }
         }
         .padding(.bottom, 40)
+        .animation(.easeInOut, value: isValidNickName)
     }
 }
 
