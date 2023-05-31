@@ -48,11 +48,11 @@ struct SetNickNameView: View {
                 nextButton()
                     .padding(.top, 24)
                 Spacer()
+                NavigationLink(destination: SetProfileImageView(), isActive: $isNavigationLinkActive) {
+                    EmptyView()
+                }
+                .hidden()
             }
-            NavigationLink(destination: SetProfileImageView(), isActive: $isNavigationLinkActive) {
-                EmptyView()
-            }
-            .hidden()
         }
         .onAppear {
             focusedField = .nickName
@@ -166,9 +166,7 @@ struct SetNickNameView: View {
             // 닉네임 유효할 때만
             if isValidNickName {
                 // firestore에 닉네임 저장 후 저장 완료되면 다음으로 넘어가기
-                
-                self.isNavigationLinkActive = true
-                loginViewModel.didSetNickName = true
+                loginViewModel.updateUserNickName(nickName)
             }
         } label: {
             if isValidNickName {
@@ -196,6 +194,12 @@ struct SetNickNameView: View {
             }
         }
         .padding(.bottom, 40)
+        .onChange(of: loginViewModel.didSetNickName, perform: { didSetNickName in
+            if didSetNickName {
+                self.isNavigationLinkActive = true
+                print("navigationlink true")
+            }
+        })
         .animation(.easeInOut, value: isValidNickName)
     }
 }

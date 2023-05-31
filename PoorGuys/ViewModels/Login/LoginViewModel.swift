@@ -137,7 +137,7 @@ final class LoginViewModel: ObservableObject {
                 // MARK: - 유저 firestore 추가
                 db.collection("users").document(uid).setData([
                     "nickName" : "",
-                    "profileImageURL" : "", // TODO : 기본 프로필 이미지 URL 넣기
+                    "profileImageURL" : "" // TODO : 기본 프로필 이미지 URL 넣기
                 ]) { error in
                     if let error = error {
                         /* TODO : 유저 등록 중 오류가 났을 때 앱에서 어떤 동작을 취해주어야 할까? */
@@ -147,6 +147,23 @@ final class LoginViewModel: ObservableObject {
                         print("새로운 유저 firestore에 등록 완료")
                         self.isUserInFirestore = true
                     }
+                }
+            }
+        }
+    }
+    
+    /// Updates the user's nickname in the database.
+    func updateUserNickName(_ nickName: String) {
+        let db = Firestore.firestore()
+        if let uid = Auth.auth().currentUser?.uid {
+            db.collection("users").document(uid).updateData([
+                "nickName" : nickName
+            ]) { error in
+                if let error = error {
+                    print("Error updating nickName")
+                } else {
+                    print("NickName successfully updated")
+                    self.didSetNickName = true
                 }
             }
         }
