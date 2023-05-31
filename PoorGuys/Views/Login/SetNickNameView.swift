@@ -9,6 +9,9 @@ import SwiftUI
 import Combine
 
 struct SetNickNameView: View {
+    enum FocusedField {
+        case nickName
+    }
     @EnvironmentObject var loginViewModel: LoginViewModel
     
     @State private var nickName: String = ""
@@ -17,6 +20,7 @@ struct SetNickNameView: View {
     @State private var isNavigationLinkActive = false
     @FocusState private var isFocused: Bool
     
+    @FocusState private var focusedField: FocusedField?
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -47,6 +51,12 @@ struct SetNickNameView: View {
             }
             .hidden()
         }
+        .onAppear {
+            focusedField = .nickName
+        }
+        .onTapGesture {
+            focusedField = nil
+        }
     }
     
     @ViewBuilder
@@ -66,6 +76,7 @@ struct SetNickNameView: View {
                       prompt: Text("닉네임을 입력해 주세요")
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(Color("neutral_500")))
+            .focused($focusedField, equals: .nickName)
             .font(.system(size: 16, weight: .semibold))
             .padding(.vertical, 16)
             .padding(.horizontal, 16)
