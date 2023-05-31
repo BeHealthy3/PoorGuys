@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SetProfileImageView: View {
+    @EnvironmentObject var loginViewModel: LoginViewModel
+    
     @State private var pickedPhoto: UIImage = UIImage()
     @State private var isNavigationLinkActive = false
     @State private var isPhotoPickerPresented = false
@@ -71,6 +73,7 @@ struct SetProfileImageView: View {
     func completeButton() -> some View {
         Button {
             /* TODO : 첫 로그인 완료 */
+            loginViewModel.updateUserProfileImage(pickedPhoto)
             self.isNavigationLinkActive = true
         } label: {
             Text("완료")
@@ -90,5 +93,6 @@ struct SetProfileImageView: View {
 struct SetProfileImageView_Previews: PreviewProvider {
     static var previews: some View {
         SetProfileImageView()
+            .environmentObject(LoginViewModel())
     }
 }

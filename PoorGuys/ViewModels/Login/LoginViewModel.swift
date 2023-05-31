@@ -9,6 +9,7 @@ import Foundation
 import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseStorage
 import GoogleSignIn
 
 enum SignInState {
@@ -164,6 +165,58 @@ final class LoginViewModel: ObservableObject {
                 } else {
                     print("NickName successfully updated")
                     self.didSetNickName = true
+                }
+            }
+        }
+    }
+    
+    /// 유저 프로필 이미지 업데이트
+    /// - Parameter profileImage: 유저가 선택한 이미지
+    func updateUserProfileImage(_ profileImage: UIImage) {
+        let storage = Storage.storage()
+        let storageRef = storage.reference()
+        
+        let data = profileImage.jpegData(compressionQuality: 0.5)
+        
+        guard let data = data else {
+            print("프로필 이미지 data 변환 중 에러")
+            return
+        }
+        
+        if let uid = Auth.auth().currentUser?.uid {
+            let profileImageRef = storageRef.child("profile_images/\(uid)")
+            
+            let uploadTask = profileImageRef.putData(data, metadata: nil) { metadata, error in
+                if let error = error {
+                    print("프로필 이미지 업로드 중 에러 \(error)")
+                } else {
+                    let size = metadata!.size
+                    print("프로필 이미지 업로드 크기 : \(size)")
+                    profileImageRef.downloadURL { url, error in
+                        if let error = error {
+                            print("프로필 이미지 다운로드 url 생성 중 에러 \(error)")
+                        } else {
+                            print("프로필 이미지 다운로드 url 생성 성공 : \(String(describing: url))")
+                            self.uploadProfileImageURL(url!)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    /// 프로필 이미지 URL firestore에 업데이트
+    /// - Parameter url: 업데이트할 프로필 이미지 url
+    func uploadProfileImageURL(_ url: URL) {
+        let db = Firestore.firestore()
+        if let uid = Auth.auth().currentUser?.uid {
+            db.collection("users").document(uid).updateData([
+                "profileImageURL" : url.absoluteString
+            ]) { error in
+                if let error = error {
+                    print("프로필 이미지 URL 업로드 중 에러 : \(error)")
+                } else {
+                    print("프로필 이미지 URL 업로드 완료")
                 }
             }
         }
