@@ -82,13 +82,13 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
             VStack {
                 HStack {
                     Spacer()
-                    Button(action: {
-                        
-                    }, label: {
+                    
+                    NavigationLink(destination: PostFillingView(post: .constant(nil))) {
                         Image("edit")
                             .imageScale(.large)
                             .foregroundColor(.accentColor)
-                    })
+                    }
+                    
                     Button(action: {
                         
                     }, label: {

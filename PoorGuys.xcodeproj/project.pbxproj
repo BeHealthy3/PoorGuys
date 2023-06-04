@@ -24,6 +24,8 @@
 		609D056A2A12B04B0092A8E2 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 609D05692A12B04B0092A8E2 /* FirebaseFirestoreSwift */; };
 		609D056C2A12B04B0092A8E2 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 609D056B2A12B04B0092A8E2 /* FirebaseStorage */; };
 		609D056E2A12B04B0092A8E2 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 609D056D2A12B04B0092A8E2 /* FirebaseStorageCombine-Community */; };
+		D3015FC12A24E06000F102D7 /* PostFillingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3015FC02A24E06000F102D7 /* PostFillingView.swift */; };
+		D3015FC32A24EEAE00F102D7 /* PostFillingCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3015FC22A24EEAE00F102D7 /* PostFillingCenterView.swift */; };
 		D34868B12A1E49ED0035FB2A /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34868B02A1E49ED0035FB2A /* PostDetailView.swift */; };
 		D34868B22A1E49ED0035FB2A /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34868B02A1E49ED0035FB2A /* PostDetailView.swift */; };
 		D34868B32A1E49ED0035FB2A /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34868B02A1E49ED0035FB2A /* PostDetailView.swift */; };
@@ -53,6 +55,7 @@
 		D3AA15202A23B2D30091DC61 /* TextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA151F2A23B2D30091DC61 /* TextEditorView.swift */; };
 		D3D310782A13D4D900085887 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310772A13D4D900085887 /* CommunityView.swift */; };
 		D3D3107A2A13D4EE00085887 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310792A13D4EE00085887 /* PostView.swift */; };
+		D3E046732A2B23D200AF21BE /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E046722A2B23D200AF21BE /* ImagePickerView.swift */; };
 		D3F3DF9C2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
 		D3F3DF9D2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
 		D3F3DF9E2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
@@ -89,6 +92,8 @@
 		609D05472A12AE3D0092A8E2 /* PoorGuysUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PoorGuysUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		609D054B2A12AE3D0092A8E2 /* PoorGuysUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoorGuysUITests.swift; sourceTree = "<group>"; };
 		609D054D2A12AE3D0092A8E2 /* PoorGuysUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoorGuysUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		D3015FC02A24E06000F102D7 /* PostFillingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFillingView.swift; sourceTree = "<group>"; };
+		D3015FC22A24EEAE00F102D7 /* PostFillingCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFillingCenterView.swift; sourceTree = "<group>"; };
 		D34868B02A1E49ED0035FB2A /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
 		D39AAE342A18F17D003F9A85 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		D39AAE382A18F25C003F9A85 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
@@ -105,6 +110,7 @@
 		D3AA151F2A23B2D30091DC61 /* TextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorView.swift; sourceTree = "<group>"; };
 		D3D310772A13D4D900085887 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
 		D3D310792A13D4EE00085887 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
+		D3E046722A2B23D200AF21BE /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 		D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D3F8B5BB2A1F6D9000A4D440 /* AppColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColor.swift; sourceTree = "<group>"; };
 		D3F8B5BF2A1FBD2C00A4D440 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
@@ -184,6 +190,9 @@
 				D3AA15082A20AD040091DC61 /* Shape.swift */,
 				D3AA151D2A23B2740091DC61 /* Notification.swift */,
 				D3D310772A13D4D900085887 /* CommunityView.swift */,
+				D3015FC02A24E06000F102D7 /* PostFillingView.swift */,
+				D3015FC22A24EEAE00F102D7 /* PostFillingCenterView.swift */,
+				D3E046722A2B23D200AF21BE /* ImagePickerView.swift */,
 				D3D310792A13D4EE00085887 /* PostView.swift */,
 				D34868B02A1E49ED0035FB2A /* PostDetailView.swift */,
 				D3F8B5C12A1FCED100A4D440 /* PostDetailUpperView.swift */,
@@ -398,7 +407,9 @@
 			files = (
 				D3AA15182A2253D40091DC61 /* CommentView.swift in Sources */,
 				D39AAE352A18F17D003F9A85 /* Post.swift in Sources */,
+				D3015FC12A24E06000F102D7 /* PostFillingView.swift in Sources */,
 				D34868B12A1E49ED0035FB2A /* PostDetailView.swift in Sources */,
+				D3E046732A2B23D200AF21BE /* ImagePickerView.swift in Sources */,
 				D39AAE392A18F25C003F9A85 /* Comment.swift in Sources */,
 				609D05332A12AE3C0092A8E2 /* ContentView.swift in Sources */,
 				609D05312A12AE3C0092A8E2 /* PoorGuysApp.swift in Sources */,
@@ -415,6 +426,7 @@
 				D3AA15072A209DE60091DC61 /* DateFormatter.swift in Sources */,
 				D3AA151E2A23B2740091DC61 /* Notification.swift in Sources */,
 				D3F8B5C22A1FCED100A4D440 /* PostDetailUpperView.swift in Sources */,
+				D3015FC32A24EEAE00F102D7 /* PostFillingCenterView.swift in Sources */,
 				D3F8B5BC2A1F6D9000A4D440 /* AppColor.swift in Sources */,
 				D39AAE3D2A18F29F003F9A85 /* Reply.swift in Sources */,
 			);

@@ -58,7 +58,14 @@ struct TextEditorView: View {
 
 struct ViewHeightKey: PreferenceKey {
     static var defaultValue: CGFloat { 0 }
-    static func reduce(value: inout Value, nextValue: () -> Value) {
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = value + nextValue()
+    }
+}
+
+struct TextEditorView_Previews: PreviewProvider {
+    static var previews: some View {
+    
+        TextEditorView(text: .constant(""), textEditorHeight: .constant(60), backgroundNeedsHighlight: .constant(false))
     }
 }
