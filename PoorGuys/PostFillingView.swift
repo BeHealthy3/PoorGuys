@@ -43,28 +43,18 @@ struct PostFillingView: View {
                     .foregroundColor(title == "" ? .appColor(.neutral600) : .appColor(.neutral900))
                     .font(.system(size: 18, weight: .bold))
                     .background(Color.appColor(.neutral050))
-                    .padding(.vertical, 20)
+                    .padding(.vertical, 10)
                     .cornerRadius(12)
                 
                 PostFillingCenterView(content: $content, imageURL: $imageURL, image: $selectedImage)
-//                if #available(iOS 16.0, *) {
-//                    TextEditor(text: $content)
-//                        .padding()
-//                        .frame(maxWidth: .infinity, minHeight: 300)
-//                        .multilineTextAlignment(.leading)
-//                        .lineSpacing(10.0)
-//                        .scrollContentBackground(.hidden)
-//                        .background(.red)
-//                } else {
-//                    TextEditor(text: $content)
-//                        .padding()
-//                        .frame(maxWidth: .infinity, minHeight: 300)
-//                        .multilineTextAlignment(.leading)
-//                        .lineSpacing(10.0)
-//                        .background(.red)
-//                }
+                    .padding(.bottom, 16)
                 
-            }.padding(EdgeInsets(top: 12, leading: 16, bottom: 16, trailing: 16))
+                Text("어푸어푸는 누구나 기분 좋게 참여할 수 있는 커뮤니티를 만들기 위해 커뮤니티 이용규칙을 제정하여 운영하고 있습니다. 위반 시 게시글이 삭제되고 서비스 이용이 일정 기간 제한될 수 있습니다.")
+                    .foregroundColor(.appColor(.neutral600))
+                    .modifier(FittingFontSizeModifier())
+                    .frame(maxWidth: .infinity)
+            }
+            .padding(.horizontal, 16)
         }
         .onAppear {
             Task {
@@ -81,7 +71,7 @@ struct PostFillingView: View {
                         selectedImage = try await ImageDownloadManager().downloadImageAndSaveAsUIImage(url: url)
                     }
                 } catch {
-                    
+                    print("포스트 불러오기 실패")
                 }
             }
         }
@@ -93,4 +83,12 @@ struct PostFillingView_Previews: PreviewProvider {
     
         PostFillingView(postID: .constant(""))
     }
+}
+
+struct FittingFontSizeModifier: ViewModifier {
+  func body(content: Content) -> some View {
+    content
+      .font(.system(size: 12))
+      .minimumScaleFactor(0.001)
+  }
 }

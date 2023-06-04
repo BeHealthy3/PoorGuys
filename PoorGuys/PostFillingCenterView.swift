@@ -122,7 +122,7 @@ struct PostFillingCenterView: View {
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 16))
             }
         }
-        .background(Color.appColor(.neutral100))
+        .background(Color.appColor(.neutral050))
         .cornerRadius(12)
     }
 }
