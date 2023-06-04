@@ -83,7 +83,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                 HStack {
                     Spacer()
                     
-                    NavigationLink(destination: PostFillingView(post: .constant(nil))) {
+                    NavigationLink(destination: PostFillingView(postID: .constant(""))) {
                         Image("edit")
                             .imageScale(.large)
                             .foregroundColor(.accentColor)

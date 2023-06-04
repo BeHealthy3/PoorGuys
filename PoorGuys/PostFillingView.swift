@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct PostFillingView: View {
 
-    @Binding var post: Post?
+    @Binding var postID: String?
     @State private var title: String = ""
     @State private var content: String = ""
     @State private var imageURL: String?
@@ -68,11 +69,16 @@ struct PostFillingView: View {
         .onAppear {
             Task {
                 do {
-                    if let post = post {
-                        self.post = try await MockPostManager.shared.fetchPost(postID: post.id)
-                        title = self.post?.title ?? ""
-                        content = self.post?.body ?? ""
-                        imageURL = self.post?.imageURL?.first ?? ""
+                    if let postID = postID {
+                        let post = try await MockPostManager.shared.fetchPost(postID: postID)
+                        
+                        title = post.title
+                        content = post.body
+                        imageURL = post.imageURL?.first
+                        
+                        let url = URL(string: imageURL ?? "")!
+                        
+                        selectedImage = try await ImageDownloadManager().downloadImageAndSaveAsUIImage(url: url)
                     }
                 } catch {
                     
@@ -85,6 +91,6 @@ struct PostFillingView: View {
 struct PostFillingView_Previews: PreviewProvider {
     static var previews: some View {
     
-        PostFillingView(post: .constant(nil))
+        PostFillingView(postID: .constant(""))
     }
 }

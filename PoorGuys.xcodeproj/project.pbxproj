@@ -26,6 +26,8 @@
 		609D056E2A12B04B0092A8E2 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 609D056D2A12B04B0092A8E2 /* FirebaseStorageCombine-Community */; };
 		D3015FC12A24E06000F102D7 /* PostFillingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3015FC02A24E06000F102D7 /* PostFillingView.swift */; };
 		D3015FC32A24EEAE00F102D7 /* PostFillingCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3015FC22A24EEAE00F102D7 /* PostFillingCenterView.swift */; };
+		D32363BD2A2C73D200857135 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D32363BC2A2C73D200857135 /* Kingfisher */; };
+		D32363BF2A2C758800857135 /* ImageDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32363BE2A2C758800857135 /* ImageDownloadManager.swift */; };
 		D34868B12A1E49ED0035FB2A /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34868B02A1E49ED0035FB2A /* PostDetailView.swift */; };
 		D34868B22A1E49ED0035FB2A /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34868B02A1E49ED0035FB2A /* PostDetailView.swift */; };
 		D34868B32A1E49ED0035FB2A /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34868B02A1E49ED0035FB2A /* PostDetailView.swift */; };
@@ -94,6 +96,7 @@
 		609D054D2A12AE3D0092A8E2 /* PoorGuysUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoorGuysUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		D3015FC02A24E06000F102D7 /* PostFillingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFillingView.swift; sourceTree = "<group>"; };
 		D3015FC22A24EEAE00F102D7 /* PostFillingCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFillingCenterView.swift; sourceTree = "<group>"; };
+		D32363BE2A2C758800857135 /* ImageDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadManager.swift; sourceTree = "<group>"; };
 		D34868B02A1E49ED0035FB2A /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
 		D39AAE342A18F17D003F9A85 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		D39AAE382A18F25C003F9A85 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
@@ -122,6 +125,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D32363BD2A2C73D200857135 /* Kingfisher in Frameworks */,
 				609D055E2A12B04B0092A8E2 /* FirebaseAnalyticsSwift in Frameworks */,
 				609D05602A12B04B0092A8E2 /* FirebaseAuth in Frameworks */,
 				609D056E2A12B04B0092A8E2 /* FirebaseStorageCombine-Community in Frameworks */,
@@ -201,6 +205,7 @@
 				D3AA15172A2253D40091DC61 /* CommentView.swift */,
 				D3AA15192A22600A0091DC61 /* ReplyView.swift */,
 				D3AA15062A209DE60091DC61 /* DateFormatter.swift */,
+				D32363BE2A2C758800857135 /* ImageDownloadManager.swift */,
 				609D05342A12AE3D0092A8E2 /* Assets.xcassets */,
 				609D05362A12AE3D0092A8E2 /* Preview Content */,
 			);
@@ -261,6 +266,7 @@
 				609D056B2A12B04B0092A8E2 /* FirebaseStorage */,
 				609D056D2A12B04B0092A8E2 /* FirebaseStorageCombine-Community */,
 				D3AA15112A21F3570091DC61 /* LoremSwiftum */,
+				D32363BC2A2C73D200857135 /* Kingfisher */,
 			);
 			productName = PoorGuys;
 			productReference = 609D052D2A12AE3C0092A8E2 /* PoorGuys.app */;
@@ -337,6 +343,7 @@
 			packageReferences = (
 				609D055A2A12B04B0092A8E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				D3AA15102A21F3570091DC61 /* XCRemoteSwiftPackageReference "LoremSwiftum" */,
+				D32363BB2A2C73D200857135 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 609D052E2A12AE3C0092A8E2 /* Products */;
 			projectDirPath = "";
@@ -423,6 +430,7 @@
 				D39AAE452A19F7D5003F9A85 /* PostManager.swift in Sources */,
 				D3AA15142A21F46C0091DC61 /* String.swift in Sources */,
 				D3AA15092A20AD040091DC61 /* Shape.swift in Sources */,
+				D32363BF2A2C758800857135 /* ImageDownloadManager.swift in Sources */,
 				D3AA15072A209DE60091DC61 /* DateFormatter.swift in Sources */,
 				D3AA151E2A23B2740091DC61 /* Notification.swift in Sources */,
 				D3F8B5C22A1FCED100A4D440 /* PostDetailUpperView.swift in Sources */,
@@ -785,6 +793,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		D32363BB2A2C73D200857135 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		D3AA15102A21F3570091DC61 /* XCRemoteSwiftPackageReference "LoremSwiftum" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lukaskubanek/LoremSwiftum";
@@ -845,6 +861,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 609D055A2A12B04B0092A8E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		D32363BC2A2C73D200857135 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D32363BB2A2C73D200857135 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		D3AA15112A21F3570091DC61 /* LoremSwiftum */ = {
 			isa = XCSwiftPackageProductDependency;
