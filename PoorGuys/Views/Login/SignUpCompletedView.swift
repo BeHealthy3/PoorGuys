@@ -13,9 +13,14 @@ struct SignUpCompletedView: View {
     
     var body: some View {
         /* 디졸브로 사라짐 구현 예정 */
-        VStack {
+        VStack(spacing: 0) {
             Spacer()
                 .frame(height: 159)
+            Image("icon.celebration")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 160, height: 160)
+                .padding(.bottom, 40)
             VStack(spacing: 8) {
                 Text("가입이 완료되었습니다!")
                     .font(.system(size: 22, weight: .bold))
