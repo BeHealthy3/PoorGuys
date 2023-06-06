@@ -38,20 +38,20 @@ struct PhotoPicker: UIViewControllerRepresentable {
         }
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            
-            // 선택한 아이템 언팩
-            if results[0].itemProvider.canLoadObject(ofClass: UIImage.self) {
-                results[0].itemProvider.loadObject(ofClass: UIImage.self) { [weak self] newImage, error in
-                    if let error = error {
-                        print("이미지 로드 실패 \(error.localizedDescription)")
-                    } else if let image = newImage as? UIImage {
-                        self?.parent.pickerResult = image
+            if !results.isEmpty {
+                // 선택한 아이템 언팩
+                if results[0].itemProvider.canLoadObject(ofClass: UIImage.self) {
+                    results[0].itemProvider.loadObject(ofClass: UIImage.self) { [weak self] newImage, error in
+                        if let error = error {
+                            print("이미지 로드 실패 \(error.localizedDescription)")
+                        } else if let image = newImage as? UIImage {
+                            self?.parent.pickerResult = image
+                        }
                     }
+                } else {
+                    print("에셋 로드 불가")
                 }
-            } else {
-                print("에셋 로드 불가")
             }
-            
             // 모달 뷰 닫기
             parent.isPresented = false
         }
