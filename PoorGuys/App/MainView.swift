@@ -11,15 +11,32 @@ import FirebaseAuth
 struct MainView: View {
     @EnvironmentObject var logInViewModel: LoginViewModel
     
+    @State private var isShowingLaunchScreen = true
+    
     var body: some View {
         Group {
-            // 유저 로그인 x 또는 유저데이터 firebase에 없음 또는 유저 닉네임 설정하지 않았으면...
-            // 로그인 뷰 보이기
-            if logInViewModel.signInState == .signedOut ||
-                !logInViewModel.isUserInFirestore ||
-                !logInViewModel.didSetNickName ||
-                !logInViewModel.signUpCompleted {
-                LoginView()
+            // 런치스크린 보이기
+            if isShowingLaunchScreen {
+                LaunchScreen()
+                    .task {
+                        // auth 상태 변경을 감지하는 리스너 추가
+                        logInViewModel.authDidChangeListener()
+                        // 유저 로그인 완료하였는지 확인
+                        logInViewModel.isSignUpAndSignInCompleted { isCompleted, error in
+                            if let error = error {
+                                print("Error while signUp completion check : \(error)")
+                                isShowingLaunchScreen = false
+                            } else {
+                                if isCompleted {
+                                    isShowingLaunchScreen = false
+                                    logInViewModel.signInState = .signedIn
+                                } else {
+                                    isShowingLaunchScreen = false
+                                    logInViewModel.signInState = .signedOut
+                                }
+                            }
+                        }
+                    }
             } else {
                 // 유저 로그인 및 닉네임 설정 완료했다면 메인 페이지 보이기
                 MyPageView() // 임시로 mypage 보이기
