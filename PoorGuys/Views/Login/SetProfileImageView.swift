@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SetProfileImageView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
     @EnvironmentObject var loginViewModel: LoginViewModel
     
     @State private var pickedPhoto: UIImage = UIImage()
@@ -16,16 +18,25 @@ struct SetProfileImageView: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            HStack {
+                Button {
+                    self.presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image("arrow.left")
+                }
+                .padding(.leading, 16)
+                .padding(.vertical, 12)
+                Spacer()
+            }
             Spacer()
-                .frame(height: 111)
-            VStack(spacing: 28 ) {
+                .frame(height: 76)
+            VStack(spacing: 8) {
                 Text("000님이 거지방에서 사용하실")
                     .font(.system(size: 22, weight: .bold))
-                    .padding(.horizontal, 49)
                 Text("프로필 사진을 등록해 주세요.")
                     .font(.system(size: 22, weight: .bold))
-                    .padding(.horizontal, 49)
             }
+            .padding(.horizontal, 40)
             Image(uiImage: pickedPhoto)
                 .resizable()
                 .scaledToFit()
@@ -44,6 +55,7 @@ struct SetProfileImageView: View {
                 EmptyView()
             }
             .hidden()
+            .navigationBarBackButtonHidden(true)
         }
         .sheet(isPresented: $isPhotoPickerPresented) {
             PhotoPicker(pickerResult: $pickedPhoto, isPresented: $isPhotoPickerPresented)
