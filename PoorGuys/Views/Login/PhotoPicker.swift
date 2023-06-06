@@ -13,6 +13,7 @@ import PhotosUI
 struct PhotoPicker: UIViewControllerRepresentable {
     @Binding var pickerResult: UIImage
     @Binding var isPresented: Bool
+    @Binding var isPhotoPickedByUser: Bool
     
     func makeUIViewController(context: Context) -> some UIViewController {
         var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
@@ -24,6 +25,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+        
     }
     
     func makeCoordinator() -> Coordinator {
@@ -46,6 +48,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
                             print("이미지 로드 실패 \(error.localizedDescription)")
                         } else if let image = newImage as? UIImage {
                             self?.parent.pickerResult = image
+                            self?.parent.isPhotoPickedByUser = true
                         }
                     }
                 } else {

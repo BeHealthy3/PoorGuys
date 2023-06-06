@@ -12,9 +12,10 @@ struct SetProfileImageView: View {
 
     @EnvironmentObject var loginViewModel: LoginViewModel
     
-    @State private var pickedPhoto: UIImage = UIImage()
+    @State private var pickedPhoto: UIImage = UIImage(named: "user.default")!
     @State private var isNavigationLinkActive = false
     @State private var isPhotoPickerPresented = false
+    @State private var isPhotoPickedByUser = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -39,9 +40,19 @@ struct SetProfileImageView: View {
             .padding(.horizontal, 40)
             Image(uiImage: pickedPhoto)
                 .resizable()
-                .scaledToFit()
+                .scaledToFill()
+                .frame(width: 170, height: 170)
                 .clipShape(Circle())
-                .frame(width: 200, height: 200)
+                .padding(.top, 50)
+                .overlay {
+                    Image("icon.camera")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 70, height: 70)
+                        .offset(x: 65, y: 80)
+                        .shadow(color: Color.black.opacity(0.1), radius: 10)
+                        
+                }
                 .onTapGesture {
                     isPhotoPickerPresented = true
                 }
@@ -58,7 +69,10 @@ struct SetProfileImageView: View {
             .navigationBarBackButtonHidden(true)
         }
         .sheet(isPresented: $isPhotoPickerPresented) {
-            PhotoPicker(pickerResult: $pickedPhoto, isPresented: $isPhotoPickerPresented)
+            PhotoPicker(pickerResult: $pickedPhoto, isPresented: $isPhotoPickerPresented, isPhotoPickedByUser: $isPhotoPickedByUser)
+        }
+        .onAppear {
+            pickedPhoto = UIImage(named: "user.default")!
         }
     }
     
@@ -85,8 +99,13 @@ struct SetProfileImageView: View {
     func completeButton() -> some View {
         Button {
             /* TODO : 첫 로그인 완료 */
-            loginViewModel.updateUserProfileImage(pickedPhoto)
-            self.isNavigationLinkActive = true
+            loginViewModel.updateUserProfileImage(pickedPhoto) { isSuccess, error in
+                if isSuccess {
+                    self.isNavigationLinkActive = true
+                } else {
+                    print("error on updating user profile image : \(String(describing: error?.localizedDescription))")
+                }
+            }
         } label: {
             Text("완료")
                 .font(.system(size: 18, weight: .bold))
@@ -95,10 +114,12 @@ struct SetProfileImageView: View {
                 .frame(maxWidth: .infinity)
                 .background {
                     RoundedRectangle(cornerRadius: 12)
-                        .foregroundColor(.blue)
+                        .foregroundColor(isPhotoPickedByUser ? Color("primary_500") : Color("primary_100"))
                 }
                 .padding(.horizontal, 16)
+                .animation(.easeOut, value: isPhotoPickedByUser)
         }
+        .disabled(!isPhotoPickedByUser)
     }
 }
 
