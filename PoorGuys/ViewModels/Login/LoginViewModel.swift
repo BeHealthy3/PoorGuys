@@ -17,18 +17,22 @@ enum SignInState {
     case signedOut
 }
 
+enum LoginError: Error {
+    case noCurrentUser
+    case noNickName
+    case authResultNil
+}
+
 final class LoginViewModel: ObservableObject {
     @Published var signInState: SignInState = .signedOut // Auth 로그인 상태
     @Published var isUserInFirestore: Bool = false // 유저가 firestore에 저장되어있는지
     @Published var didSetNickName: Bool = false // firestore에 저장되어있는 유저 데이터에 닉네임 저장되어있는지
-    @Published var signUpCompleted: Bool = false
-    
     @Published var nickName: String = ""
     @Published var isValidatingNickName = false
     
     // MARK: - 로그인 / 로그아웃
     /// 구글로 로그인 및 firestore 유저 정보 등록
-    func signInWithGoogle() {
+    func signInWithGoogle(completion: @escaping (_ isSignInSuccess: Bool, Error?) -> Void) {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         
         // 구글 로그인 설정 객체 생성
@@ -43,6 +47,7 @@ final class LoginViewModel: ObservableObject {
         GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { [unowned self] result, error in
             guard error == nil else {
                 print(error?.localizedDescription as Any)
+                completion(false, error)
                 return
             }
             
@@ -50,6 +55,7 @@ final class LoginViewModel: ObservableObject {
                   let idToken = user.idToken?.tokenString
             else {
                 print(error?.localizedDescription as Any)
+                completion(false, error)
                 return
             }
             
@@ -60,18 +66,109 @@ final class LoginViewModel: ObservableObject {
             Auth.auth().signIn(with: credential) { result, error in
                 if let error = error {
                     print(error.localizedDescription)
+                    completion(false, error)
                 } else {
                     self.signInState = .signedIn
                     if let result = result {
                         print("유저 auth 로그인 완료 / uid : \(result.user.uid)")
                         
                         // auth 로그인된 유저 정보가 firestore에도 있는지 확인
-                        self.checkIfUserDataIsInFirestore(of: result.user.uid)
+                        self.isUserDataStoredInFirestore(of: result.user.uid) { isStored, error in
+                            completion(isStored, error)
+                        }
                     } else {
                         print("!ERROR : Auth result nil - 확인 필요")
+                        completion(false, LoginError.authResultNil)
                     }
                 }
             }
+        }
+    }
+    
+    /// Firestore에 유저 정보 등록되어있는지 확인
+    /// - Parameter result: Auth.auth().signIn(with:) 함수의 completion result
+    func isUserDataStoredInFirestore(of uid: String, completion: @escaping (Bool, Error?) -> Void) {
+        // 구글 인증은 로그인과 회원가입 구분이 없기 때문에
+        // firestore에 이미 있는 회원인지 확인 후, 없으면 firestore DB에 등록
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(uid)
+        
+        /* TODO : 여기서 앱이 종료되어서 firestore에 유저 저장이 안된다면..?
+         매번 앱 실행마다 확인 필요 */
+        
+        docRef.getDocument { document, error in
+            if let document = document, document.exists {
+                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                print("해당하는 유저 firestore에 있음 : \(dataDescription)")
+                self.isUserInFirestore = true
+                if let property = document.get("nickName") as? String {
+                    if property.isEmpty {
+                        print("해당 유저 닉네임 설정되지 않음")
+                        self.didSetNickName = false
+                        completion(false, error)
+                    }
+                    else {
+                        self.didSetNickName = true
+                        completion(true, nil)
+                    }
+                }
+            } else {
+                print("해당하는 유저 없음")
+                completion(false, nil)
+                // MARK: - 유저 firestore 추가
+                db.collection("users").document(uid).setData([
+                    "nickName" : "",
+                    "profileImageURL" : "" // TODO : 기본 프로필 이미지 URL 넣기
+                ]) { error in
+                    if let error = error {
+                        /* TODO : 유저 등록 중 오류가 났을 때 앱에서 어떤 동작을 취해주어야 할까? */
+                        print("유저 등록 중 오류 : \(error)")
+                        self.isUserInFirestore = false
+                    } else {
+                        print("새로운 유저 firestore에 등록 완료")
+                        self.isUserInFirestore = true
+                    }
+                }
+            }
+        }
+    }
+    
+    /// 회원가입 및 로그인 완료 여부 판단
+    /// - Returns: 회원가입 및 로그인 완료했는지
+    func isSignUpAndSignInCompleted(completion: @escaping (Bool, Error?) -> Void) {
+        
+        // 현재 로그인된 유저가 있나요?
+        if let uid = Auth.auth().currentUser?.uid {
+            signInState = .signedIn
+            
+            // 로그인된 유저가 있다면, 해당 유저의 닉네임이 설정되어있나요?
+            let db = Firestore.firestore()
+            let docRef = db.collection("users").document(uid)
+            
+            docRef.getDocument { document, error in
+                if let document = document, document.exists {
+                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                    print("해당하는 유저 firestore에 있음 : \(dataDescription)")
+                    self.isUserInFirestore = true
+                    if let property = document.get("nickName") as? String {
+                        if property.isEmpty {
+                            print("해당 유저 닉네임 설정되지 않음")
+                            self.didSetNickName = false
+                            completion(false, LoginError.noNickName)
+                        }
+                        else {
+                            self.didSetNickName = true
+                            completion(true, nil)
+                        }
+                    }
+                } else {
+                    print("해당하는 유저 없음")
+                    completion(false, error)
+                }
+            }
+            
+        } else {
+            completion(false, LoginError.noCurrentUser)
         }
     }
     
@@ -90,7 +187,6 @@ final class LoginViewModel: ObservableObject {
         
         isUserInFirestore = false
         didSetNickName = false
-        signUpCompleted = false
         
         self.signInState = .signedOut
         print("유저 로그아웃 완료")
@@ -105,52 +201,6 @@ final class LoginViewModel: ObservableObject {
                 print("In authDidChangeListener... 유저 로그인되지 않음")
             }
         })
-    }
-    
-    /// Firestore에 유저 정보 등록되어있는지 확인
-    /// - Parameter result: Auth.auth().signIn(with:) 함수의 completion result
-    func checkIfUserDataIsInFirestore(of uid: String) {
-        // 구글 인증은 로그인과 회원가입 구분이 없기 때문에
-        // firestore에 이미 있는 회원인지 확인 후, 없으면 firestore DB에 등록
-        let db = Firestore.firestore()
-        let docRef = db.collection("users").document(uid)
-        
-        /* TODO : 여기서 앱이 종료되어서 firestore에 유저 저장이 안된다면..?
-         매번 앱 실행마다 확인 필요 */
-        
-        docRef.getDocument { document, error in
-            if let document = document, document.exists {
-                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                print("해당하는 유저 firestore에 있음 : \(dataDescription)")
-                self.isUserInFirestore = true
-                if let property = document.get("nickName") as? String {
-                    if property.isEmpty {
-                        print("해당 유저 닉네임 설정되지 않음")
-                        self.didSetNickName = false
-                    }
-                    else {
-                        self.didSetNickName = true
-                        self.signUpCompleted = true
-                    }
-                }
-            } else {
-                print("해당하는 유저 없음")
-                // MARK: - 유저 firestore 추가
-                db.collection("users").document(uid).setData([
-                    "nickName" : "",
-                    "profileImageURL" : "" // TODO : 기본 프로필 이미지 URL 넣기
-                ]) { error in
-                    if let error = error {
-                        /* TODO : 유저 등록 중 오류가 났을 때 앱에서 어떤 동작을 취해주어야 할까? */
-                        print("유저 등록 중 오류 : \(error)")
-                        self.isUserInFirestore = false
-                    } else {
-                        print("새로운 유저 firestore에 등록 완료")
-                        self.isUserInFirestore = true
-                    }
-                }
-            }
-        }
     }
     
     /// Updates the user's nickname in the database.
@@ -173,7 +223,6 @@ final class LoginViewModel: ObservableObject {
                             completion(false, error)
                         } else {
                             completion(true, nil)
-//                            self.didSetNickName = true
                         }
                     }
                 }
@@ -197,7 +246,7 @@ final class LoginViewModel: ObservableObject {
         if let uid = Auth.auth().currentUser?.uid {
             let profileImageRef = storageRef.child("profile_images/\(uid)")
             
-            let uploadTask = profileImageRef.putData(data, metadata: nil) { metadata, error in
+            _ = profileImageRef.putData(data, metadata: nil) { metadata, error in
                 if let error = error {
                     print("프로필 이미지 업로드 중 에러 \(error)")
                     completion(false, error)
