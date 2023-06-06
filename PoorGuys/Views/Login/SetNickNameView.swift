@@ -133,14 +133,21 @@ struct SetNickNameView: View {
                         .foregroundColor(Color("neutral_600"))
                         .padding(.leading, 32)
                 } else {
-                    Text(showNickNameNotUnique ? "이미 사용 중인 닉네임입니다" : "한글, 영어, 숫자 이용하여 8글자 이내, 숫자만은 불가능")
-                        .font(.system(size: 12, weight: showNickNameNotValidated || showNickNameNotUnique ? .bold : .semibold))
-                        .foregroundColor(showNickNameNotValidated || showNickNameNotUnique ? Color("red") : Color("neutral_600"))
-                        .padding(.leading, 32)
-                        .animation(.easeInOut(duration: 0.5) , value: showNickNameNotValidated || showNickNameNotUnique)
+                    if showNickNameNotValidated || showNickNameNotUnique {
+                        Text(showNickNameNotUnique ? "이미 사용 중인 닉네임입니다" : "한글, 영어, 숫자 이용하여 8글자 이내, 숫자만은 불가능")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(Color("red"))
+                            .padding(.leading, 32)
+                    } else {
+                        Text(showNickNameNotUnique ? "이미 사용 중인 닉네임입니다" : "한글, 영어, 숫자 이용하여 8글자 이내, 숫자만은 불가능")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color("neutral_600"))
+                            .padding(.leading, 32)
+                    }
                 }
                 Spacer()
             }
+            .animation(.easeInOut(duration: 0.1) , value: isValidNickName || showNickNameNotValidated || showNickNameNotUnique)
         }
         .padding(.horizontal, 16)
         .onChange(of: isValidatingNickName) { isValidating in
@@ -166,40 +173,27 @@ struct SetNickNameView: View {
             // 닉네임 유효할 때만
             if isValidNickName {
                 // firestore에 닉네임 저장 후 저장 완료되면 다음으로 넘어가기
-                loginViewModel.updateUserNickName(nickName)
+                loginViewModel.updateUserNickName(nickName) { isUpdateSuccessed, error in
+                    if isUpdateSuccessed {
+                        self.isNavigationLinkActive = true
+                    } else {
+                        print("Error: updating nickName failed : \(String(describing: error?.localizedDescription))")
+                    }
+                }
             }
         } label: {
-            if isValidNickName {
-                Text("다음")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color("title.loginButtons"))
-                    .padding(.vertical)
-                    .frame(maxWidth: .infinity)
-                    .background {
-                        RoundedRectangle(cornerRadius: 12)
-                            .foregroundColor(Color("primary_500"))
-                    }
-                    .padding(.horizontal, 16)
-            } else {
-                Text("다음")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color("title.loginButtons"))
-                    .padding(.vertical)
-                    .frame(maxWidth: .infinity)
-                    .background {
-                        RoundedRectangle(cornerRadius: 12)
-                            .foregroundColor(Color("primary_100"))
-                    }
-                    .padding(.horizontal, 16)
-            }
+            Text("다음")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundColor(Color("title.loginButtons"))
+                .padding(.vertical)
+                .frame(maxWidth: .infinity)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .foregroundColor(isValidNickName ? Color("primary_500") : Color("primary_100"))
+                }
+                .padding(.horizontal, 16)
         }
         .padding(.bottom, 40)
-        .onChange(of: loginViewModel.didSetNickName, perform: { didSetNickName in
-            if didSetNickName {
-                self.isNavigationLinkActive = true
-                print("navigationlink true")
-            }
-        })
         .animation(.easeInOut, value: isValidNickName)
     }
 }

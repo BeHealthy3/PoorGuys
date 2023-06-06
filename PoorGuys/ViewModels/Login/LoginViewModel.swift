@@ -154,17 +154,28 @@ final class LoginViewModel: ObservableObject {
     }
     
     /// Updates the user's nickname in the database.
-    func updateUserNickName(_ nickName: String) {
+    func updateUserNickName(_ nickName: String, completion: @escaping (Bool, Error?) -> Void) {
         let db = Firestore.firestore()
         if let uid = Auth.auth().currentUser?.uid {
             db.collection("users").document(uid).updateData([
                 "nickName" : nickName
             ]) { error in
                 if let error = error {
-                    print("Error updating nickName")
+                    print("Error updating nickName : \(error.localizedDescription)")
+                    completion(false, error)
                 } else {
                     print("NickName successfully updated")
-                    self.didSetNickName = true
+                    let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+                    changeRequest?.displayName = nickName
+                    changeRequest?.commitChanges { error in
+                        if let error = error {
+                            print("Error updating user displayName : \(error.localizedDescription)")
+                            completion(false, error)
+                        } else {
+                            completion(true, nil)
+//                            self.didSetNickName = true
+                        }
+                    }
                 }
             }
         }
@@ -172,7 +183,7 @@ final class LoginViewModel: ObservableObject {
     
     /// 유저 프로필 이미지 업데이트
     /// - Parameter profileImage: 유저가 선택한 이미지
-    func updateUserProfileImage(_ profileImage: UIImage) {
+    func updateUserProfileImage(_ profileImage: UIImage, completion: @escaping (Bool, Error?) -> Void) {
         let storage = Storage.storage()
         let storageRef = storage.reference()
         
@@ -189,15 +200,18 @@ final class LoginViewModel: ObservableObject {
             let uploadTask = profileImageRef.putData(data, metadata: nil) { metadata, error in
                 if let error = error {
                     print("프로필 이미지 업로드 중 에러 \(error)")
+                    completion(false, error)
                 } else {
                     let size = metadata!.size
                     print("프로필 이미지 업로드 크기 : \(size)")
                     profileImageRef.downloadURL { url, error in
                         if let error = error {
                             print("프로필 이미지 다운로드 url 생성 중 에러 \(error)")
+                            completion(false, error)
                         } else {
                             print("프로필 이미지 다운로드 url 생성 성공 : \(String(describing: url))")
                             self.uploadProfileImageURL(url!)
+                            completion(true, nil)
                         }
                     }
                 }
