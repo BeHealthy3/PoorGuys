@@ -16,11 +16,6 @@ struct LoginView: View {
     var body: some View {
         VStack {
             Spacer()
-            RoundedRectangle(cornerRadius: 12)
-                .foregroundColor(.gray)
-                .padding(.horizontal, 16)
-                .aspectRatio(1, contentMode: .fit)
-            Spacer()
             VStack(spacing: 8) {
                 googleLoginButton()
                 appleLoginButton()
@@ -28,17 +23,6 @@ struct LoginView: View {
             .padding(.bottom, 40)
             .padding(.horizontal, 16)
             
-        }
-        .onChange(of: loginViewModel.signInState) { signInState in
-            if signInState == .signedIn {
-                self.isPresentingSetNickNameView = true
-            }
-        }
-        .onAppear {
-            self.isPresentingSetNickNameView = false
-            if loginViewModel.signInState == .signedIn {
-                self.isPresentingSetNickNameView = true
-            }
         }
         .fullScreenCover(isPresented: $isPresentingSetNickNameView, content: {
             SetNickNameView()
@@ -48,7 +32,11 @@ struct LoginView: View {
     @ViewBuilder
     func googleLoginButton() -> some View {
         Button {
-            loginViewModel.signInWithGoogle()
+            loginViewModel.signInWithGoogle() { isSignedIn, error in
+                if !loginViewModel.didSetNickName {
+                    self.isPresentingSetNickNameView = true
+                }
+            }
         } label: {
             Image("login.google")
                 .resizable()
