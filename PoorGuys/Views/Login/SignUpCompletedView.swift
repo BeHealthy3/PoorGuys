@@ -35,7 +35,7 @@ struct SignUpCompletedView: View {
     func toMainViewButton() -> some View {
         Button {
             /* TODO : 첫 로그인 완료 */
-            loginViewModel.signUpCompleted = true
+            loginViewModel.didSetNickName = true
         } label: {
             Text("메인 페이지로")
                 .font(.system(size: 18, weight: .bold))
