@@ -38,21 +38,13 @@ struct MainView: View {
                         }
                     }
             } else {
-                // 유저 로그인 및 닉네임 설정 완료했다면 메인 페이지 보이기
-                MyPageView() // 임시로 mypage 보이기
+                // 로그아웃 되어있거나, 닉네임 설정되어 있지 않으면 로그인 뷰 보이기
+                if logInViewModel.signInState == .signedOut || !logInViewModel.didSetNickName {
+                    LoginView()
+                } else {
+                    MyPageView()
+                }
             }
-        }
-        .onAppear {
-            // 유저가 로그인했으면 signInState 변경
-            if Auth.auth().currentUser?.uid != nil {
-                logInViewModel.signInState = .signedIn
-                
-                // firestore에 유저 데이터 저장되어있는지 확인
-                logInViewModel.checkIfUserDataIsInFirestore(of: Auth.auth().currentUser!.uid)
-            }
-            
-            // auth 상태 변경을 감지하는 리스너 추가
-            logInViewModel.authDidChangeListener()
         }
         .preferredColorScheme(.light)   // 기기 다크모드여도 앱은 라이트모드 적용
     }
