@@ -131,18 +131,18 @@ struct SetNickNameView: View {
                     Text("사용 가능한 닉네임입니다")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(Color("neutral_600"))
-                        .padding(.leading, 32)
+                        .padding(.leading, 16)
                 } else {
                     if showNickNameNotValidated || showNickNameNotUnique {
                         Text(showNickNameNotUnique ? "이미 사용 중인 닉네임입니다" : "한글, 영어, 숫자 이용하여 8글자 이내, 숫자만은 불가능")
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(Color("red"))
-                            .padding(.leading, 32)
+                            .padding(.leading, 16)
                     } else {
                         Text(showNickNameNotUnique ? "이미 사용 중인 닉네임입니다" : "한글, 영어, 숫자 이용하여 8글자 이내, 숫자만은 불가능")
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundColor(Color("neutral_600"))
-                            .padding(.leading, 32)
+                            .padding(.leading, 16)
                     }
                 }
                 Spacer()
