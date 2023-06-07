@@ -39,7 +39,15 @@ struct SignUpCompletedView: View {
     @ViewBuilder
     func toMainViewButton() -> some View {
         Button {
-            loginViewModel.didSetNickName = true
+            loginViewModel.setCurrentUser { isUser, error in
+                if let error = error {
+                    print("Error while setting current user: \(error.localizedDescription)")
+                } else {
+                    DispatchQueue.main.async {
+                        loginViewModel.didSetNickName = true
+                    }
+                }
+            }
         } label: {
             Text("메인 페이지로")
                 .font(.system(size: 18, weight: .bold))
