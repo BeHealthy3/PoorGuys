@@ -80,6 +80,14 @@ struct SetProfileImageView: View {
     func skipButton() -> some View {
         Button {
             /* TODO : 프로필 사진 업로드 건너뛰기 */
+            pickedPhoto = UIImage(named: "user.default")!
+            loginViewModel.updateUserProfileImage(pickedPhoto) { isSuccess, error in
+                if isSuccess {
+                    self.isNavigationLinkActive = true
+                } else {
+                    print("error on updating user profile default image : \(String(describing: error?.localizedDescription))")
+                }
+            }
             self.isNavigationLinkActive = true
         } label: {
             Text("건너뛰기")
