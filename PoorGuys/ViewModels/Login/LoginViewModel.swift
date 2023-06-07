@@ -30,7 +30,7 @@ final class LoginViewModel: ObservableObject {
     @Published var nickName: String = ""
     @Published var isValidatingNickName = false
     
-    // MARK: - 로그인 / 로그아웃
+    // MARK: - 로그인
     /// 구글로 로그인 및 firestore 유저 정보 등록
     func signInWithGoogle(completion: @escaping (_ isSignInSuccess: Bool, Error?) -> Void) {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
@@ -109,7 +109,14 @@ final class LoginViewModel: ObservableObject {
                     }
                     else {
                         self.didSetNickName = true
-                        completion(true, nil)
+                        self.setCurrentUser { isUser, error in
+                            if let error = error {
+                                print("Error while setting current user : \(error)")
+                                completion(false, nil)
+                            } else {
+                                completion(true, nil)
+                            }
+                        }
                     }
                 }
             } else {
@@ -136,7 +143,6 @@ final class LoginViewModel: ObservableObject {
     /// 회원가입 및 로그인 완료 여부 판단
     /// - Returns: 회원가입 및 로그인 완료했는지
     func isSignUpAndSignInCompleted(completion: @escaping (Bool, Error?) -> Void) {
-        
         // 현재 로그인된 유저가 있나요?
         if let uid = Auth.auth().currentUser?.uid {
             signInState = .signedIn
@@ -158,7 +164,14 @@ final class LoginViewModel: ObservableObject {
                         }
                         else {
                             self.didSetNickName = true
-                            completion(true, nil)
+                            self.setCurrentUser { isUser, error in
+                                if let error = error {
+                                    print("Error while setting current user : \(error)")
+                                    completion(false, nil)
+                                } else {
+                                    completion(true, nil)
+                                }
+                            }
                         }
                     }
                 } else {
@@ -172,6 +185,47 @@ final class LoginViewModel: ObservableObject {
         }
     }
     
+    /// currentUser 모델 값 채워넣기
+    func setCurrentUser(completion: @escaping (Bool, Error?) -> Void) {
+        var nickName: String?
+        var profileImageURL: String?
+        if let uid = Auth.auth().currentUser?.uid {
+            let db = Firestore.firestore()
+            let docRef = db.collection("users").document(uid)
+            
+            docRef.getDocument { document, error in
+                if let document = document, document.exists {
+                    if let _nickName = document.get("nickName") as? String {
+                        nickName = _nickName
+                    } else {
+                        completion(false, LoginError.noNickName)
+                    }
+                    
+                    if let _profileImageURL = document.get("profileImageURL") as? String {
+                        profileImageURL = _profileImageURL
+                        URLSession.shared.dataTask(with: URL(string: profileImageURL!)!) { data, response, error in
+                            guard let data = data, error == nil else {
+                                completion(false, error)
+                                return
+                            }
+                            let profileImage = UIImage(data: data)
+                            User.currentUser = User(uid: uid, nickName: nickName ?? "", profileImageURL: profileImageURL, profileImage: profileImage, authenticationMethod: .google)
+                            print("currentUser 생성 완료")
+                            completion(true, nil)
+                        }.resume()
+                    } else {
+                        completion(true, nil)
+                    }
+                } else {
+                    print("Error while getting from document : \(String(describing: error))")
+                    completion(false, error)
+                }
+            }
+            
+        }
+    }
+    
+    // MARK: - 로그아웃
     /// 유저 로그아웃 - 모든 인증방식에 적용
     func signOut() {
         // GIDSignIn.sharedInstance()?.currentUser 에 nil 할당
@@ -187,6 +241,7 @@ final class LoginViewModel: ObservableObject {
         
         isUserInFirestore = false
         didSetNickName = false
+        User.currentUser = nil
         
         self.signInState = .signedOut
         print("유저 로그아웃 완료")
