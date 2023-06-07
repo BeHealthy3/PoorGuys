@@ -29,10 +29,14 @@ struct MainView: View {
                             } else {
                                 if isCompleted {
                                     isShowingLaunchScreen = false
-                                    logInViewModel.signInState = .signedIn
+                                    DispatchQueue.main.async {
+                                        logInViewModel.signInState = .signedIn
+                                    }
                                 } else {
                                     isShowingLaunchScreen = false
-                                    logInViewModel.signInState = .signedOut
+                                    DispatchQueue.main.async {
+                                        logInViewModel.signInState = .signedOut
+                                    }
                                 }
                             }
                         }
