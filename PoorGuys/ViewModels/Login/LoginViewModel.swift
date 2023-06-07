@@ -210,6 +210,7 @@ final class LoginViewModel: ObservableObject {
                             }
                             let profileImage = UIImage(data: data)
                             User.currentUser = User(uid: uid, nickName: nickName ?? "", profileImageURL: profileImageURL, profileImage: profileImage, authenticationMethod: .google)
+                            self.setCurrentUserProvider()
                             print("currentUser 생성 완료")
                             completion(true, nil)
                         }.resume()
@@ -222,6 +223,25 @@ final class LoginViewModel: ObservableObject {
                 }
             }
             
+        }
+    }
+    
+    func setCurrentUserProvider() {
+        if let currentUser = Auth.auth().currentUser {
+            for userInfo in currentUser.providerData {
+                let providerID = userInfo.providerID
+                print("providerID : \(providerID)")
+                
+                if providerID == GoogleAuthProviderID {
+                    User.currentUser?.authenticationMethod = .google
+                    print("Provider : google")
+                } else if providerID == "apple.com" {
+                    User.currentUser?.authenticationMethod = .apple
+                    print("Provider : apple")
+                } else {
+                    print("ERROR : 사용자가 등록되지 않은 인증 방법으로 로그인하였습니다.")
+                }
+            }
         }
     }
     
