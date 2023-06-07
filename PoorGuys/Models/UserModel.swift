@@ -5,7 +5,7 @@
 //  Created by 권승용 on 2023/05/17.
 //
 
-import Foundation
+import UIKit
 
 enum AuthenticationMethod {
     case google
@@ -13,8 +13,11 @@ enum AuthenticationMethod {
 }
 
 struct User {
+    static var currentUser: User? = nil
+    
     var uid: String
     var nickName: String
     var profileImageURL: String?
+    var profileImage: UIImage?
     var authenticationMethod: AuthenticationMethod
 }
