@@ -108,12 +108,14 @@ final class LoginViewModel: ObservableObject {
                         completion(false, error)
                     }
                     else {
-                        self.didSetNickName = true
                         self.setCurrentUser { isUser, error in
                             if let error = error {
                                 print("Error while setting current user : \(error)")
                                 completion(false, nil)
                             } else {
+                                DispatchQueue.main.async {
+                                    self.didSetNickName = true
+                                }
                                 completion(true, nil)
                             }
                         }
@@ -163,12 +165,14 @@ final class LoginViewModel: ObservableObject {
                             completion(false, LoginError.noNickName)
                         }
                         else {
-                            self.didSetNickName = true
                             self.setCurrentUser { isUser, error in
                                 if let error = error {
                                     print("Error while setting current user : \(error)")
                                     completion(false, nil)
                                 } else {
+                                    DispatchQueue.main.async {
+                                        self.didSetNickName = true
+                                    }
                                     completion(true, nil)
                                 }
                             }
