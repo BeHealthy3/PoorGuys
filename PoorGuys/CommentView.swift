@@ -98,14 +98,14 @@ struct CommentView: View {
                 }
                 .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             }
-            if let replies = comment.replies {
-                VStack {
-                    ForEach(replies) { reply in
-                        ReplyView(reply: reply)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                }
-            }
+//            if let replies = comment.replies {
+//                VStack {
+//                    ForEach(replies) { reply in
+//                        ReplyView(reply: reply)
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                    }
+//                }
+//            }
         }
     }
 }

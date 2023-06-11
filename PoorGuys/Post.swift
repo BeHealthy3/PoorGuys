@@ -8,7 +8,7 @@
 import Foundation
 import LoremSwiftum
 
-struct Post: Identifiable, Equatable {
+struct Post: Identifiable, Equatable, Codable {
     static func == (lhs: Post, rhs: Post) -> Bool {
         lhs.id == rhs.id
     }
@@ -27,7 +27,7 @@ struct Post: Identifiable, Equatable {
         let isAboutMoney = likeCount.isMultiple(of: 3) ? true : false
         let isWeirdPost = likeCount.isMultiple(of: 7) ? true : false
     
-        return Post(id: dummyID, userID: dummyUserId, nickName: nickName, profileImageURL: profileImageURL, isAboutMoney: isAboutMoney, title: title, body: body, timeStamp: timeStamp, likeCount: likeCount, commentCount: commentCount, isWeirdPost: isWeirdPost, imageURL: imageURL, comments: likeCount.isMultiple(of: 1) ? Comment.multipleDummies(number: 10) : nil)
+        return Post(id: dummyID, userID: dummyUserId, nickName: nickName, profileImageURL: profileImageURL, isAboutMoney: isAboutMoney, title: title, body: body, timeStamp: timeStamp, likeCount: likeCount, commentCount: commentCount, isWeirdPost: isWeirdPost, imageURL: imageURL, comments: likeCount.isMultiple(of: 1) ? Comment.multipleDummies(number: 3) : nil)
     }
     
     static func multipleDummies(number: Int) -> [Post] {
@@ -53,4 +53,8 @@ struct Post: Identifiable, Equatable {
     var isWeirdPost: Bool
     var imageURL: [String]?
     var comments: [Comment]?
+    
+    enum codingKeys: String, CodingKey {
+        case id, userID, nickName, profileImageURL, isAboutMoney, title, body, timeStamp, likeCount ,commentCount, isWeirdPost, imageURL, comments
+    }
 }

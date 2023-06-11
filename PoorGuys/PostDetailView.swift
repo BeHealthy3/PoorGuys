@@ -12,6 +12,7 @@ struct PostDetailView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var post: Post?
+    @State var comments: [Comment]?
     
     init(postID: String) {
         self.postID = postID
@@ -41,16 +42,20 @@ struct PostDetailView: View {
                             )
                     }
                     
-                    if let comments = post.comments {
+                    if let comments = self.comments {
                         VStack {
-                            ForEach(comments) { comment in
+                            ForEach(comments.indices, id: \.self) { index in
+                                let comment = comments[index]
+                                
+                                if index != 0 && comment.belongingCommentID == nil {
+                                    Rectangle()
+                                        .frame(height: 1)
+                                        .foregroundColor(.appColor(.neutral100))
+                                }
                                 CommentView(comment: comment)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                                Rectangle()
-                                    .frame(height: 1)
-                                    .foregroundColor(.appColor(.neutral100))
+                                    .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
                             }
-                        
                         }
                     }
                 }
@@ -66,8 +71,43 @@ struct PostDetailView: View {
         .onAppear {
             Task {
                 post = try await MockPostManager.shared.fetchPost(postID: "")
+                
+                comments = rearrangeComments(
+                    post?.comments
+                    ??
+                    [Comment]()
+                )
             }
         }
+    }
+    
+    func rearrangeComments(_ comments: [Comment]) -> [Comment] {
+        let commentsWithBelongingID =
+        comments
+            .filter { $0.belongingCommentID != nil }
+            .sorted { lhs, rhs in
+            lhs.timeStamp < rhs.timeStamp
+        }
+        
+        let commentsWithoutBelongingID =
+        comments
+            .filter { $0.belongingCommentID == nil }
+            .sorted { lhs, rhs in
+            lhs.timeStamp < rhs.timeStamp
+        }
+        
+        var reArrangedComments = [Comment]()
+        
+        for commentWithoutBelongingID in commentsWithoutBelongingID {
+            reArrangedComments.append(commentWithoutBelongingID)
+            for commentWithBelongingID in commentsWithBelongingID {
+                if commentWithBelongingID.belongingCommentID == commentWithoutBelongingID.id {
+                    reArrangedComments.append(commentWithBelongingID)
+                }
+            }
+        }
+        
+        return reArrangedComments
     }
 }
 
