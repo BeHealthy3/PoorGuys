@@ -16,6 +16,9 @@ struct LoginView: View {
     var body: some View {
         VStack {
             Spacer()
+            GIFView(type: .name("welcome"))
+                .frame(width: 300, height: 300)
+            Spacer()
             VStack(spacing: 8) {
                 googleLoginButton()
                 appleLoginButton()
