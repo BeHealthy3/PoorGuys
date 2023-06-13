@@ -7,11 +7,15 @@
 
 import Foundation
 
-protocol PostManagable {   
+protocol PostManagable {
     func uploadNewPost(_ post: Post) async throws
     func updatePost(_ post: Post) async throws
-    func fetch20Posts() async throws -> [Post]
-    func fetchNext10Posts(from: Post) async throws -> [Post]
-    func fetchPrevious10Posts(from: Post) async throws -> [Post]
+    mutating func fetch10Posts() async throws -> [Post]
     func fetchPost(postID: String) async throws -> Post
+    
+    func uploadNewComment(_ comment: Comment) throws
+    func deleteComment(commentID: String) async throws
+    
+//    func uploadNewReply(_ reply: Reply) throws
+//    func deleteReply(replyID: String) async throws
 }

@@ -10,10 +10,11 @@ import Combine
 
 protocol CommunityPostsManagable: ObservableObject {
     
+    var postManager: PostManagable { get }
+    
     var posts: [Post] { get set }
     
-    func fetch20Posts() async
-    func fetchNext10Posts(after post: Post) async
+    func fetch10Posts() async
     func thisIsTheThirdLast(_ post: Post) -> Bool
 }
 
@@ -29,29 +30,19 @@ extension CommunityPostsManagable {
 
 class MockCommunityViewModel: CommunityPostsManagable {
     
+    var postManager: PostManagable = FirebasePostManager()
+    
     @Published var posts: [Post] = []
     
-    func fetch20Posts() async {
+    func fetch10Posts() async {
         do {
-            let newPosts = try await MockPostManager.shared.fetch20Posts()
+            let newPosts = try await postManager.fetch10Posts()
             
             DispatchQueue.main.async {
                 self.posts.insert(contentsOf: newPosts, at: 0)
             }
         } catch {
-            
-        }
-    }
-    
-    func fetchNext10Posts(after post: Post) async {
-        do {
-            let newPosts = try await MockPostManager.shared.fetchNext10Posts(from: post)
-            
-            DispatchQueue.main.async {
-                self.posts.insert(contentsOf: newPosts, at: self.posts.endIndex)
-            }
-        } catch {
-            
+            print("fetch error")
         }
     }
     
@@ -102,13 +93,10 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack {
                         ForEach(viewModel.posts, id: \.id) { post in
+                            
                             if post.isWeirdPost {
                                 PostView(post: post)
-                                    .task {
-                                        if viewModel.thisIsTheThirdLast(post) {
-                                            await viewModel.fetchNext10Posts(after: post)
-                                        }
-                                    }
+                                    .task { await fetchPostsTask(post: post) }
                                     .padding(5)
                                     .background(Color.white)
                                     .cornerRadius(12)
@@ -118,11 +106,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                                 NavigationLink(destination: PostDetailView(postID: post.id), label: {
                                     PostView(post: post)
                                 })
-                                .task {
-                                    if viewModel.thisIsTheThirdLast(post) {
-                                        await viewModel.fetchNext10Posts(after: post)
-                                    }
-                                }
+                                .task { await fetchPostsTask(post: post) }
                                 .padding(5)
                                 .background(Color.white)
                                 .cornerRadius(12)
@@ -137,11 +121,17 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
             .onAppear {
                 if !isViewDidLoad {
                     Task {
-                        await viewModel.fetch20Posts()
+                        await viewModel.fetch10Posts()
                         isViewDidLoad = true
                     }
                 }
             }
+        }
+    }
+    
+    func fetchPostsTask(post: Post) async {
+        if viewModel.thisIsTheThirdLast(post) {
+            await viewModel.fetch10Posts()
         }
     }
 }
