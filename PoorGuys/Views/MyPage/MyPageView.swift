@@ -18,11 +18,13 @@ struct MyPageView: View {
             VStack(spacing: 0) {
                 navigationHeader()
                 ScrollView {
-                    profileCard()
-                        .padding(.top, 8)
-                    myRelatedPosts()
-                        .padding(.top, 24)
-                    Spacer()
+                    VStack(spacing: 0) {
+                        profileCard()
+                            .padding(.top, 8)
+                        myRelatedPosts()
+                            .padding(.top, 24)
+                        Spacer()
+                    }
                 }
             }
         }
