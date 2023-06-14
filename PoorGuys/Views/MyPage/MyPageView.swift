@@ -9,10 +9,42 @@ import SwiftUI
 
 struct MyPageView: View {
     @EnvironmentObject var loginViewModel: LoginViewModel
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    @State private var currentUser: User?
     
     var body: some View {
         VStack {
             profileCard()
+        VStack(spacing: 0) {
+            profileHeader()
+            ScrollView {
+                profileCard()
+                    .padding(.top, 8)
+                Spacer()
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
+    @ViewBuilder
+    func profileHeader() -> some View {
+        ZStack {
+            HStack {
+                Button {
+                    self.presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image("arrow.left")
+                }
+                .padding(.leading, 16)
+                .padding(.vertical, 12)
+                Spacer()
+            }
+            HStack {
+                Text("마이페이지")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(Color("neutral_900"))
+                    .padding(.vertical, 12)
+            }
         }
     }
     
