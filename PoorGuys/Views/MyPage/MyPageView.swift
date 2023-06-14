@@ -11,7 +11,7 @@ struct MyPageView: View {
     @EnvironmentObject var loginViewModel: LoginViewModel
     @Environment(\.dismiss) private var dismiss
     
-    @State private var currentUser: User?
+    @State private var currentUser: User = User(uid: "", nickName: "", authenticationMethod: .google)
     
     var body: some View {
         NavigationView {
@@ -25,7 +25,9 @@ struct MyPageView: View {
             }
         }
         .onAppear {
-            self.currentUser = User.currentUser
+            if let user = User.currentUser {
+                self.currentUser = user
+            }
         }
         
         .navigationBarBackButtonHidden(true)
@@ -57,7 +59,7 @@ struct MyPageView: View {
         VStack(spacing: 4) {
             HStack {
                 Spacer()
-                NavigationLink(destination: EditProfileView()) {
+                NavigationLink(destination: EditProfileView(currentUser: $currentUser)) {
                     Image("icon.edit")
                         .resizable()
                         .scaledToFit()
@@ -67,26 +69,22 @@ struct MyPageView: View {
             }
             .padding(.top ,8)
             HStack(spacing: 20) {
-                Image(uiImage: (currentUser?.profileImage) ?? UIImage(named: "user.default")!)
+                Image(uiImage: (currentUser.profileImage) ?? UIImage(named: "user.default")!)
                     .resizable()
                     .scaledToFill()
                     .frame(width: 68, height: 68)
                     .clipShape(Circle())
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(currentUser?.nickName ?? "")
+                    Text(currentUser.nickName)
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(Color("primary_500"))
-                    switch currentUser?.authenticationMethod {
+                    switch currentUser.authenticationMethod {
                     case .google:
                         Text("구글 연동")
                             .font(.system(size: 14, weight: .regular))
                             .foregroundColor(Color("neutral_900"))
                     case .apple:
                         Text("애플 연동")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundColor(Color("neutral_900"))
-                    case .none:
-                        Text("")
                             .font(.system(size: 14, weight: .regular))
                             .foregroundColor(Color("neutral_900"))
                     }

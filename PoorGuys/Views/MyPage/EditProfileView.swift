@@ -15,6 +15,8 @@ struct EditProfileView: View {
 
     @EnvironmentObject var loginViewModel: LoginViewModel
     
+    @Binding var currentUser: User
+    
     @State private var pickedPhoto: UIImage = UIImage(named: "user.default")!
     @State private var isPhotoPickerPresented = false
     @State private var nickName: String = ""
@@ -68,6 +70,24 @@ struct EditProfileView: View {
                 Spacer()
                 Button {
                    /* TODO : 프로필 편집 완료*/
+                    if isValidNickName {
+                        // firestore에 닉네임 저장 후 저장 완료되면 다음으로 넘어가기
+                        loginViewModel.updateUserNickName(nickName) { isUpdateSuccessed, error in
+                            if isUpdateSuccessed {
+                                loginViewModel.updateUserProfileImage(pickedPhoto) { isUpdateCompleted, error in
+                                    if isUpdateCompleted {
+                                        currentUser.nickName = nickName
+                                        currentUser.profileImage = pickedPhoto
+                                        dismiss()
+                                    } else {
+                                        print("Error: upating Profile Image failed : \(String(describing: error?.localizedDescription))")
+                                    }
+                                }
+                            } else {
+                                print("Error: updating nickName failed : \(String(describing: error?.localizedDescription))")
+                            }
+                        }
+                    }
                 } label: {
                     Text("완료")
                         .font(.system(size: 14, weight: .bold))
@@ -76,9 +96,10 @@ struct EditProfileView: View {
                         .padding(.horizontal, 8)
                         .background {
                             RoundedRectangle(cornerRadius: 12)
-                                .foregroundColor(Color("primary_500"))
+                                .foregroundColor(isValidNickName ? Color("primary_500") : Color("primary_100"))
                         }
                 }
+                .disabled(!isValidNickName)
                 .padding(.trailing, 16)
             }
             Text("프로필 편집")
@@ -206,6 +227,6 @@ struct EditProfileView: View {
 
 struct EditProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        EditProfileView()
+        EditProfileView(currentUser: .constant(User(uid: "", nickName: "", authenticationMethod: .google)))
     }
 }

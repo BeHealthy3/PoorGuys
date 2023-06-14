@@ -301,6 +301,7 @@ final class LoginViewModel: ObservableObject {
                             print("Error updating user displayName : \(error.localizedDescription)")
                             completion(false, error)
                         } else {
+                            User.currentUser?.nickName = nickName
                             completion(true, nil)
                         }
                     }
@@ -339,6 +340,7 @@ final class LoginViewModel: ObservableObject {
                         } else {
                             print("프로필 이미지 다운로드 url 생성 성공 : \(String(describing: url))")
                             self.uploadProfileImageURL(url!)
+                            User.currentUser?.profileImage = profileImage
                             completion(true, nil)
                         }
                     }
@@ -359,6 +361,7 @@ final class LoginViewModel: ObservableObject {
                     print("프로필 이미지 URL 업로드 중 에러 : \(error)")
                 } else {
                     print("프로필 이미지 URL 업로드 완료")
+                    User.currentUser?.profileImageURL = url.absoluteString
                 }
             }
         }
