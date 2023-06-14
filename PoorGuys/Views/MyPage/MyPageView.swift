@@ -9,17 +9,19 @@ import SwiftUI
 
 struct MyPageView: View {
     @EnvironmentObject var loginViewModel: LoginViewModel
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) private var dismiss
     
     @State private var currentUser: User?
     
     var body: some View {
-        VStack(spacing: 0) {
-            profileHeader()
-            ScrollView {
-                profileCard()
-                    .padding(.top, 8)
-                Spacer()
+        NavigationView {
+            VStack(spacing: 0) {
+                navigationHeader()
+                ScrollView {
+                    profileCard()
+                        .padding(.top, 8)
+                    Spacer()
+                }
             }
         }
         .onAppear {
@@ -31,11 +33,11 @@ struct MyPageView: View {
     }
     
     @ViewBuilder
-    func profileHeader() -> some View {
+    func navigationHeader() -> some View {
         ZStack {
             HStack {
                 Button {
-                    self.presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 } label: {
                     Image("arrow.left")
                 }
@@ -43,12 +45,10 @@ struct MyPageView: View {
                 .padding(.vertical, 12)
                 Spacer()
             }
-            HStack {
-                Text("마이페이지")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color("neutral_900"))
-                    .padding(.vertical, 12)
-            }
+            Text("마이페이지")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundColor(Color("neutral_900"))
+                .padding(.vertical, 12)
         }
     }
     
@@ -57,9 +57,7 @@ struct MyPageView: View {
         VStack(spacing: 4) {
             HStack {
                 Spacer()
-                Button {
-                    /* TODO : EditProfileView로 네비게이션 */
-                } label: {
+                NavigationLink(destination: EditProfileView()) {
                     Image("icon.edit")
                         .resizable()
                         .scaledToFit()
