@@ -402,7 +402,7 @@ final class LoginViewModel: ObservableObject {
                                 isUnique = false
                             }
                         } else {
-                            isUnique = false
+                            print("Error: Auth로부터 uid 가져오기 실패")
                         }
                     }
                 }
