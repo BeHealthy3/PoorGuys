@@ -23,6 +23,8 @@ struct MyPageView: View {
                             .padding(.top, 8)
                         myRelatedPosts()
                             .padding(.top, 24)
+                        additionalInfos()
+                            .padding(.top, 16)
                         Spacer()
                     }
                 }
@@ -171,10 +173,75 @@ struct MyPageView: View {
             .padding(.vertical, 24)
             Divider()
         } // end of VStack
-        .padding(.horizontal, 24)
+        .padding(.horizontal, 16)
     }
     
-    
+    @ViewBuilder
+    func additionalInfos() -> some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text("이용 약관")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(Color("neutral_800"))
+                Spacer()
+                Image("arrow.right.gray")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 16)
+            HStack {
+                Text("개인정보 처리방침")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(Color("neutral_800"))
+                Spacer()
+                Image("arrow.right.gray")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 16)
+            HStack {
+                Text("문의하기")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(Color("neutral_800"))
+                Spacer()
+                Image("arrow.right.gray")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 16)
+            HStack {
+                Text("공지사항")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(Color("neutral_800"))
+                Spacer()
+                Image("arrow.right.gray")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 16)
+            HStack {
+                Text("앱 버전")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(Color("neutral_800"))
+                Spacer()
+                Text("현재 버전 \((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!)")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color("neutral_500"))
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 16)
+            Divider()
+        } // end of VStack
+        .padding(.horizontal, 16)
+    }
 }
 
 struct MyPageView_Previews: PreviewProvider {
