@@ -390,7 +390,23 @@ final class LoginViewModel: ObservableObject {
             var isUnique = false
             do {
                 let snapshot = try await docRef.getDocuments()
-                isUnique = snapshot.isEmpty
+                if snapshot.isEmpty {
+                    isUnique = true
+                } else {
+                    for document in snapshot.documents {
+                        let data = document.data()
+                        if let nickName = data["nickName"] as? String,
+                           let user = User.currentUser {
+                            if nickName == user.nickName {
+                                isUnique = true
+                            } else {
+                                isUnique = false
+                            }
+                        } else {
+                            isUnique = false
+                        }
+                    }
+                }
             } catch {
                 print("닉네임 중복 확인 중 오류 : \(error)")
                 throw error
