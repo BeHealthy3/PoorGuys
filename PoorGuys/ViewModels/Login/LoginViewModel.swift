@@ -394,10 +394,9 @@ final class LoginViewModel: ObservableObject {
                     isUnique = true
                 } else {
                     for document in snapshot.documents {
-                        let data = document.data()
-                        if let nickName = data["nickName"] as? String,
-                           let user = User.currentUser {
-                            if nickName == user.nickName {
+                        let id = document.documentID
+                        if let uid = Auth.auth().currentUser?.uid {
+                            if id == uid {
                                 isUnique = true
                             } else {
                                 isUnique = false

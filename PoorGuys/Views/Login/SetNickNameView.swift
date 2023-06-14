@@ -79,6 +79,7 @@ struct SetNickNameView: View {
                       prompt: Text("닉네임을 입력해 주세요")
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(Color("neutral_500")))
+            .autocorrectionDisabled()
             .focused($focusedField, equals: .nickName)
             .font(.system(size: 16, weight: .semibold))
             .padding(.vertical, 16)
