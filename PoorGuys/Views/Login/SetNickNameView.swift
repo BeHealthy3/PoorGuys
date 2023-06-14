@@ -135,7 +135,7 @@ struct SetNickNameView: View {
                         .padding(.leading, 16)
                 } else {
                     if showNickNameNotValidated || showNickNameNotUnique {
-                        Text(showNickNameNotUnique ? "이미 사용 중인 닉네임입니다" : "한글, 영어, 숫자 이용하여 8글자 이내, 숫자만은 불가능")
+                        Text(showNickNameNotUnique && !showNickNameNotValidated ? "이미 사용 중인 닉네임입니다" : "한글, 영어, 숫자 이용하여 8글자 이내, 숫자만은 불가능")
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(Color("red"))
                             .padding(.leading, 16)
