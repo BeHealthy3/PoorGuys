@@ -5,11 +5,12 @@
 //  Created by 신동훈 on 2023/05/20.
 //
 
-import Foundation
+import SwiftUI
 
 protocol PostManagable {
-    func uploadNewPost(_ post: Post) async throws
-    func updatePost(_ post: Post) async throws
+    func uploadImage(_ image: UIImage) async throws -> URL
+    func uploadNewPost(_ post: Post, with image: UIImage) async throws
+    func updatePost(_ post: Post, with image: UIImage) async throws
     mutating func fetch10Posts() async throws -> [Post]
     func fetchPost(postID: String) async throws -> Post
     

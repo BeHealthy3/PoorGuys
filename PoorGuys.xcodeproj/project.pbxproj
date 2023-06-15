@@ -55,6 +55,9 @@
 		D3AA151C2A2369F90091DC61 /* PostDetailLowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA151B2A2369F90091DC61 /* PostDetailLowerView.swift */; };
 		D3AA151E2A23B2740091DC61 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA151D2A23B2740091DC61 /* Notification.swift */; };
 		D3AA15202A23B2D30091DC61 /* TextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA151F2A23B2D30091DC61 /* TextEditorView.swift */; };
+		D3BA03472A38D3B600C99DF9 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA03462A38D3B600C99DF9 /* FirebaseError.swift */; };
+		D3BA03482A38D3B600C99DF9 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA03462A38D3B600C99DF9 /* FirebaseError.swift */; };
+		D3BA03492A38D3B600C99DF9 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA03462A38D3B600C99DF9 /* FirebaseError.swift */; };
 		D3D310782A13D4D900085887 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310772A13D4D900085887 /* CommunityView.swift */; };
 		D3D3107A2A13D4EE00085887 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310792A13D4EE00085887 /* PostView.swift */; };
 		D3E046732A2B23D200AF21BE /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E046722A2B23D200AF21BE /* ImagePickerView.swift */; };
@@ -111,6 +114,7 @@
 		D3AA151B2A2369F90091DC61 /* PostDetailLowerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailLowerView.swift; sourceTree = "<group>"; };
 		D3AA151D2A23B2740091DC61 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		D3AA151F2A23B2D30091DC61 /* TextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorView.swift; sourceTree = "<group>"; };
+		D3BA03462A38D3B600C99DF9 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
 		D3D310772A13D4D900085887 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
 		D3D310792A13D4EE00085887 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		D3E046722A2B23D200AF21BE /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
@@ -185,6 +189,7 @@
 				D39AAE342A18F17D003F9A85 /* Post.swift */,
 				D39AAE402A18F746003F9A85 /* PostManagable.swift */,
 				D39AAE442A19F7D5003F9A85 /* PostManager.swift */,
+				D3BA03462A38D3B600C99DF9 /* FirebaseError.swift */,
 				D39AAE382A18F25C003F9A85 /* Comment.swift */,
 				D3AA15132A21F46C0091DC61 /* String.swift */,
 				D39AAE3C2A18F29F003F9A85 /* Reply.swift */,
@@ -425,6 +430,7 @@
 				D3D3107A2A13D4EE00085887 /* PostView.swift in Sources */,
 				D3AA151C2A2369F90091DC61 /* PostDetailLowerView.swift in Sources */,
 				D3D310782A13D4D900085887 /* CommunityView.swift in Sources */,
+				D3BA03472A38D3B600C99DF9 /* FirebaseError.swift in Sources */,
 				D3AA151A2A22600A0091DC61 /* ReplyView.swift in Sources */,
 				D3F8B5C02A1FBD2C00A4D440 /* BackButton.swift in Sources */,
 				D39AAE452A19F7D5003F9A85 /* PostManager.swift in Sources */,
@@ -445,6 +451,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				609D05422A12AE3D0092A8E2 /* PoorGuysTests.swift in Sources */,
+				D3BA03482A38D3B600C99DF9 /* FirebaseError.swift in Sources */,
 				D39AAE462A19F7D5003F9A85 /* PostManager.swift in Sources */,
 				D39AAE3A2A18F25C003F9A85 /* Comment.swift in Sources */,
 				D39AAE3E2A18F29F003F9A85 /* Reply.swift in Sources */,
@@ -458,6 +465,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3BA03492A38D3B600C99DF9 /* FirebaseError.swift in Sources */,
 				609D054E2A12AE3D0092A8E2 /* PoorGuysUITestsLaunchTests.swift in Sources */,
 				D39AAE3F2A18F29F003F9A85 /* Reply.swift in Sources */,
 				D39AAE472A19F7D5003F9A85 /* PostManager.swift in Sources */,

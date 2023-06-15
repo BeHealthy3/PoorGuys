@@ -8,14 +8,34 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-import Firebase
+import FirebaseStorage
 
 struct FirebasePostManager: PostManagable {
-        
+    
     private let postCollection = Firestore.firestore().collection("posts")
+    private let storage = Storage.storage()
+    
     private var lastDocument: DocumentSnapshot?
     
-    func uploadNewPost(_ post: Post) async throws {
+    @discardableResult
+    func uploadImage(_ image: UIImage) async throws -> URL {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+            throw FirebaseError.imageNotConvertable
+        }
+        
+        let fileName = UUID().uuidString
+        let imageRef = storage.reference().child("post_images/\(fileName).jpg")
+        
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        
+        let _ = try await imageRef.putDataAsync(imageData, metadata: metadata)
+        let url = try await imageRef.downloadURL()
+        
+        return url
+    }
+    
+    func uploadNewPost(_ post: Post, with image: UIImage) async throws {
         do {
             let ref = try postCollection.addDocument(from: post)
             let refId = ref.documentID
@@ -29,8 +49,8 @@ struct FirebasePostManager: PostManagable {
         }
     }
     
-    func updatePost(_ post: Post) async throws {
-        
+    func updatePost(_ post: Post, with image: UIImage) async throws {
+//        postCollection.document(post.id).updateData(<#T##fields: [AnyHashable : Any]##[AnyHashable : Any]#>)
     }
     
     mutating func fetch10Posts() async throws -> [Post] {
@@ -59,12 +79,11 @@ struct FirebasePostManager: PostManagable {
     }
     
     func fetchPost(postID: String) async throws -> Post {
-//        임시
-        return await withUnsafeContinuation { continuation in
-            DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
-                continuation.resume(returning: Post.dummy())
-            }
-        }
+        
+        let documentSnapShot = try await postCollection.document(postID).getDocument()
+        guard let post = try? documentSnapShot.data(as: Post.self) else { throw FirebaseError.documentNotFound }
+        
+        return post
     }
     
     func uploadNewComment(_ comment: Comment) throws {}
@@ -77,15 +96,14 @@ struct FirebasePostManager: PostManagable {
 }
 
 struct MockPostManager: PostManagable {
+    
     static let shared = MockPostManager()
     
     private init() {}
     
-    func uploadNewPost(_ post: Post) async throws {
-    }
-    
-    func updatePost(_ post: Post) async throws {
-    }
+    func uploadImage(_ image: UIImage) async throws -> URL {}
+    func uploadNewPost(_ post: Post, with image: UIImage) async throws {}
+    func updatePost(_ post: Post, with image: UIImage) async throws {}
     
     func fetch10Posts() async throws -> [Post] {
         return await withUnsafeContinuation { continuation in
