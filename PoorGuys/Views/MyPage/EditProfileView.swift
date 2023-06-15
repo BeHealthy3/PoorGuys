@@ -26,6 +26,7 @@ struct EditProfileView: View {
     @State private var isValidatingNickName = false
     @State private var showNickNameNotValidated = false
     @State private var showNickNameNotUnique = false
+    @State private var isPresentingConfirmationDialog = false
     
     @FocusState private var focusedField: FocusedField?
     @Environment(\.dismiss) private var dismiss
@@ -42,6 +43,12 @@ struct EditProfileView: View {
         .sheet(isPresented: $isPhotoPickerPresented) {
             PhotoPicker(pickerResult: $pickedPhoto, isPresented: $isPhotoPickerPresented, isPhotoPickedByUser: .constant(false))
         }
+        .confirmationDialog("프로필 사진 설정", isPresented: $isPresentingConfirmationDialog, actions: {
+            Button("앨범에서 사진 선택") { isPhotoPickerPresented = true }
+            Button("프로필 사진 삭제", role: .destructive) { pickedPhoto = UIImage(named: "user.default")! }
+        }, message: {
+            Text("프로필 사진 설정")
+        })
         .onTapGesture {
             focusedField = nil
         }
@@ -127,7 +134,7 @@ struct EditProfileView: View {
                     
             }
             .onTapGesture {
-                isPhotoPickerPresented = true
+                isPresentingConfirmationDialog = true
             }
     }
     
