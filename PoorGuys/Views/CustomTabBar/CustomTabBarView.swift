@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 enum TabBarItem: Hashable {
     case community, saveHistory, alert
@@ -74,9 +75,16 @@ extension CustomTabBarView {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.bottom, 40)
+        .if(UIDevice.current.hasNotch) { view in
+            view
+                .padding(.bottom, 40)
+        }
+        .if(!UIDevice.current.hasNotch) { view in
+            view
+                .padding(.bottom, 20)
+        }
         .background {
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color("white"))
                 .shadow(color: Color(uiColor: UIColor(red: 0, green: 0, blue: 0, alpha: 0.05)), radius: 10)
         }
