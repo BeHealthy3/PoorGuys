@@ -34,7 +34,7 @@ struct FirebasePostManager: PostManagable {
     }
     
     func removeImage(imageID: String) async throws {
-        try await storageReference.child(imageID).delete()
+        try await storageReference.child("post_images/\(imageID).jpg").delete()
     }
     
     func uploadNewPost(_ post: Post, with image: UIImage?) async throws {
@@ -58,8 +58,26 @@ struct FirebasePostManager: PostManagable {
         }
     }
     
-    func updatePost(_ post: Post, with image: UIImage) async throws {
-//        postCollection.document(post.id).updateData(<#T##fields: [AnyHashable : Any]##[AnyHashable : Any]#>)
+    func updatePost(_ post: Post, with image: UIImage?) async throws {
+        
+        var updatedPost = post
+        
+        if let image = image {
+            updatedPost.imageURL = [try await uploadImage(image).absoluteString]
+            
+            if let oldImageURL = post.imageURL?.first {
+                try await removeImage(imageID: oldImageURL)
+            }
+        }
+        
+        try await postCollection.document(updatedPost.id).updateData(
+            [
+                "isAboutMoney" : updatedPost.isAboutMoney,
+                "title" : updatedPost.title,
+                "body" : updatedPost.body,
+                "imageURL" : updatedPost.imageURL
+            ]
+        )
     }
     
     mutating func fetch10Posts() async throws -> [Post] {
@@ -111,8 +129,9 @@ struct MockPostManager: PostManagable {
     private init() {}
     
     func uploadImage(_ image: UIImage) async throws -> URL { return URL(string: "")! }
+    func removeImage(imageID: String) async throws {}
     func uploadNewPost(_ post: Post, with image: UIImage?) async throws {}
-    func updatePost(_ post: Post, with image: UIImage) async throws {}
+    func updatePost(_ post: Post, with image: UIImage?) async throws {}
     
     func fetch10Posts() async throws -> [Post] {
         return await withUnsafeContinuation { continuation in

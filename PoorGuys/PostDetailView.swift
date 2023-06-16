@@ -70,7 +70,7 @@ struct PostDetailView: View {
         .navigationBarItems(leading: BackButton(presentationMode: presentationMode))
         .onAppear {
             Task {
-                post = try await MockPostManager.shared.fetchPost(postID: "")
+                post = try await FirebasePostManager().fetchPost(postID: postID)
                 
                 comments = rearrangeComments(
                     post?.comments
