@@ -11,9 +11,8 @@ import FirebaseFirestoreSwift
 import FirebaseStorage
 
 struct FirebasePostManager: PostManagable {
-    
     private let postCollection = Firestore.firestore().collection("posts")
-    private let storage = Storage.storage()
+    private let storageReference = Storage.storage().reference()
     
     private var lastDocument: DocumentSnapshot?
     
@@ -23,7 +22,7 @@ struct FirebasePostManager: PostManagable {
         }
         
         let fileName = UUID().uuidString
-        let imageRef = storage.reference().child("post_images/\(fileName).jpg")
+        let imageRef = storageReference.child("post_images/\(fileName).jpg")
         
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpeg"
@@ -34,9 +33,14 @@ struct FirebasePostManager: PostManagable {
         return url
     }
     
+    func removeImage(imageID: String) async throws {
+        try await storageReference.child(imageID).delete()
+    }
+    
     func uploadNewPost(_ post: Post, with image: UIImage?) async throws {
         do {
             var post = post
+            
             if let image = image {
                 let imageURL = try await uploadImage(image)
                 post.imageURL = [imageURL.absoluteString]
