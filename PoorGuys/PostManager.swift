@@ -17,7 +17,6 @@ struct FirebasePostManager: PostManagable {
     
     private var lastDocument: DocumentSnapshot?
     
-    @discardableResult
     func uploadImage(_ image: UIImage) async throws -> URL {
         guard let imageData = image.jpegData(compressionQuality: 0.5) else {
             throw FirebaseError.imageNotConvertable
@@ -35,8 +34,14 @@ struct FirebasePostManager: PostManagable {
         return url
     }
     
-    func uploadNewPost(_ post: Post, with image: UIImage) async throws {
+    func uploadNewPost(_ post: Post, with image: UIImage?) async throws {
         do {
+            var post = post
+            if let image = image {
+                let imageURL = try await uploadImage(image)
+                post.imageURL = [imageURL.absoluteString]
+            }
+            
             let ref = try postCollection.addDocument(from: post)
             let refId = ref.documentID
             let data: [String : Any] = [
@@ -101,8 +106,8 @@ struct MockPostManager: PostManagable {
     
     private init() {}
     
-    func uploadImage(_ image: UIImage) async throws -> URL {}
-    func uploadNewPost(_ post: Post, with image: UIImage) async throws {}
+    func uploadImage(_ image: UIImage) async throws -> URL { return URL(string: "")! }
+    func uploadNewPost(_ post: Post, with image: UIImage?) async throws {}
     func updatePost(_ post: Post, with image: UIImage) async throws {}
     
     func fetch10Posts() async throws -> [Post] {

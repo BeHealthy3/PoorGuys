@@ -9,7 +9,7 @@ import SwiftUI
 
 protocol PostManagable {
     func uploadImage(_ image: UIImage) async throws -> URL
-    func uploadNewPost(_ post: Post, with image: UIImage) async throws
+    func uploadNewPost(_ post: Post, with image: UIImage?) async throws
     func updatePost(_ post: Post, with image: UIImage) async throws
     mutating func fetch10Posts() async throws -> [Post]
     func fetchPost(postID: String) async throws -> Post
