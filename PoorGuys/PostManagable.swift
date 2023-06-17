@@ -8,12 +8,11 @@
 import SwiftUI
 
 protocol PostManagable {
-    func uploadImage(_ image: UIImage) async throws -> URL
-    func removeImage(imageID: String) async throws
     func uploadNewPost(_ post: Post, with image: UIImage?) async throws
     func updatePost(_ post: Post, with image: UIImage?) async throws
     mutating func fetch10Posts() async throws -> [Post]
     func fetchPost(postID: String) async throws -> Post
+    func removePost(postID: String) async throws
     
     func uploadNewComment(_ comment: Comment) throws
     func deleteComment(commentID: String) async throws

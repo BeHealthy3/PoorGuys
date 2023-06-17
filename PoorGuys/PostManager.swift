@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 import FirebaseStorage
 
 struct FirebasePostManager: PostManagable {
+    
     private let postCollection = Firestore.firestore().collection("posts")
     private let storageReference = Storage.storage().reference()
     
@@ -80,6 +81,10 @@ struct FirebasePostManager: PostManagable {
         )
     }
     
+    func removePost(postID: String) async throws {
+        try await postCollection.document(postID).delete()
+    }
+    
     mutating func fetch10Posts() async throws -> [Post] {
         var query = postCollection
                .order(by: "timeStamp", descending: true)
@@ -108,7 +113,7 @@ struct FirebasePostManager: PostManagable {
     func fetchPost(postID: String) async throws -> Post {
         
         let documentSnapShot = try await postCollection.document(postID).getDocument()
-        guard let post = try? documentSnapShot.data(as: Post.self) else { throw FirebaseError.documentNotFound }
+        guard let post = try? documentSnapShot.data(as: Post.self), documentSnapShot.exists else { throw FirebaseError.documentNotFound }
         
         return post
     }
@@ -128,10 +133,16 @@ struct MockPostManager: PostManagable {
     
     private init() {}
     
-    func uploadImage(_ image: UIImage) async throws -> URL { return URL(string: "")! }
-    func removeImage(imageID: String) async throws {}
     func uploadNewPost(_ post: Post, with image: UIImage?) async throws {}
     func updatePost(_ post: Post, with image: UIImage?) async throws {}
+    func fetchPost(postID: String) async throws -> Post {
+        return await withUnsafeContinuation { continuation in
+            DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
+                continuation.resume(returning: Post.dummy())
+            }
+        }
+    }
+    func removePost(postID: String) async throws {}
     
     func fetch10Posts() async throws -> [Post] {
         return await withUnsafeContinuation { continuation in
@@ -142,16 +153,7 @@ struct MockPostManager: PostManagable {
         }
     }
     
-    func fetchPost(postID: String) async throws -> Post {
-        return await withUnsafeContinuation { continuation in
-            DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
-                continuation.resume(returning: Post.dummy())
-            }
-        }
-    }
-    
     func uploadNewComment(_ comment: Comment) throws {}
-    
     func deleteComment(commentID: String) async throws {}
     
 //    func uploadNewReply(_ reply: Reply) throws {}
