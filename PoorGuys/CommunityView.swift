@@ -61,6 +61,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     
     @StateObject private var viewModel: ViewModel
     @State private var isViewDidLoad: Bool = false
+    @State private var isModalPresented = false
     
     init(viewModel: ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -74,10 +75,15 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                 HStack {
                     Spacer()
                     
-                    NavigationLink(destination: PostFillingView(postID: .constant(""))) {
+                    Button {
+                        isModalPresented = true
+                    } label: {
                         Image("edit")
                             .imageScale(.large)
                             .foregroundColor(.accentColor)
+                    }
+                    .fullScreenCover(isPresented: $isModalPresented) {
+                        PostFillingView(postID: .constant(""))
                     }
                     
                     Button(action: {
