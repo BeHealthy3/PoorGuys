@@ -54,6 +54,7 @@ struct FirebasePostManager: PostManagable {
             ]
             
             try await postCollection.document(refId).updateData(data)
+            
         } catch {
             throw error
         }
@@ -118,7 +119,9 @@ struct FirebasePostManager: PostManagable {
         return post
     }
     
-    func uploadNewComment(_ comment: Comment) throws {}
+    func uploadNewComment(_ comments: [Comment], in post: Post) async throws {
+        try await postCollection.document(post.id).updateData( ["comments" : comments] )
+    }
     
     func deleteComment(commentID: String) async throws {}
     
@@ -153,7 +156,7 @@ struct MockPostManager: PostManagable {
         }
     }
     
-    func uploadNewComment(_ comment: Comment) throws {}
+    func uploadNewComment(_ comments: [Comment], in post: Post) async throws {}
     func deleteComment(commentID: String) async throws {}
     
 //    func uploadNewReply(_ reply: Reply) throws {}
