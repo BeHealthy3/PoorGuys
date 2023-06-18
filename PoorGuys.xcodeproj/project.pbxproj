@@ -48,6 +48,7 @@
 		609D056A2A12B04B0092A8E2 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 609D05692A12B04B0092A8E2 /* FirebaseFirestoreSwift */; };
 		609D056C2A12B04B0092A8E2 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 609D056B2A12B04B0092A8E2 /* FirebaseStorage */; };
 		609D056E2A12B04B0092A8E2 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 609D056D2A12B04B0092A8E2 /* FirebaseStorageCombine-Community */; };
+		60A8E0982A3909D30026DA04 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E0972A3909D30026DA04 /* EditProfileView.swift */; };
 		60E12A6F2A38510B008AFCEF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60E12A6E2A38510B008AFCEF /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -95,6 +96,7 @@
 		609D05472A12AE3D0092A8E2 /* PoorGuysUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PoorGuysUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		609D054B2A12AE3D0092A8E2 /* PoorGuysUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoorGuysUITests.swift; sourceTree = "<group>"; };
 		609D054D2A12AE3D0092A8E2 /* PoorGuysUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoorGuysUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		60A8E0972A3909D30026DA04 /* EditProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		60E12A6E2A38510B008AFCEF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -196,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				60558D052A14BA2C007581AD /* MyPageView.swift */,
+				60A8E0972A3909D30026DA04 /* EditProfileView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -473,6 +476,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6074FE342A27AC090020FBF2 /* PhotoPicker.swift in Sources */,
+				60A8E0982A3909D30026DA04 /* EditProfileView.swift in Sources */,
 				6001EFD12A13600500A9A2EF /* LoginView.swift in Sources */,
 				60405D5C2A2EF5BB0053BEC9 /* LaunchScreen.swift in Sources */,
 				6001EFD92A13669300A9A2EF /* SetProfileImageView.swift in Sources */,
