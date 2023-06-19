@@ -83,7 +83,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                             .foregroundColor(.accentColor)
                     }
                     .fullScreenCover(isPresented: $isModalPresented) {
-                        PostFillingView(postID: .constant(""))
+                        PostFillingView(postID: .constant(""), isPresented: $isModalPresented)
                     }
                     
                     Button(action: {

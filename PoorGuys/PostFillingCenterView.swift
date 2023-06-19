@@ -17,7 +17,7 @@ struct PostFillingCenterView: View {
     @State private var isShowingImagePicker = false
     @FocusState private var isTextFieldFocused: Bool
 
-    init(content: Binding<String>, imageURL: Binding<String?>, image: Binding<UIImage?>) {
+    init(content: Binding<String>, image: Binding<UIImage?>) {
         _content = content
 //        _imageURL = imageURL
         _selectedImage = image
@@ -129,6 +129,6 @@ struct PostFillingCenterView: View {
 
 struct PostFillingCenterView_Previews: PreviewProvider {
     static var previews: some View {
-        PostFillingCenterView(content: .constant(""), imageURL: .constant(nil), image: .constant(nil))
+        PostFillingCenterView(content: .constant(""), image: .constant(nil))
     }
 }
