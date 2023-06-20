@@ -31,8 +31,6 @@
 		6093F7472A381904004F9D53 /* GIFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6093F7462A381904004F9D53 /* GIFView.swift */; };
 		6093F7492A38190A004F9D53 /* welcome.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6093F7482A38190A004F9D53 /* welcome.gif */; };
 		6093F74C2A381999004F9D53 /* FLAnimatedImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6093F74B2A381999004F9D53 /* FLAnimatedImage */; };
-		609D05312A12AE3C0092A8E2 /* PoorGuysApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609D05302A12AE3C0092A8E2 /* PoorGuysApp.swift */; };
-		609D05332A12AE3C0092A8E2 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609D05322A12AE3C0092A8E2 /* MainView.swift */; };
 		609D05352A12AE3D0092A8E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609D05342A12AE3D0092A8E2 /* Assets.xcassets */; };
 		609D05382A12AE3D0092A8E2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609D05372A12AE3D0092A8E2 /* Preview Assets.xcassets */; };
 		609D05422A12AE3D0092A8E2 /* PoorGuysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609D05412A12AE3D0092A8E2 /* PoorGuysTests.swift */; };
@@ -54,6 +52,49 @@
 		60A8E09F2A3AABAF0026DA04 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E09E2A3AABAF0026DA04 /* TabBarView.swift */; };
 		60A8E0A12A3AE1650026DA04 /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E0A02A3AE1650026DA04 /* UIDevice+Extensions.swift */; };
 		60E12A6F2A38510B008AFCEF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60E12A6E2A38510B008AFCEF /* GoogleService-Info.plist */; };
+		D3015FC12A24E06000F102D7 /* PostFillingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3015FC02A24E06000F102D7 /* PostFillingView.swift */; };
+		D3015FC32A24EEAE00F102D7 /* PostFillingCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3015FC22A24EEAE00F102D7 /* PostFillingCenterView.swift */; };
+		D32363BD2A2C73D200857135 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D32363BC2A2C73D200857135 /* Kingfisher */; };
+		D32363BF2A2C758800857135 /* ImageDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32363BE2A2C758800857135 /* ImageDownloadManager.swift */; };
+		D34868B12A1E49ED0035FB2A /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34868B02A1E49ED0035FB2A /* PostDetailView.swift */; };
+		D34868B22A1E49ED0035FB2A /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34868B02A1E49ED0035FB2A /* PostDetailView.swift */; };
+		D34868B32A1E49ED0035FB2A /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34868B02A1E49ED0035FB2A /* PostDetailView.swift */; };
+		D39AAE352A18F17D003F9A85 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE342A18F17D003F9A85 /* Post.swift */; };
+		D39AAE362A18F17D003F9A85 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE342A18F17D003F9A85 /* Post.swift */; };
+		D39AAE372A18F17D003F9A85 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE342A18F17D003F9A85 /* Post.swift */; };
+		D39AAE392A18F25C003F9A85 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE382A18F25C003F9A85 /* Comment.swift */; };
+		D39AAE3A2A18F25C003F9A85 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE382A18F25C003F9A85 /* Comment.swift */; };
+		D39AAE3B2A18F25C003F9A85 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE382A18F25C003F9A85 /* Comment.swift */; };
+		D39AAE3D2A18F29F003F9A85 /* Reply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE3C2A18F29F003F9A85 /* Reply.swift */; };
+		D39AAE3E2A18F29F003F9A85 /* Reply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE3C2A18F29F003F9A85 /* Reply.swift */; };
+		D39AAE3F2A18F29F003F9A85 /* Reply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE3C2A18F29F003F9A85 /* Reply.swift */; };
+		D39AAE412A18F746003F9A85 /* PostManagable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE402A18F746003F9A85 /* PostManagable.swift */; };
+		D39AAE422A18F746003F9A85 /* PostManagable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE402A18F746003F9A85 /* PostManagable.swift */; };
+		D39AAE432A18F746003F9A85 /* PostManagable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE402A18F746003F9A85 /* PostManagable.swift */; };
+		D39AAE452A19F7D5003F9A85 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE442A19F7D5003F9A85 /* PostManager.swift */; };
+		D39AAE462A19F7D5003F9A85 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE442A19F7D5003F9A85 /* PostManager.swift */; };
+		D39AAE472A19F7D5003F9A85 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39AAE442A19F7D5003F9A85 /* PostManager.swift */; };
+		D3AA15072A209DE60091DC61 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15062A209DE60091DC61 /* DateFormatter.swift */; };
+		D3AA15092A20AD040091DC61 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15082A20AD040091DC61 /* Shape.swift */; };
+		D3AA15122A21F3570091DC61 /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = D3AA15112A21F3570091DC61 /* LoremSwiftum */; };
+		D3AA15142A21F46C0091DC61 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15132A21F46C0091DC61 /* String.swift */; };
+		D3AA15182A2253D40091DC61 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15172A2253D40091DC61 /* CommentView.swift */; };
+		D3AA151A2A22600A0091DC61 /* ReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA15192A22600A0091DC61 /* ReplyView.swift */; };
+		D3AA151C2A2369F90091DC61 /* PostDetailLowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA151B2A2369F90091DC61 /* PostDetailLowerView.swift */; };
+		D3AA151E2A23B2740091DC61 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA151D2A23B2740091DC61 /* Notification.swift */; };
+		D3AA15202A23B2D30091DC61 /* TextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA151F2A23B2D30091DC61 /* TextEditorView.swift */; };
+		D3BA03472A38D3B600C99DF9 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA03462A38D3B600C99DF9 /* FirebaseError.swift */; };
+		D3BA03482A38D3B600C99DF9 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA03462A38D3B600C99DF9 /* FirebaseError.swift */; };
+		D3BA03492A38D3B600C99DF9 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA03462A38D3B600C99DF9 /* FirebaseError.swift */; };
+		D3D310782A13D4D900085887 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310772A13D4D900085887 /* CommunityView.swift */; };
+		D3D3107A2A13D4EE00085887 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D310792A13D4EE00085887 /* PostView.swift */; };
+		D3E046732A2B23D200AF21BE /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E046722A2B23D200AF21BE /* ImagePickerView.swift */; };
+		D3F3DF9C2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
+		D3F3DF9D2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
+		D3F3DF9E2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
+		D3F8B5BC2A1F6D9000A4D440 /* AppColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8B5BB2A1F6D9000A4D440 /* AppColor.swift */; };
+		D3F8B5C02A1FBD2C00A4D440 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8B5BF2A1FBD2C00A4D440 /* BackButton.swift */; };
+		D3F8B5C22A1FCED100A4D440 /* PostDetailUpperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8B5C12A1FCED100A4D440 /* PostDetailUpperView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,8 +132,6 @@
 		6093F7462A381904004F9D53 /* GIFView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GIFView.swift; sourceTree = "<group>"; };
 		6093F7482A38190A004F9D53 /* welcome.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = welcome.gif; sourceTree = "<group>"; };
 		609D052D2A12AE3C0092A8E2 /* PoorGuys.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoorGuys.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		609D05302A12AE3C0092A8E2 /* PoorGuysApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoorGuysApp.swift; sourceTree = "<group>"; };
-		609D05322A12AE3C0092A8E2 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		609D05342A12AE3D0092A8E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		609D05372A12AE3D0092A8E2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		609D053D2A12AE3D0092A8E2 /* PoorGuysTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PoorGuysTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +145,31 @@
 		60A8E09E2A3AABAF0026DA04 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		60A8E0A02A3AE1650026DA04 /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
 		60E12A6E2A38510B008AFCEF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D3015FC02A24E06000F102D7 /* PostFillingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFillingView.swift; sourceTree = "<group>"; };
+		D3015FC22A24EEAE00F102D7 /* PostFillingCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFillingCenterView.swift; sourceTree = "<group>"; };
+		D32363BE2A2C758800857135 /* ImageDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadManager.swift; sourceTree = "<group>"; };
+		D34868B02A1E49ED0035FB2A /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
+		D39AAE342A18F17D003F9A85 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		D39AAE382A18F25C003F9A85 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		D39AAE3C2A18F29F003F9A85 /* Reply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reply.swift; sourceTree = "<group>"; };
+		D39AAE402A18F746003F9A85 /* PostManagable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManagable.swift; sourceTree = "<group>"; };
+		D39AAE442A19F7D5003F9A85 /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
+		D3AA15062A209DE60091DC61 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		D3AA15082A20AD040091DC61 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
+		D3AA15132A21F46C0091DC61 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		D3AA15172A2253D40091DC61 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
+		D3AA15192A22600A0091DC61 /* ReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyView.swift; sourceTree = "<group>"; };
+		D3AA151B2A2369F90091DC61 /* PostDetailLowerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailLowerView.swift; sourceTree = "<group>"; };
+		D3AA151D2A23B2740091DC61 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		D3AA151F2A23B2D30091DC61 /* TextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorView.swift; sourceTree = "<group>"; };
+		D3BA03462A38D3B600C99DF9 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
+		D3D310772A13D4D900085887 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
+		D3D310792A13D4EE00085887 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
+		D3E046722A2B23D200AF21BE /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
+		D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D3F8B5BB2A1F6D9000A4D440 /* AppColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColor.swift; sourceTree = "<group>"; };
+		D3F8B5BF2A1FBD2C00A4D440 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
+		D3F8B5C12A1FCED100A4D440 /* PostDetailUpperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailUpperView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +177,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D32363BD2A2C73D200857135 /* Kingfisher in Frameworks */,
 				609D055E2A12B04B0092A8E2 /* FirebaseAnalyticsSwift in Frameworks */,
 				609D05602A12B04B0092A8E2 /* FirebaseAuth in Frameworks */,
 				6001EFF22A1391BF00A9A2EF /* GoogleSignIn in Frameworks */,
@@ -125,6 +190,7 @@
 				609D05622A12B04B0092A8E2 /* FirebaseAuthCombine-Community in Frameworks */,
 				609D05662A12B04B0092A8E2 /* FirebaseFirestore in Frameworks */,
 				609D05682A12B04B0092A8E2 /* FirebaseFirestoreCombine-Community in Frameworks */,
+				D3AA15122A21F3570091DC61 /* LoremSwiftum in Frameworks */,
 				609D056A2A12B04B0092A8E2 /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -199,7 +265,6 @@
 		601A6D582A1F95FC0066D5CD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				609D05342A12AE3D0092A8E2 /* Assets.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -216,8 +281,6 @@
 		606782E82A14C52100BF1E12 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				609D05302A12AE3C0092A8E2 /* PoorGuysApp.swift */,
-				609D05322A12AE3C0092A8E2 /* MainView.swift */,
 				60405D5B2A2EF5BB0053BEC9 /* LaunchScreen.swift */,
 			);
 			path = App;
@@ -272,6 +335,32 @@
 		609D052F2A12AE3C0092A8E2 /* PoorGuys */ = {
 			isa = PBXGroup;
 			children = (
+				D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */,
+				D39AAE342A18F17D003F9A85 /* Post.swift */,
+				D39AAE402A18F746003F9A85 /* PostManagable.swift */,
+				D39AAE442A19F7D5003F9A85 /* PostManager.swift */,
+				D3BA03462A38D3B600C99DF9 /* FirebaseError.swift */,
+				D39AAE382A18F25C003F9A85 /* Comment.swift */,
+				D3AA15132A21F46C0091DC61 /* String.swift */,
+				D39AAE3C2A18F29F003F9A85 /* Reply.swift */,
+				D3F8B5BB2A1F6D9000A4D440 /* AppColor.swift */,
+				D3F8B5BF2A1FBD2C00A4D440 /* BackButton.swift */,
+				D3AA15082A20AD040091DC61 /* Shape.swift */,
+				D3AA151D2A23B2740091DC61 /* Notification.swift */,
+				D3D310772A13D4D900085887 /* CommunityView.swift */,
+				D3015FC02A24E06000F102D7 /* PostFillingView.swift */,
+				D3015FC22A24EEAE00F102D7 /* PostFillingCenterView.swift */,
+				D3E046722A2B23D200AF21BE /* ImagePickerView.swift */,
+				D3D310792A13D4EE00085887 /* PostView.swift */,
+				D34868B02A1E49ED0035FB2A /* PostDetailView.swift */,
+				D3F8B5C12A1FCED100A4D440 /* PostDetailUpperView.swift */,
+				D3AA151B2A2369F90091DC61 /* PostDetailLowerView.swift */,
+				D3AA151F2A23B2D30091DC61 /* TextEditorView.swift */,
+				D3AA15172A2253D40091DC61 /* CommentView.swift */,
+				D3AA15192A22600A0091DC61 /* ReplyView.swift */,
+				D3AA15062A209DE60091DC61 /* DateFormatter.swift */,
+				D32363BE2A2C758800857135 /* ImageDownloadManager.swift */,
+				609D05342A12AE3D0092A8E2 /* Assets.xcassets */,
 				60E12A6E2A38510B008AFCEF /* GoogleService-Info.plist */,
 				6001EFF52A1488E100A9A2EF /* Info.plist */,
 				606782E82A14C52100BF1E12 /* App */,
@@ -348,6 +437,8 @@
 				609D05692A12B04B0092A8E2 /* FirebaseFirestoreSwift */,
 				609D056B2A12B04B0092A8E2 /* FirebaseStorage */,
 				609D056D2A12B04B0092A8E2 /* FirebaseStorageCombine-Community */,
+				D3AA15112A21F3570091DC61 /* LoremSwiftum */,
+				D32363BC2A2C73D200857135 /* Kingfisher */,
 				6001EFF12A1391BF00A9A2EF /* GoogleSignIn */,
 				6001EFF32A1391BF00A9A2EF /* GoogleSignInSwift */,
 				6093F74B2A381999004F9D53 /* FLAnimatedImage */,
@@ -426,6 +517,8 @@
 			mainGroup = 609D05242A12AE3C0092A8E2;
 			packageReferences = (
 				609D055A2A12B04B0092A8E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				D3AA15102A21F3570091DC61 /* XCRemoteSwiftPackageReference "LoremSwiftum" */,
+				D32363BB2A2C73D200857135 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				6001EFF02A1391BF00A9A2EF /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				6093F74A2A381999004F9D53 /* XCRemoteSwiftPackageReference "FLAnimatedImage" */,
 			);
@@ -448,6 +541,7 @@
 				609D05382A12AE3D0092A8E2 /* Preview Assets.xcassets in Resources */,
 				60E12A6F2A38510B008AFCEF /* GoogleService-Info.plist in Resources */,
 				609D05352A12AE3D0092A8E2 /* Assets.xcassets in Resources */,
+				D3F3DF9C2A1395E9006FB45E /* GoogleService-Info.plist in Resources */,
 				6093F7492A38190A004F9D53 /* welcome.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -456,6 +550,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3F3DF9D2A1395E9006FB45E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,6 +558,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3F3DF9E2A1395E9006FB45E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -495,6 +591,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3AA15182A2253D40091DC61 /* CommentView.swift in Sources */,
+				D39AAE352A18F17D003F9A85 /* Post.swift in Sources */,
+				D3015FC12A24E06000F102D7 /* PostFillingView.swift in Sources */,
+				D34868B12A1E49ED0035FB2A /* PostDetailView.swift in Sources */,
+				D3E046732A2B23D200AF21BE /* ImagePickerView.swift in Sources */,
+				D39AAE392A18F25C003F9A85 /* Comment.swift in Sources */,
+				D3AA15202A23B2D30091DC61 /* TextEditorView.swift in Sources */,
+				D39AAE412A18F746003F9A85 /* PostManagable.swift in Sources */,
+				D3D3107A2A13D4EE00085887 /* PostView.swift in Sources */,
+				D3AA151C2A2369F90091DC61 /* PostDetailLowerView.swift in Sources */,
+				D3D310782A13D4D900085887 /* CommunityView.swift in Sources */,
+				D3BA03472A38D3B600C99DF9 /* FirebaseError.swift in Sources */,
+				D3AA151A2A22600A0091DC61 /* ReplyView.swift in Sources */,
+				D3F8B5C02A1FBD2C00A4D440 /* BackButton.swift in Sources */,
+				D39AAE452A19F7D5003F9A85 /* PostManager.swift in Sources */,
+				D3AA15142A21F46C0091DC61 /* String.swift in Sources */,
+				D3AA15092A20AD040091DC61 /* Shape.swift in Sources */,
+				D32363BF2A2C758800857135 /* ImageDownloadManager.swift in Sources */,
+				D3AA15072A209DE60091DC61 /* DateFormatter.swift in Sources */,
+				D3AA151E2A23B2740091DC61 /* Notification.swift in Sources */,
+				D3F8B5C22A1FCED100A4D440 /* PostDetailUpperView.swift in Sources */,
+				D3015FC32A24EEAE00F102D7 /* PostFillingCenterView.swift in Sources */,
+				D3F8B5BC2A1F6D9000A4D440 /* AppColor.swift in Sources */,
+				D39AAE3D2A18F29F003F9A85 /* Reply.swift in Sources */,
 				6074FE342A27AC090020FBF2 /* PhotoPicker.swift in Sources */,
 				60A8E0A12A3AE1650026DA04 /* UIDevice+Extensions.swift in Sources */,
 				60A8E0982A3909D30026DA04 /* EditProfileView.swift in Sources */,
@@ -504,13 +624,11 @@
 				601A6D532A1F71160066D5CD /* Debounce+View+Extension.swift in Sources */,
 				60A8E09D2A39DA5E0026DA04 /* CustomTabBarContainerView.swift in Sources */,
 				6001EFD72A13668B00A9A2EF /* SetNickNameView.swift in Sources */,
-				609D05332A12AE3C0092A8E2 /* MainView.swift in Sources */,
 				60558D062A14BA2C007581AD /* MyPageView.swift in Sources */,
 				60A8E09F2A3AABAF0026DA04 /* TabBarView.swift in Sources */,
 				60A8E09B2A39D0E00026DA04 /* CustomTabBarView.swift in Sources */,
 				6001EFDB2A1366BE00A9A2EF /* SignUpCompletedView.swift in Sources */,
 				6093F7472A381904004F9D53 /* GIFView.swift in Sources */,
-				609D05312A12AE3C0092A8E2 /* PoorGuysApp.swift in Sources */,
 				6001EFE82A13910B00A9A2EF /* LoginViewModel.swift in Sources */,
 				6074FE322A272E3E0020FBF2 /* View+Extensions.swift in Sources */,
 				606782F12A14D36500BF1E12 /* SecretConstants.swift in Sources */,
@@ -525,6 +643,13 @@
 			files = (
 				6001EFE92A13910B00A9A2EF /* LoginViewModel.swift in Sources */,
 				609D05422A12AE3D0092A8E2 /* PoorGuysTests.swift in Sources */,
+				D3BA03482A38D3B600C99DF9 /* FirebaseError.swift in Sources */,
+				D39AAE462A19F7D5003F9A85 /* PostManager.swift in Sources */,
+				D39AAE3A2A18F25C003F9A85 /* Comment.swift in Sources */,
+				D39AAE3E2A18F29F003F9A85 /* Reply.swift in Sources */,
+				D34868B22A1E49ED0035FB2A /* PostDetailView.swift in Sources */,
+				D39AAE362A18F17D003F9A85 /* Post.swift in Sources */,
+				D39AAE422A18F746003F9A85 /* PostManagable.swift in Sources */,
 				606782F72A14D50F00BF1E12 /* UserModel.swift in Sources */,
 				606782F22A14D36500BF1E12 /* SecretConstants.swift in Sources */,
 			);
@@ -534,8 +659,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3BA03492A38D3B600C99DF9 /* FirebaseError.swift in Sources */,
 				609D054E2A12AE3D0092A8E2 /* PoorGuysUITestsLaunchTests.swift in Sources */,
+				D39AAE3F2A18F29F003F9A85 /* Reply.swift in Sources */,
+				D39AAE472A19F7D5003F9A85 /* PostManager.swift in Sources */,
+				D34868B32A1E49ED0035FB2A /* PostDetailView.swift in Sources */,
+				D39AAE432A18F746003F9A85 /* PostManagable.swift in Sources */,
+				D39AAE372A18F17D003F9A85 /* Post.swift in Sources */,
 				609D054C2A12AE3D0092A8E2 /* PoorGuysUITests.swift in Sources */,
+				D39AAE3B2A18F25C003F9A85 /* Comment.swift in Sources */,
 				6001EFEA2A13910B00A9A2EF /* LoginViewModel.swift in Sources */,
 				606782F82A14D50F00BF1E12 /* UserModel.swift in Sources */,
 				606782F32A14D36500BF1E12 /* SecretConstants.swift in Sources */,
@@ -886,6 +1018,22 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		D32363BB2A2C73D200857135 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		D3AA15102A21F3570091DC61 /* XCRemoteSwiftPackageReference "LoremSwiftum" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lukaskubanek/LoremSwiftum";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -953,6 +1101,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 609D055A2A12B04B0092A8E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		D32363BC2A2C73D200857135 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D32363BB2A2C73D200857135 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		D3AA15112A21F3570091DC61 /* LoremSwiftum */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3AA15102A21F3570091DC61 /* XCRemoteSwiftPackageReference "LoremSwiftum" */;
+			productName = LoremSwiftum;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
