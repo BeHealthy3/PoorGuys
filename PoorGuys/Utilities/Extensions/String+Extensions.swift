@@ -1,5 +1,5 @@
 //
-//  String.swift
+//  String+Extensions.swift
 //  PoorGuys
 //
 //  Created by 신동훈 on 2023/05/27.
