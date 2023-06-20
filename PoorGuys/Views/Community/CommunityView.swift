@@ -8,55 +8,6 @@
 import SwiftUI
 import Combine
 
-protocol CommunityPostsManagable: ObservableObject {
-    
-    var postManager: PostManagable { get }
-    
-    var posts: [Post] { get set }
-    
-    func fetch10Posts() async
-    func thisIsTheThirdLast(_ post: Post) -> Bool
-}
-
-extension CommunityPostsManagable {
-    func removeFirst10Posts() {
-        posts.removeFirst(10)
-    }
-    
-    func removeLast10Posts() {
-        posts.removeLast(10)
-    }
-}
-
-class MockCommunityViewModel: CommunityPostsManagable {
-    
-    var postManager: PostManagable = FirebasePostManager()
-    
-    @Published var posts: [Post] = []
-    
-    func fetch10Posts() async {
-        do {
-            let newPosts = try await postManager.fetch10Posts()
-            
-            DispatchQueue.main.async {
-                self.posts.insert(contentsOf: newPosts, at: 0)
-            }
-        } catch {
-            print("fetch error")
-        }
-    }
-    
-    func thisIsTheThirdLast(_ post: Post) -> Bool {
-        guard posts.count >= 3 else {
-            // 배열의 크기가 3보다 작으면 끝에서 3번째 요소가 없으므로 false 반환
-            return false
-        }
-        
-        let thirdLastElement = posts[posts.count - 3]
-        return post == thirdLastElement
-    }
-}
-
 struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     
     @StateObject private var viewModel: ViewModel
@@ -145,7 +96,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
 
 struct CommunityView_Previews: PreviewProvider {
     static var previews: some View {
-        CommunityView(viewModel: MockCommunityViewModel())
+        CommunityView(viewModel: CommunityViewModel())
     }
 }
 
