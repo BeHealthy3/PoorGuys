@@ -110,3 +110,6 @@ xcuserdata
 
 ### Secret Constants ###
 PoorGuys/Utilities/Constants/SecretConstants.swift
+
+# Ignore .DS_Store files
+.DS_Store
