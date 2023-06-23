@@ -13,15 +13,17 @@ struct PostFillingCenterView: View {
 
     @Binding var content: String
 //    @Binding var imageURL: String?
+    @Binding var isAboutMoney: Bool
     @Binding var selectedImage: UIImage?
     @State private var isShowingImagePicker = false
     @FocusState private var isTextFieldFocused: Bool
 
-    init(content: Binding<String>, image: Binding<UIImage?>) {
+    init(content: Binding<String>, isAboutMoney: Binding<Bool>, image: Binding<UIImage?>) {
         _content = content
 //        _imageURL = imageURL
         _selectedImage = image
         UITextView.appearance().backgroundColor = .clear
+        _isAboutMoney = isAboutMoney
     }
     
     var body: some View {
@@ -122,13 +124,13 @@ struct PostFillingCenterView: View {
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 16))
             }
         }
-        .background(Color.appColor(.neutral050))
+        .background(isAboutMoney ? Color.appColor(.primary050) : Color.appColor(.neutral050))
         .cornerRadius(12)
     }
 }
 
 struct PostFillingCenterView_Previews: PreviewProvider {
     static var previews: some View {
-        PostFillingCenterView(content: .constant(""), image: .constant(nil))
+        PostFillingCenterView(content: .constant(""), isAboutMoney: .constant(false), image: .constant(nil))
     }
 }
