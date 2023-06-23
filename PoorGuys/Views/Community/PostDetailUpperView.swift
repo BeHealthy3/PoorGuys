@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PostDetailUpperView: View {
     
+    @Environment(\.presentationMode) var presentationMode
     @State var showingSheet = false
     
     let post: Post
@@ -37,15 +38,35 @@ struct PostDetailUpperView: View {
                         showingSheet = true
                     }
                     .confirmationDialog("", isPresented: $showingSheet) {
-                        Button {
-                            print("수정하기")
-                        } label: {
-                            Text("수정하기")
-                        }
-                        Button {
-                            print("신고하기")
-                        } label: {
-                            Text("신고하기")
+                        if User.currentUser?.uid == post.userID {
+                            Button(role: .destructive) {
+                                
+                                Task.detached {
+                                    do {
+                                        try await FirebasePostManager().removePost(postID: post.id)
+                                    } catch {
+                                        print("삭제 실패")
+                                    }
+                                    
+                                    DispatchQueue.main.async {
+                                        presentationMode.wrappedValue.dismiss()
+                                    }
+                                }
+                                
+                            } label: {
+                                Text("삭제하기")
+                            }
+                            Button {
+                                print("수정하기")
+                            } label: {
+                                Text("수정하기")
+                            }
+                        } else {
+                            Button {
+                                print("신고하기")
+                            } label: {
+                                Text("신고하기")
+                            }
                         }
                     }
             }

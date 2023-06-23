@@ -13,6 +13,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     @StateObject private var viewModel: ViewModel
     @State private var isViewDidLoad: Bool = false
     @State private var isModalPresented = false
+    @State private var isDetailViewActive = false
     
     init(viewModel: ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -84,6 +85,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     func fetchPostsTask(post: Post) async {
