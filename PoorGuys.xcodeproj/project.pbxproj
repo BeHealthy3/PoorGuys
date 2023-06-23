@@ -227,6 +227,7 @@
 		6001EFE52A1390DD00A9A2EF /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				D35939FA2A420C66007263E8 /* CommunityViewModel.swift */,
 				6001EFEB2A13911100A9A2EF /* Login */,
 			);
 			path = ViewModels;
@@ -236,7 +237,6 @@
 			isa = PBXGroup;
 			children = (
 				6001EFE72A13910B00A9A2EF /* LoginViewModel.swift */,
-				D35939FA2A420C66007263E8 /* CommunityViewModel.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";

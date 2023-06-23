@@ -9,12 +9,14 @@ import SwiftUI
 
 struct PostFillingView: View {
 
+    @Environment(\.presentationMode) var presentationMode
+    
     @Binding var postID: String?
     @Binding var isPresented: Bool
     @State private var isAboutMoney: Bool = false
     @State private var title: String = ""
     @State private var content: String = ""
-    @State private var imageURL: String?
+    @State private var imageURL: [String]?
     @State private var selectedImage: UIImage?
     @FocusState private var isTextEditorFocused: Bool
     @State private var editorHeight: CGFloat = 300
@@ -32,7 +34,16 @@ struct PostFillingView: View {
 
                     Spacer()
                     Button(action: {
-                        print("upload post")
+                        Task {
+                            do {
+                                postID == nil ? try await uploadPost() : try await updatePost()
+                            } catch {
+                                print("등록 또는 수정 실패")
+                            }
+                        }
+                        
+                        presentationMode.wrappedValue.dismiss()
+                        
                     }) {
                         Text("등록")
                             .foregroundColor(.white)
@@ -101,9 +112,10 @@ struct PostFillingView: View {
                         
                         title = post.title
                         content = post.body
-                        imageURL = post.imageURL?.first
+                        imageURL = post.imageURL
                         
-                        let url = URL(string: imageURL ?? "")!
+//                        default 이미지 디자인 받아서 나중에 올려줘야할 듯.
+                        let url = URL(string: imageURL?.first ?? "")!
                         
                         selectedImage = try await ImageDownloadManager().downloadImageAndSaveAsUIImage(url: url)
                     }
@@ -112,6 +124,19 @@ struct PostFillingView: View {
                 }
             }
         }
+    }
+    
+    private func uploadPost() async throws {
+        guard let user = User.currentUser else { throw FirebaseError.userNotFound}
+        let post = Post(id: "", userID: user.uid, nickName: user.nickName, profileImageURL: user.profileImageURL, isAboutMoney: isAboutMoney, title: title, body: content, timeStamp: Date(), likeCount: 0, commentCount: 0, isWeirdPost: false, imageURL: nil, comments: nil)
+        
+        try await FirebasePostManager().uploadNewPost(post, with: selectedImage)
+    }
+    
+    private func updatePost() async throws {
+//        타이틀, 본문, 돈얘기여부 제외하고는 업데이트를하지 않아서 아무값이나 넣어줘도 됨
+        let post = Post(id: postID!, userID: "", nickName: "", profileImageURL: nil, isAboutMoney: isAboutMoney, title: title, body: content, timeStamp: Date(), likeCount: 0, commentCount: 0, isWeirdPost: false, imageURL: imageURL, comments: nil)
+        try await FirebasePostManager().updatePost(post, with: selectedImage)
     }
 }
 

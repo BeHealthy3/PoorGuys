@@ -11,6 +11,7 @@ struct PostDetailUpperView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @State var showingSheet = false
+    @State private var isModalPresented = false
     
     let post: Post
     
@@ -57,10 +58,14 @@ struct PostDetailUpperView: View {
                                 Text("삭제하기")
                             }
                             Button {
-                                print("수정하기")
+                                isModalPresented = true
                             } label: {
                                 Text("수정하기")
                             }
+                            .fullScreenCover(isPresented: $isModalPresented) {
+                                PostFillingView(postID: .constant(post.id), isPresented: $isModalPresented)
+                            }
+                            
                         } else {
                             Button {
                                 print("신고하기")
