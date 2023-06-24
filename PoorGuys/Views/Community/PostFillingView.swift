@@ -36,7 +36,11 @@ struct PostFillingView: View {
                     Button(action: {
                         Task {
                             do {
-                                postID == nil ? try await uploadPost() : try await updatePost()
+                                if let postID = postID, !postID.isEmpty {
+                                    try await updatePost()
+                                } else {
+                                    try await uploadPost()
+                                }
                             } catch {
                                 print("등록 또는 수정 실패")
                             }
@@ -97,7 +101,7 @@ struct PostFillingView: View {
         .onAppear {
             Task {
                 do {
-                    if let postID = postID {
+                    if let postID = postID, !postID.isEmpty {
                         let post = try await MockPostManager.shared.fetchPost(postID: postID)
                         
                         title = post.title

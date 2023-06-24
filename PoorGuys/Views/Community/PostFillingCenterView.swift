@@ -126,6 +126,7 @@ struct PostFillingCenterView: View {
         }
         .background(isAboutMoney ? Color.appColor(.primary050) : Color.appColor(.neutral050))
         .cornerRadius(12)
+        .animation(.easeInOut, value: isAboutMoney)
     }
 }
 
