@@ -38,7 +38,7 @@ class CommunityViewModel: CommunityPostsManagable {
             let newPosts = try await postManager.fetch10Posts()
             
             DispatchQueue.main.async {
-                self.posts.insert(contentsOf: newPosts, at: 0)
+                self.posts += newPosts
             }
         } catch {
             print("fetch error")
