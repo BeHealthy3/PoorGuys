@@ -11,11 +11,10 @@ import FirebaseFirestoreSwift
 import FirebaseStorage
 
 struct FirebasePostManager: PostManagable {
-    
     private let postCollection = Firestore.firestore().collection("posts")
     private let storageReference = Storage.storage().reference()
     
-    private var lastDocument: DocumentSnapshot?
+    internal var lastDocument: DocumentSnapshot?
     
     func uploadImage(_ image: UIImage) async throws -> URL {
         guard let imageData = image.jpegData(compressionQuality: 0.5) else {
@@ -86,6 +85,10 @@ struct FirebasePostManager: PostManagable {
         try await postCollection.document(postID).delete()
     }
     
+    mutating func removeLocalPosts() {
+        lastDocument = nil
+    }
+    
     mutating func fetch10Posts() async throws -> [Post] {
         var query = postCollection
                .order(by: "timeStamp", descending: true)
@@ -146,7 +149,7 @@ struct MockPostManager: PostManagable {
         }
     }
     func removePost(postID: String) async throws {}
-    
+    mutating func removeLocalPosts() {}
     func fetch10Posts() async throws -> [Post] {
         return await withUnsafeContinuation { continuation in
             DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {

@@ -79,18 +79,35 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
             .onAppear {
                 if !isViewDidLoad {
                     Task {
-                        await viewModel.fetch10Posts()
+                        await fetch10Posts()
                         isViewDidLoad = true
                     }
                 }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .refreshable {
+            viewModel.removePosts()
+            await fetch10Posts()
+        }
     }
     
-    func fetchPostsTask(post: Post) async {
+    private func fetchPostsTask(post: Post) async {
         if viewModel.thisIsTheThirdLast(post) {
-            await viewModel.fetch10Posts()
+            await fetch10Posts()
+        }
+    }
+    
+    private func refresh() async {
+        viewModel.removePosts()
+        await fetch10Posts()
+    }
+    
+    private func fetch10Posts() async {
+        do {
+            try await viewModel.fetch10Posts()
+        } catch {
+            print("포스팅 패치 실패")
         }
     }
 }

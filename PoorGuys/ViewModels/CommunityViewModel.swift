@@ -13,18 +13,9 @@ protocol CommunityPostsManagable: ObservableObject {
     
     var posts: [Post] { get set }
     
-    func fetch10Posts() async
+    func fetch10Posts() async throws
     func thisIsTheThirdLast(_ post: Post) -> Bool
-}
-
-extension CommunityPostsManagable {
-    func removeFirst10Posts() {
-        posts.removeFirst(10)
-    }
-    
-    func removeLast10Posts() {
-        posts.removeLast(10)
-    }
+    func removePosts()
 }
 
 class CommunityViewModel: CommunityPostsManagable {
@@ -33,16 +24,17 @@ class CommunityViewModel: CommunityPostsManagable {
     
     @Published var posts: [Post] = []
     
-    func fetch10Posts() async {
-        do {
-            let newPosts = try await postManager.fetch10Posts()
-            
-            DispatchQueue.main.async {
-                self.posts += newPosts
-            }
-        } catch {
-            print("fetch error")
+    func fetch10Posts() async throws {
+        let newPosts = try await postManager.fetch10Posts()
+        
+        DispatchQueue.main.async {
+            self.posts += newPosts
         }
+    }
+    
+    func removePosts() {
+        postManager.removeLocalPosts()
+        posts = []
     }
     
     func thisIsTheThirdLast(_ post: Post) -> Bool {
