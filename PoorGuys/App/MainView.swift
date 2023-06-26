@@ -52,7 +52,7 @@ struct MainView: View {
                         CommunityView(viewModel: CommunityViewModel())
                             .tabBarItem(tab: .community, selection: $tabSelection)
                         
-                        Text("아낌내역 탭")
+                        SaveHistoryView()
                             .tabBarItem(tab: .saveHistory, selection: $tabSelection)
                         
                         Text("알림 탭")

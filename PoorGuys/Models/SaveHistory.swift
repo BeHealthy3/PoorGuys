@@ -69,8 +69,13 @@ enum SaveCategory: String {
     }
 }
 
+enum SaveHistoryState {
+    case saved, wasted, selected
+}
+
 struct SaveHistory: Identifiable {
     let id = UUID().uuidString
     let category: SaveCategory
+    let state: SaveHistoryState
     let price: Int
 }
