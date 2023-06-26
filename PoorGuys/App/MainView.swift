@@ -12,6 +12,8 @@ struct MainView: View {
     @EnvironmentObject var logInViewModel: LoginViewModel
     
     @State private var isShowingLaunchScreen = true
+    @State private var selection: String = "community"
+    @State private var tabSelection: TabBarItem = .community
     
     var body: some View {
         Group {
@@ -46,7 +48,17 @@ struct MainView: View {
                 if logInViewModel.signInState == .signedOut || !logInViewModel.didSetNickName {
                     LoginView()
                 } else {
-                    MyPageView()
+                    CustomTabBarContainerView(selection: $tabSelection) {
+                        CommunityView(viewModel: CommunityViewModel())
+                            .tabBarItem(tab: .community, selection: $tabSelection)
+                        
+                        Text("아낌내역 탭")
+                            .tabBarItem(tab: .saveHistory, selection: $tabSelection)
+                        
+                        Text("알림 탭")
+                            .tabBarItem(tab: .alert, selection: $tabSelection)
+                    }
+                    .edgesIgnoringSafeArea(.bottom)
                 }
             }
         }
