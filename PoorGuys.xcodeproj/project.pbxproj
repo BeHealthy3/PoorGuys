@@ -17,6 +17,11 @@
 		6001EFF22A1391BF00A9A2EF /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 6001EFF12A1391BF00A9A2EF /* GoogleSignIn */; };
 		6001EFF42A1391BF00A9A2EF /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6001EFF32A1391BF00A9A2EF /* GoogleSignInSwift */; };
 		601A6D572A1F74720066D5CD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601A6D562A1F74720066D5CD /* Constants.swift */; };
+		60279EBA2A492F99000D9226 /* SaveHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60279EB92A492F99000D9226 /* SaveHistory.swift */; };
+		60279EBD2A492FA7000D9226 /* SaveHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60279EBC2A492FA7000D9226 /* SaveHistoryViewModel.swift */; };
+		60279EC22A492FAF000D9226 /* SaveHistoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60279EBF2A492FAF000D9226 /* SaveHistoryRow.swift */; };
+		60279EC32A492FAF000D9226 /* SaveHistoryViewFullScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60279EC02A492FAF000D9226 /* SaveHistoryViewFullScroll.swift */; };
+		60279EC42A492FAF000D9226 /* SaveHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60279EC12A492FAF000D9226 /* SaveHistoryView.swift */; };
 		60405D5C2A2EF5BB0053BEC9 /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60405D5B2A2EF5BB0053BEC9 /* LaunchScreen.swift */; };
 		60558D062A14BA2C007581AD /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60558D052A14BA2C007581AD /* MyPageView.swift */; };
 		606782F62A14D50F00BF1E12 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606782F52A14D50F00BF1E12 /* UserModel.swift */; };
@@ -106,6 +111,11 @@
 		6001EFE72A13910B00A9A2EF /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		6001EFF52A1488E100A9A2EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		601A6D562A1F74720066D5CD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		60279EB92A492F99000D9226 /* SaveHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveHistory.swift; sourceTree = "<group>"; };
+		60279EBC2A492FA7000D9226 /* SaveHistoryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveHistoryViewModel.swift; sourceTree = "<group>"; };
+		60279EBF2A492FAF000D9226 /* SaveHistoryRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveHistoryRow.swift; sourceTree = "<group>"; };
+		60279EC02A492FAF000D9226 /* SaveHistoryViewFullScroll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveHistoryViewFullScroll.swift; sourceTree = "<group>"; };
+		60279EC12A492FAF000D9226 /* SaveHistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveHistoryView.swift; sourceTree = "<group>"; };
 		60405D5B2A2EF5BB0053BEC9 /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		60558D052A14BA2C007581AD /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		606782F52A14D50F00BF1E12 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
@@ -201,6 +211,7 @@
 		6001EFCE2A135FF200A9A2EF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				60279EBE2A492FAF000D9226 /* SaveHistory */,
 				D35939B92A41AD09007263E8 /* Components */,
 				D35939B82A41AC97007263E8 /* Community */,
 				60A8E0992A39CFDB0026DA04 /* CustomTabBar */,
@@ -227,6 +238,7 @@
 		6001EFE52A1390DD00A9A2EF /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				60279EBB2A492FA7000D9226 /* SaveHistory */,
 				6001EFEB2A13911100A9A2EF /* Login */,
 			);
 			path = ViewModels;
@@ -259,6 +271,24 @@
 				D39A57AD2A41A6920033DAD5 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		60279EBB2A492FA7000D9226 /* SaveHistory */ = {
+			isa = PBXGroup;
+			children = (
+				60279EBC2A492FA7000D9226 /* SaveHistoryViewModel.swift */,
+			);
+			path = SaveHistory;
+			sourceTree = "<group>";
+		};
+		60279EBE2A492FAF000D9226 /* SaveHistory */ = {
+			isa = PBXGroup;
+			children = (
+				60279EBF2A492FAF000D9226 /* SaveHistoryRow.swift */,
+				60279EC02A492FAF000D9226 /* SaveHistoryViewFullScroll.swift */,
+				60279EC12A492FAF000D9226 /* SaveHistoryView.swift */,
+			);
+			path = SaveHistory;
 			sourceTree = "<group>";
 		};
 		60558D042A14BA11007581AD /* MyPage */ = {
@@ -306,6 +336,7 @@
 		606782F42A14D4FA00BF1E12 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				60279EB92A492F99000D9226 /* SaveHistory.swift */,
 				D35939DD2A41F62B007263E8 /* Comment.swift */,
 				D35939DE2A41F62B007263E8 /* Post.swift */,
 				D35939DC2A41F62B007263E8 /* Reply.swift */,
@@ -626,14 +657,17 @@
 			files = (
 				D35939BF2A41F42B007263E8 /* DateFormatter.swift in Sources */,
 				D35939F42A42056D007263E8 /* PostDetailLowerView.swift in Sources */,
+				60279EBD2A492FA7000D9226 /* SaveHistoryViewModel.swift in Sources */,
 				D35939CF2A41F44C007263E8 /* View+Extensions.swift in Sources */,
 				D39A57AB2A41A67C0033DAD5 /* PoorGuysApp.swift in Sources */,
 				D35939CE2A41F44C007263E8 /* Debounce+View+Extension.swift in Sources */,
 				D35939F12A42056D007263E8 /* CommentView.swift in Sources */,
 				D35939E52A420561007263E8 /* ImagePickerView.swift in Sources */,
 				D35939F02A42056D007263E8 /* PostFillingCenterView.swift in Sources */,
+				60279EC22A492FAF000D9226 /* SaveHistoryRow.swift in Sources */,
 				D37956C02A41A16C00E7724F /* SecretConstants.swift in Sources */,
 				6074FE342A27AC090020FBF2 /* PhotoPicker.swift in Sources */,
+				60279EC32A492FAF000D9226 /* SaveHistoryViewFullScroll.swift in Sources */,
 				D35939E42A420561007263E8 /* BackButton.swift in Sources */,
 				D35939CD2A41F44C007263E8 /* Shape+Extensions.swift in Sources */,
 				D35939FB2A420C66007263E8 /* CommunityViewModel.swift in Sources */,
@@ -642,9 +676,11 @@
 				D35939F72A42056D007263E8 /* ReplyView.swift in Sources */,
 				D35939D32A41F49A007263E8 /* String+Extensions.swift in Sources */,
 				D35939E02A41F62B007263E8 /* Comment.swift in Sources */,
+				60279EC42A492FAF000D9226 /* SaveHistoryView.swift in Sources */,
 				D35939C72A41F442007263E8 /* PostManagable.swift in Sources */,
 				D35939F52A42056D007263E8 /* CommunityView.swift in Sources */,
 				60A8E0982A3909D30026DA04 /* EditProfileView.swift in Sources */,
+				60279EBA2A492F99000D9226 /* SaveHistory.swift in Sources */,
 				6001EFD12A13600500A9A2EF /* LoginView.swift in Sources */,
 				60405D5C2A2EF5BB0053BEC9 /* LaunchScreen.swift in Sources */,
 				D35939E12A41F62B007263E8 /* Post.swift in Sources */,
