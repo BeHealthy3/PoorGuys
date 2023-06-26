@@ -11,8 +11,8 @@ struct PostDetailView: View {
     let postID: String
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State var post: Post?
-    @State var comments: [Comment]?
+    @State private var post: Post?
+    @State private var comments: [Comment]?
     
     init(postID: String) {
         self.postID = postID

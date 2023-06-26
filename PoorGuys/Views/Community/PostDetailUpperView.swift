@@ -10,7 +10,7 @@ import SwiftUI
 struct PostDetailUpperView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @State var showingSheet = false
+    @State private var showingSheet = false
     @State private var isModalPresented = false
     
     let post: Post
@@ -63,7 +63,7 @@ struct PostDetailUpperView: View {
                                 Text("수정하기")
                             }
                             .fullScreenCover(isPresented: $isModalPresented) {
-                                PostFillingView(postID: .constant(post.id), isPresented: $isModalPresented)
+                                PostFillingView(isPresented: $isModalPresented, needsRefresh: .constant(false), postID: .constant(post.id))
                             }
                             
                         } else {

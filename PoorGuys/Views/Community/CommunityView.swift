@@ -14,6 +14,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     @State private var isViewDidLoad: Bool = false
     @State private var isModalPresented = false
     @State private var isDetailViewActive = false
+    @State private var needsRefresh = false
     
     init(viewModel: ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -35,7 +36,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                             .foregroundColor(.accentColor)
                     }
                     .fullScreenCover(isPresented: $isModalPresented) {
-                        PostFillingView(postID: .constant(""), isPresented: $isModalPresented)
+                        PostFillingView(isPresented: $isModalPresented, needsRefresh: $needsRefresh, postID: .constant(""))
                     }
                     
                     Button(action: {
@@ -77,18 +78,22 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                 }
             }
             .onAppear {
-                if !isViewDidLoad {
-                    Task {
+                Task {
+                    if !isViewDidLoad {
                         await fetch10Posts()
                         isViewDidLoad = true
-                    }
+                    } else {
+                        if needsRefresh {
+                            await refresh()
+                            needsRefresh = false
+                        }
+                    }                    
                 }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .refreshable {
-            viewModel.removePosts()
-            await fetch10Posts()
+            await refresh()
         }
     }
     

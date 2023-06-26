@@ -11,8 +11,11 @@ struct PostFillingView: View {
 
     @Environment(\.presentationMode) var presentationMode
     
-    @Binding var postID: String?
     @Binding var isPresented: Bool
+    @Binding var needsRefresh: Bool
+    
+    @Binding var postID: String?
+    
     @State private var isAboutMoney: Bool = false
     @State private var title: String = ""
     @State private var content: String = ""
@@ -41,6 +44,7 @@ struct PostFillingView: View {
                                 } else {
                                     try await uploadPost()
                                 }
+                                needsRefresh = true
                             } catch {
                                 print("등록 또는 수정 실패")
                             }
@@ -137,7 +141,7 @@ struct PostFillingView: View {
 struct PostFillingView_Previews: PreviewProvider {
     static var previews: some View {
     
-        PostFillingView(postID: .constant(""), isPresented: .constant(true))
+        PostFillingView(isPresented: .constant(true), needsRefresh: .constant(false), postID: .constant(""))
     }
 }
 
