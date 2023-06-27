@@ -11,7 +11,15 @@ struct CommentView: View {
     
     @State var showingSheet = false
     
-    let comment: Comment
+    private let comment: Comment
+    @Binding private var replyingCommentID: String?
+    @Binding private var replyingNickname: String?
+ 
+    init(comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>) {
+        self.comment = comment
+        self._replyingCommentID = replyingCommentID
+        self._replyingNickname = replyingNickName
+    }
     
     var body: some View {
         VStack {
@@ -78,6 +86,8 @@ struct CommentView: View {
                                 Text("답글 쓰기")
                                     .onTapGesture {
                                         NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
+                                        replyingCommentID = comment.id
+                                        replyingNickname = comment.nickName
                                     }
                                 HStack(spacing: 4) {
                                     Image("thumbsUp")
@@ -112,6 +122,6 @@ struct CommentView: View {
 
 struct CommentView_Previews: PreviewProvider {
     static var previews: some View {
-        return CommentView(comment: Comment.dummy())
+        return CommentView(comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""))
     }
 }

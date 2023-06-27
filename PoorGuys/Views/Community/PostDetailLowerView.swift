@@ -11,14 +11,26 @@ struct PostDetailLowerView: View {
     
     let post: Post
     
+    @Binding private var comments: [Comment]?
+    @Binding private var replyingCommentID: String?
+    
     @State private var text: String = ""
-    @State var viewHeight: CGFloat = 60
-    @State var backgroundNeedsHighlight = false
+    @State private var viewHeight: CGFloat = 60
+    @State private var backgroundNeedsHighlight = false
+    
+    init(post: Post, comments: Binding<[Comment]?>, replyingCommentID: Binding<String?>) {
+        self.post = post
+        self._comments = comments
+        self._replyingCommentID = replyingCommentID
+    }
     
     var body: some View {
         VStack {
-            EmptyView()
-                .frame(height: 8, alignment: .top)
+            if replyingCommentID != nil {
+                EmptyView()
+                    .frame(height: 8, alignment: .top)
+            }
+            
             HStack(spacing: 8) {
                 VStack {
                     Spacer(minLength: 0)
@@ -65,6 +77,6 @@ struct PostDetailLowerView: View {
 
 struct PostDetailLowerView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailLowerView(post: Post.dummy())
+        PostDetailLowerView(post: Post.dummy(), comments: .constant(nil), replyingCommentID: .constant(String.randomString(length: 10)))
     }
 }

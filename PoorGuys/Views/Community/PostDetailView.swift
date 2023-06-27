@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct PostDetailView: View {
     let postID: String
@@ -13,6 +14,8 @@ struct PostDetailView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var post: Post?
     @State private var comments: [Comment]?
+    @State private var replyingCommentID: String? = nil
+    @State private var replyingNickname: String? = nil
     
     init(postID: String) {
         self.postID = postID
@@ -25,7 +28,7 @@ struct PostDetailView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: replyingNickname == nil ? 16 : 0) {
             if let post = post {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack {
@@ -52,20 +55,50 @@ struct PostDetailView: View {
                                         .frame(height: 1)
                                         .foregroundColor(.appColor(.neutral100))
                                 }
-                                CommentView(comment: comment)
+                                CommentView(comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                     .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
                             }
                         }
                     }
                 }
+                .padding(.horizontal, 18)
+                .padding(.vertical, 0)
                 
-                PostDetailLowerView(post: post)
+                if let replyingNickname = replyingNickname {
+                    VStack(spacing: 0) {
+                        HStack {
+                            Text("\(replyingNickname)님에게 답글을 남기는 중")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor(Color.appColor(.neutral600))
+                            
+                            Spacer()
+                            
+                            Button {
+                                self.replyingNickname = nil
+                                self.replyingCommentID = nil
+                            } label: {
+                                Image("xmark")
+                                    .renderingMode(.template)
+                                    .foregroundColor(Color.appColor(.neutral600))
+                                    .frame(width: 24, height: 24)
+                            }
+                        }
+                        .padding(.all, 10)
+                        .background(Color.appColor(.neutral050))
+                        
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(.appColor(.neutral200))
+                    }
+                }
+                
+                PostDetailLowerView(post: post, comments: $comments, replyingCommentID: $replyingCommentID)
+                    .padding(EdgeInsets(top: 0, leading: 18, bottom: 16, trailing: 18))
             } else {
                 ProgressView()
             }
         }
-        .padding(EdgeInsets(top: 0, leading: 18, bottom: 16, trailing: 18))
         .navigationBarBackButtonHidden()
         .navigationBarItems(leading: BackButton(presentationMode: presentationMode))
         .onAppear {
@@ -114,5 +147,23 @@ struct PostDetailView: View {
 struct PostDetailView_Previews: PreviewProvider {
     static var previews: some View {
         PostDetailView(postID: "")
+    }
+}
+
+extension Publishers {
+    static var keyboardHeight: AnyPublisher<CGFloat, Never> {
+        let willShow = NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
+            .map { notification -> CGFloat in
+                let keyboardFrame = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                return keyboardFrame.height
+            }
+        
+        let willHide = NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
+            .map { _ -> CGFloat in
+                0
+            }
+        
+        return MergeMany(willShow, willHide)
+            .eraseToAnyPublisher()
     }
 }
