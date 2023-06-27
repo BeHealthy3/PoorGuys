@@ -19,7 +19,7 @@ struct CustomTabBarContainerView<Content: View>: View {
     
     var body: some View {
         ZStack() {
-            content.ignoresSafeArea()
+            content
             VStack {
                 Spacer()
                 CustomTabBarView(tabs: tabs, selection: $selection, localSelection: selection)
