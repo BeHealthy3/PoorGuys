@@ -16,4 +16,5 @@ class SaveHistoryViewModel: ObservableObject {
         SaveHistory(category: .impulseBuy, state: .wasted, price: 8000),
         SaveHistory(category: .impulseBuy, state: .wasted, price: 8000),
     ]
+
 }

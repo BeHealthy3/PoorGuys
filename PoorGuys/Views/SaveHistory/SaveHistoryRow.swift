@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct SaveHistoryRow: View {
-    let saveHistory: SaveHistory
+    @State var saveHistory: SaveHistory
     @State var iconColor = Color("primary_500")
     @State var textColor = Color("red")
     
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
-                categoryIcon()
+                CategoryIcon(saveHistory: saveHistory, saveState: $saveHistory.state, isSelected: .constant(false))
                 Spacer()
                 HStack(alignment: .bottom, spacing: 4) {
                     Text("\(saveHistory.price)")
@@ -29,37 +29,6 @@ struct SaveHistoryRow: View {
             .padding(.vertical, 16)
             .padding(.horizontal, 1)
             Divider()
-        }
-    }
-    
-    @ViewBuilder
-    func categoryIcon() -> some View {
-        HStack(spacing: 2) {
-            Image(saveHistory.category.iconName)
-                .renderingMode(.template)
-                .foregroundColor(iconColor)
-                .frame(width: 16, height: 16)
-            Text(saveHistory.category.categoryName)
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(iconColor)
-        }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 12)
-        .background {
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(iconColor, lineWidth: 1)
-        }
-        .onAppear {
-            switch saveHistory.state {
-            case .saved:
-                iconColor = Color("primary_500")
-                textColor = Color("primary_500")
-            case .wasted:
-                iconColor = Color("neutral_600")
-                textColor = Color("red")
-            case .selected:
-                iconColor = Color("white")
-            }
         }
     }
 }
