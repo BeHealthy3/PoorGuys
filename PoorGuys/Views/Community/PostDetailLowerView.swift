@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PostDetailLowerView: View {
     
-    let post: Post
+    var post: Post
     
     @Binding private var comments: [Comment]?
     @Binding private var replyingCommentID: String?
@@ -19,6 +19,7 @@ struct PostDetailLowerView: View {
     @State private var backgroundNeedsHighlight = false
     
     init(post: Post, comments: Binding<[Comment]?>, replyingCommentID: Binding<String?>) {
+        print(post)
         self.post = post
         self._comments = comments
         self._replyingCommentID = replyingCommentID
@@ -53,8 +54,30 @@ struct PostDetailLowerView: View {
                     VStack {
                         Spacer(minLength: 0)
                             .frame(height: viewHeight - 50 > 0 ? viewHeight - 50 : 0)
-                        Image("sendButton")
-                            .padding(EdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 16))
+                        Button {
+                            
+                            do {
+//                                guard let user = User.currentUser else {
+//                                    throw LoginError.noCurrentUser
+//                                }
+                                let user = User(uid: post.userID, nickName: post.nickName, profileImageURL: post.profileImageURL, profileImage: nil, authenticationMethod: .apple)
+                                let comment = Comment(id: UUID().uuidString, nickName: user.nickName, profileImageURL: user.profileImageURL, userID: user.uid, postID: post.id, content: text, likeCount: 0, timeStamp: Date(), isDeletedComment: false, belongingCommentID: replyingCommentID)
+                                
+                                Task {
+                                    do {
+                                        try await FirebasePostManager().addComment(comment: comment, on: post)
+                                    }
+                                    catch {
+                                        print("업데이트실패")
+                                    }
+                                }
+                            } catch {
+                                print("업데이트 실패")
+                            }
+                        } label: {
+                            Image("sendButton")
+                                .padding(EdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 16))
+                        }
                     }
                 }
                 .overlay(

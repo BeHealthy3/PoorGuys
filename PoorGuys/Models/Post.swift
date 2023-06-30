@@ -9,6 +9,7 @@ import Foundation
 import LoremSwiftum
 
 struct Post: Identifiable, Equatable, Codable {
+    
     static func == (lhs: Post, rhs: Post) -> Bool {
         lhs.id == rhs.id
     }

@@ -83,12 +83,15 @@ struct CommentView: View {
                         HStack(spacing: 8) {
                             
                             HStack(spacing: 10) {
-                                Text("답글 쓰기")
-                                    .onTapGesture {
-                                        NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
-                                        replyingCommentID = comment.id
-                                        replyingNickname = comment.nickName
-                                    }
+                                if comment.belongingCommentID == nil {
+                                    Text("답글 쓰기")
+                                        .onTapGesture {
+                                            NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
+                                            replyingCommentID = comment.id
+                                            replyingNickname = comment.nickName
+                                        }
+                                }
+                                
                                 HStack(spacing: 4) {
                                     Image("thumbsUp")
                                         .renderingMode(.template)

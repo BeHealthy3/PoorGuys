@@ -11,4 +11,6 @@ enum FirebaseError: Error {
     case documentNotFound
     case imageNotConvertable
     case userNotFound
+    case updateFailed
+    case encodingError
 }
