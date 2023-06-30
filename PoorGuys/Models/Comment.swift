@@ -8,7 +8,7 @@
 import Foundation
 import LoremSwiftum
 
-struct Comment: Identifiable, Codable {
+struct Comment: Identifiable, Codable, Equatable {
     
     static func dummy() -> Comment {
         let id: String = "\(Int.random(in: 1...10))"

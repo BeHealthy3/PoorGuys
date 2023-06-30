@@ -59,6 +59,7 @@ struct PostDetailView: View {
                                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                     .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
                             }
+                            .transition(.slide)
                         }
                     }
                 }
@@ -93,7 +94,7 @@ struct PostDetailView: View {
                     }
                 }
                 
-                PostDetailLowerView(post: post, comments: $comments, replyingCommentID: $replyingCommentID)
+                PostDetailLowerView(post: post, comments: $comments, replyingCommentID: $replyingCommentID, replyingNickname: $replyingNickname)
                     .padding(EdgeInsets(top: 0, leading: 18, bottom: 16, trailing: 18))
             } else {
                 ProgressView()

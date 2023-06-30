@@ -13,16 +13,18 @@ struct PostDetailLowerView: View {
     
     @Binding private var comments: [Comment]?
     @Binding private var replyingCommentID: String?
+    @Binding private var replyingNickname: String?
     
     @State private var text: String = ""
     @State private var viewHeight: CGFloat = 60
     @State private var backgroundNeedsHighlight = false
     
-    init(post: Post, comments: Binding<[Comment]?>, replyingCommentID: Binding<String?>) {
+    init(post: Post, comments: Binding<[Comment]?>, replyingCommentID: Binding<String?>, replyingNickname: Binding<String?>) {
         print(post)
         self.post = post
         self._comments = comments
         self._replyingCommentID = replyingCommentID
+        self._replyingNickname = replyingNickname
     }
     
     var body: some View {
@@ -57,22 +59,21 @@ struct PostDetailLowerView: View {
                         Button {
                             
                             do {
-//                                guard let user = User.currentUser else {
-//                                    throw LoginError.noCurrentUser
-//                                }
                                 let user = User(uid: post.userID, nickName: post.nickName, profileImageURL: post.profileImageURL, profileImage: nil, authenticationMethod: .apple)
                                 let comment = Comment(id: UUID().uuidString, nickName: user.nickName, profileImageURL: user.profileImageURL, userID: user.uid, postID: post.id, content: text, likeCount: 0, timeStamp: Date(), isDeletedComment: false, belongingCommentID: replyingCommentID)
                                 
                                 Task {
                                     do {
                                         try await FirebasePostManager().addComment(comment: comment, on: post)
+                                        text = ""
+                                        replyingCommentID = nil
+                                        replyingNickname = nil
+                                        insertComment(comment)
                                     }
                                     catch {
                                         print("업데이트실패")
                                     }
                                 }
-                            } catch {
-                                print("업데이트 실패")
                             }
                         } label: {
                             Image("sendButton")
@@ -96,10 +97,31 @@ struct PostDetailLowerView: View {
             }
         }
     }
+    
+    func insertComment(_ newComment: Comment) {
+        withAnimation(.easeInOut) {
+            if let belongingCommentID = newComment.belongingCommentID, let comments = comments {
+                
+                if let lastIndex = comments.lastIndex(where: { $0.belongingCommentID == belongingCommentID }) {
+                    self.comments?.insert(newComment, at: lastIndex + 1)
+                    
+                } else {
+                    
+                    if let index = comments.firstIndex(where: { $0.id == belongingCommentID }) {
+                        self.comments?.insert(newComment, at: index + 1)
+                    }
+                }
+                
+            } else {
+                self.comments?.append(newComment)
+            }
+        }
+        
+    }
 }
 
 struct PostDetailLowerView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailLowerView(post: Post.dummy(), comments: .constant(nil), replyingCommentID: .constant(String.randomString(length: 10)))
+        PostDetailLowerView(post: Post.dummy(), comments: .constant(nil), replyingCommentID: .constant(String.randomString(length: 10)), replyingNickname: .constant(nil))
     }
 }
