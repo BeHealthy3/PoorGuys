@@ -12,7 +12,11 @@ struct PostDetailView: View {
     let postID: String
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State private var post: Post?
+    @State private var post: Post? {
+        didSet {
+            print(post?.userID, "🚨")
+        }
+    }
     @State private var comments: [Comment]?
     @State private var replyingCommentID: String? = nil
     @State private var replyingNickname: String? = nil
@@ -55,7 +59,7 @@ struct PostDetailView: View {
                                         .frame(height: 1)
                                         .foregroundColor(.appColor(.neutral100))
                                 }
-                                CommentView(comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname)
+                                CommentView(postUserID: post.userID, comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                     .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
                             }

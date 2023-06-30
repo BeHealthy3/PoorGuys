@@ -9,13 +9,16 @@ import SwiftUI
 
 struct CommentView: View {
     
+    private var postUserID: String
+    
     @State var showingSheet = false
     
     private let comment: Comment
     @Binding private var replyingCommentID: String?
     @Binding private var replyingNickname: String?
- 
-    init(comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>) {
+    
+    init(postUserID: String, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>) {
+        self.postUserID = postUserID
         self.comment = comment
         self._replyingCommentID = replyingCommentID
         self._replyingNickname = replyingNickName
@@ -44,12 +47,13 @@ struct CommentView: View {
                             ProgressView()
                                 .frame(width: 24, height: 24)
                         }
-
-                        Text(comment.nickName)
+                        
+                        Text(comment.nickName + (postUserID == comment.userID ? " (작성자)" : ""))
                             .lineLimit(1)
-                            .foregroundColor(.appColor(.neutral700))
-                            .font(.system(size: 12, weight: .bold
-                                         ))
+                            .foregroundColor(postUserID == comment.userID ?
+                                .appColor(.primary500) : .appColor(.neutral700))
+                            .font(.system(size: 12, weight: .bold))
+                            
                         Spacer()
                         Image("verticalEllipsis")
                             .onTapGesture {
@@ -125,6 +129,6 @@ struct CommentView: View {
 
 struct CommentView_Previews: PreviewProvider {
     static var previews: some View {
-        return CommentView(comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""))
+        return CommentView(postUserID: "", comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""))
     }
 }

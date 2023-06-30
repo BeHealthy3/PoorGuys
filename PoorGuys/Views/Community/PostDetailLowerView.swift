@@ -59,7 +59,8 @@ struct PostDetailLowerView: View {
                         Button {
                             
                             do {
-                                let user = User(uid: post.userID, nickName: post.nickName, profileImageURL: post.profileImageURL, profileImage: nil, authenticationMethod: .apple)
+                                guard let user = User.currentUser else { throw FirebaseError.userNotFound }
+                                
                                 let comment = Comment(id: UUID().uuidString, nickName: user.nickName, profileImageURL: user.profileImageURL, userID: user.uid, postID: post.id, content: text, likeCount: 0, timeStamp: Date(), isDeletedComment: false, belongingCommentID: replyingCommentID)
                                 
                                 Task {
@@ -74,6 +75,8 @@ struct PostDetailLowerView: View {
                                         print("업데이트실패")
                                     }
                                 }
+                            } catch {
+                                print("인증 정보 오류")
                             }
                         } label: {
                             Image("sendButton")
