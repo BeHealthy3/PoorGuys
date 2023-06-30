@@ -156,8 +156,8 @@ struct FirebasePostManager: PostManagable {
                     ]
                     commentsData.append(commentData)
                 }
-
-                transaction.updateData([commentsField: commentsData], forDocument: docRef)
+                
+                transaction.updateData([commentsField : commentsData, "commentCount" : post.commentCount += 1], forDocument: docRef)
             }
 
             return nil
