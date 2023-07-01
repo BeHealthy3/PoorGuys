@@ -45,6 +45,7 @@
 		60A8E09D2A39DA5E0026DA04 /* CustomTabBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E09C2A39DA5E0026DA04 /* CustomTabBarContainerView.swift */; };
 		60A8E09F2A3AABAF0026DA04 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E09E2A3AABAF0026DA04 /* TabBarView.swift */; };
 		D32363BD2A2C73D200857135 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D32363BC2A2C73D200857135 /* Kingfisher */; };
+		D32770222A50369A002C34C6 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32770212A50369A002C34C6 /* Typealias.swift */; };
 		D35939BD2A41F41F007263E8 /* ImageDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BC2A41F41F007263E8 /* ImageDownloadManager.swift */; };
 		D35939BF2A41F42B007263E8 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BE2A41F42B007263E8 /* DateFormatter.swift */; };
 		D35939C12A41F436007263E8 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939C02A41F436007263E8 /* Notification.swift */; };
@@ -123,6 +124,7 @@
 		60A8E09A2A39D0E00026DA04 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
 		60A8E09C2A39DA5E0026DA04 /* CustomTabBarContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarContainerView.swift; sourceTree = "<group>"; };
 		60A8E09E2A3AABAF0026DA04 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		D32770212A50369A002C34C6 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D35939BC2A41F41F007263E8 /* ImageDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadManager.swift; sourceTree = "<group>"; };
 		D35939BE2A41F42B007263E8 /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		D35939C02A41F436007263E8 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				D35939DE2A41F62B007263E8 /* Post.swift */,
 				D35939DC2A41F62B007263E8 /* Reply.swift */,
 				606782F52A14D50F00BF1E12 /* UserModel.swift */,
+				D32770212A50369A002C34C6 /* Typealias.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -628,6 +631,7 @@
 				D35939F42A42056D007263E8 /* PostDetailLowerView.swift in Sources */,
 				D35939CF2A41F44C007263E8 /* View+Extensions.swift in Sources */,
 				D39A57AB2A41A67C0033DAD5 /* PoorGuysApp.swift in Sources */,
+				D32770222A50369A002C34C6 /* Typealias.swift in Sources */,
 				D35939CE2A41F44C007263E8 /* Debounce+View+Extension.swift in Sources */,
 				D35939F12A42056D007263E8 /* CommentView.swift in Sources */,
 				D35939E52A420561007263E8 /* ImagePickerView.swift in Sources */,

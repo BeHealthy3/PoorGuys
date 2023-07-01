@@ -17,11 +17,14 @@ struct CommentView: View {
     @Binding private var replyingCommentID: String?
     @Binding private var replyingNickname: String?
     
-    init(postUserID: String, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>) {
+    var deleteComment: (String) async throws -> Void
+    
+    init(postUserID: String, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>, deleteComment: @escaping (String) -> Void) {
         self.postUserID = postUserID
         self.comment = comment
         self._replyingCommentID = replyingCommentID
         self._replyingNickname = replyingNickName
+        self.deleteComment = deleteComment
     }
     
     var body: some View {
@@ -60,15 +63,20 @@ struct CommentView: View {
                                 showingSheet = true
                             }
                             .confirmationDialog("", isPresented: $showingSheet) {
-                                Button {
-                                    print("수정하기")
-                                } label: {
-                                    Text("수정하기")
-                                }
-                                Button {
-                                    print("신고하기")
-                                } label: {
-                                    Text("신고하기")
+                                if comment.userID == "dummyIDqIfSiPKg" {
+                                    Button {
+                                        Task {
+                                            try await deleteComment(comment.id)
+                                        }
+                                    } label: {
+                                        Text("삭제하기")
+                                    }
+                                } else {
+                                    Button {
+                                        print("신고하기")
+                                    } label: {
+                                        Text("신고하기")
+                                    }
                                 }
                             }
                     }
@@ -129,6 +137,6 @@ struct CommentView: View {
 
 struct CommentView_Previews: PreviewProvider {
     static var previews: some View {
-        return CommentView(postUserID: "", comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""))
+        return CommentView(postUserID: "", comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""), deleteComment: { _ in })
     }
 }

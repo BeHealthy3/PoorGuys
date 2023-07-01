@@ -12,11 +12,7 @@ struct PostDetailView: View {
     let postID: String
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State private var post: Post? {
-        didSet {
-            print(post?.userID, "🚨")
-        }
-    }
+    @State private var post: Post?
     @State private var comments: [Comment]?
     @State private var replyingCommentID: String? = nil
     @State private var replyingNickname: String? = nil
@@ -59,7 +55,18 @@ struct PostDetailView: View {
                                         .frame(height: 1)
                                         .foregroundColor(.appColor(.neutral100))
                                 }
-                                CommentView(postUserID: post.userID, comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname)
+                                CommentView(postUserID: post.userID, comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname) { commentID in
+                                    Task {
+                                        do {
+                                            try await FirebasePostManager().removeComment(commentID, in: post)
+                                            withAnimation {
+                                                self.comments = comments.filter { $0.id != commentID }
+                                            }
+                                        } catch {
+                                            print("댓글 삭제실패")
+                                        }
+                                    }
+                                }
                                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                     .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
                             }

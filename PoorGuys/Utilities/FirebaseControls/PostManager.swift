@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 import FirebaseStorage
 
 struct FirebasePostManager: PostManagable {
+    
     private let postCollection = Firestore.firestore().collection("posts")
     private let storageReference = Storage.storage().reference()
     
@@ -170,6 +171,53 @@ struct FirebasePostManager: PostManagable {
         }
     }
     
+    func removeComment(_ id: ID, in post: Post) async throws {
+        
+        let docRef = postCollection.document(post.id)
+        let commentsField = "comments"
+        
+        Firestore.firestore().runTransaction { transaction, errorPointer in
+            // 문서 가져오기
+            let postDocument = try? transaction.getDocument(docRef)
+            
+            // 필드 업데이트
+            if let document = postDocument,
+               document.exists,
+               var post = try? document.data(as: Post.self),
+               var comments = post.comments {
+
+                let commentRemovedComments = comments.filter { $0.id != id }
+                var commentsData = [[String: Any]]()
+                
+                for comment in commentRemovedComments {
+                    let commentData: [String: Any] = [
+                        "id": comment.id,
+                        "nickName": comment.nickName,
+                        "profileImageURL": comment.profileImageURL,
+                        "userID": comment.userID,
+                        "postID": comment.postID,
+                        "content": comment.content,
+                        "likeCount": comment.likeCount,
+                        "timeStamp": comment.timeStamp,
+                        "isDeletedComment": comment.isDeletedComment,
+                        "belongingCommentID": comment.belongingCommentID
+                    ]
+                    commentsData.append(commentData)
+                }
+                
+                transaction.updateData([commentsField : commentsData, "commentCount" : post.commentCount - 1], forDocument: docRef)
+            }
+
+            return nil
+        } completion: { _, error in
+            if let error = error {
+                print("트랜잭션 실패: \(error)")
+            } else {
+                print("트랜잭션 성공")
+            }
+        }
+    }
+    
 //    func deleteComment(commentID: String) async throws {}
     
 //    func uploadNewReply(_ reply: Reply) throws {}
@@ -203,6 +251,7 @@ struct MockPostManager: PostManagable {
     }
     
     func addComment(comment: Comment, on post: Post) async throws {}
+    func removeComment(_ id: ID, in post: Post) async throws {}
 //    func deleteComment(commentID: String) async throws {}
     
 //    func uploadNewReply(_ reply: Reply) throws {}
