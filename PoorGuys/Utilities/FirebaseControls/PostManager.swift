@@ -172,7 +172,13 @@ struct FirebasePostManager: PostManagable {
                var post = try? document.data(as: Post.self),
                var comments = post.comments {
 
-                let commentRemovedComments = comments.filter { $0.id != id }
+                let commentRemovedComments = comments.map { comment in
+                    var updatedComment = comment
+                    if comment.id == id {
+                        updatedComment.isDeletedComment = true
+                    }
+                    return updatedComment
+                }
                 
                 transaction.updateData([commentsField : commentsData(from: commentRemovedComments), "commentCount" : post.commentCount - 1], forDocument: docRef)
             }

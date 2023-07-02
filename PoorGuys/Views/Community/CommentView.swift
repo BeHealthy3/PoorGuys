@@ -13,12 +13,14 @@ struct CommentView: View {
     
     private let comment: Comment
     
-    @Binding private var post: Post
+    @Binding private var post: Post?
+    @Binding private var comments: [Comment]?
     @Binding private var replyingCommentID: String?
     @Binding private var replyingNickname: String?
     
-    init(post: Binding<Post>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>) {
+    init(post: Binding<Post?>, comments: Binding<[Comment]?>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>) {
         self._post = post
+        self._comments = comments
         self.comment = comment
         self._replyingCommentID = replyingCommentID
         self._replyingNickname = replyingNickName
@@ -48,9 +50,9 @@ struct CommentView: View {
                                 .frame(width: 24, height: 24)
                         }
                         
-                        Text(comment.nickName + (post.userID == comment.userID ? " (작성자)" : ""))
+                        Text(comment.nickName + (post?.userID == comment.userID ? " (작성자)" : ""))
                             .lineLimit(1)
-                            .foregroundColor(post.userID == comment.userID ?
+                            .foregroundColor(post?.userID == comment.userID ?
                                 .appColor(.primary500) : .appColor(.neutral700))
                             .font(.system(size: 12, weight: .bold))
                             
@@ -60,11 +62,26 @@ struct CommentView: View {
                                 showingSheet = true
                             }
                             .confirmationDialog("", isPresented: $showingSheet) {
-                                if comment.userID == "dummyIDqIfSiPKg" {
+//                                if let user = User.currentUser, comment.userID == user.uid {
+                                if comment.userID == "dummyUserIDUtVjUYszAN" {
                                     Button {
                                         Task {
-//                                            try await deleteComment(comment.id)
+                                            do {
+                                                try await FirebasePostManager().removeComment(comment.id, in: post!)
+                                                withAnimation {
+                                                    comments! = comments!.map { comment in
+                                                        var updatedComment = comment
+                                                        if comment.id == self.comment.id {
+                                                            updatedComment.isDeletedComment = true
+                                                        }
+                                                        return updatedComment
+                                                    }
+                                                }
+                                            } catch {
+                                                print("댓글 삭제실패")
+                                            }
                                         }
+
                                     } label: {
                                         Text("삭제하기")
                                     }
@@ -106,7 +123,7 @@ struct CommentView: View {
                                         guard let user = User.currentUser else { throw LoginError.noCurrentUser }
                                         
                                         Task {
-                                            try await FirebasePostManager(user: user).likeComment(comment.id, in: post)
+                                            try await FirebasePostManager(user: user).likeComment(comment.id, in: post!)
                                         }
                                     } catch {
                                         print("로그인 에러 또는 좋아요 에러")
@@ -144,6 +161,6 @@ struct CommentView: View {
 
 struct CommentView_Previews: PreviewProvider {
     static var previews: some View {
-        CommentView(post: .constant(Post.dummy()), comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""))
+        CommentView(post: .constant(Post.dummy()), comments: .constant(Comment.multipleDummies(number: 1)), comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""))
     }
 }

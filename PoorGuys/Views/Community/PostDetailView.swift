@@ -56,7 +56,7 @@ struct PostDetailView: View {
                                         .foregroundColor(.appColor(.neutral100))
                                 }
                                 
-                                CommentView(post: .constant(post), comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname)
+                                CommentView(post: $post, comments: $comments, comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                     .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
                             }
