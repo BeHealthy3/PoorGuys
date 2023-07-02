@@ -8,23 +8,20 @@
 import SwiftUI
 
 struct CommentView: View {
-    
-    private var postUserID: String
-    
+        
     @State var showingSheet = false
     
     private let comment: Comment
+    
+    @Binding private var post: Post
     @Binding private var replyingCommentID: String?
     @Binding private var replyingNickname: String?
     
-    var deleteComment: (String) async throws -> Void
-    
-    init(postUserID: String, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>, deleteComment: @escaping (String) -> Void) {
-        self.postUserID = postUserID
+    init(post: Binding<Post>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>) {
+        self._post = post
         self.comment = comment
         self._replyingCommentID = replyingCommentID
         self._replyingNickname = replyingNickName
-        self.deleteComment = deleteComment
     }
     
     var body: some View {
@@ -51,9 +48,9 @@ struct CommentView: View {
                                 .frame(width: 24, height: 24)
                         }
                         
-                        Text(comment.nickName + (postUserID == comment.userID ? " (작성자)" : ""))
+                        Text(comment.nickName + (post.userID == comment.userID ? " (작성자)" : ""))
                             .lineLimit(1)
-                            .foregroundColor(postUserID == comment.userID ?
+                            .foregroundColor(post.userID == comment.userID ?
                                 .appColor(.primary500) : .appColor(.neutral700))
                             .font(.system(size: 12, weight: .bold))
                             
@@ -66,7 +63,7 @@ struct CommentView: View {
                                 if comment.userID == "dummyIDqIfSiPKg" {
                                     Button {
                                         Task {
-                                            try await deleteComment(comment.id)
+//                                            try await deleteComment(comment.id)
                                         }
                                     } label: {
                                         Text("삭제하기")
@@ -104,16 +101,26 @@ struct CommentView: View {
                                         }
                                 }
                                 
-                                HStack(spacing: 4) {
-                                    Image("thumbsUp")
-                                        .renderingMode(.template)
-                                        .foregroundColor(.appColor(.neutral500))
-                                    Text(String(comment.likeCount))
-                                        .foregroundColor(.appColor(.neutral500))
-                                        .font(.system(size: 11))
-                                }
-                                .onTapGesture {
-                                    print("좋아요")
+                                Button {
+                                    do {
+                                        guard let user = User.currentUser else { throw LoginError.noCurrentUser }
+                                        
+                                        Task {
+                                            try await FirebasePostManager(user: user).likeComment(comment.id, in: post)
+                                        }
+                                    } catch {
+                                        print("로그인 에러 또는 좋아요 에러")
+                                    }
+                                    
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Image("thumbsUp")
+                                            .renderingMode(.template)
+                                            .foregroundColor(.appColor(.neutral500))
+                                        Text(String(comment.likeCount))
+                                            .foregroundColor(.appColor(.neutral500))
+                                            .font(.system(size: 11))
+                                    }
                                 }
                             }
                         }
@@ -137,6 +144,6 @@ struct CommentView: View {
 
 struct CommentView_Previews: PreviewProvider {
     static var previews: some View {
-        return CommentView(postUserID: "", comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""), deleteComment: { _ in })
+        CommentView(post: .constant(Post.dummy()), comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""))
     }
 }

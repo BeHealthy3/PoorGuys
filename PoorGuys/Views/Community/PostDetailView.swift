@@ -55,18 +55,8 @@ struct PostDetailView: View {
                                         .frame(height: 1)
                                         .foregroundColor(.appColor(.neutral100))
                                 }
-                                CommentView(postUserID: post.userID, comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname) { commentID in
-                                    Task {
-                                        do {
-                                            try await FirebasePostManager().removeComment(commentID, in: post)
-                                            withAnimation {
-                                                self.comments = comments.filter { $0.id != commentID }
-                                            }
-                                        } catch {
-                                            print("댓글 삭제실패")
-                                        }
-                                    }
-                                }
+                                
+                                CommentView(post: .constant(post), comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                     .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
                             }
