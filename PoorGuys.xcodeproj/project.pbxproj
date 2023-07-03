@@ -52,6 +52,7 @@
 		60A8E09B2A39D0E00026DA04 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E09A2A39D0E00026DA04 /* CustomTabBarView.swift */; };
 		60A8E09D2A39DA5E0026DA04 /* CustomTabBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E09C2A39DA5E0026DA04 /* CustomTabBarContainerView.swift */; };
 		60A8E09F2A3AABAF0026DA04 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E09E2A3AABAF0026DA04 /* TabBarView.swift */; };
+		60C5B1D12A4D2C1C0034E961 /* CurrencyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C5B1D02A4D2C1C0034E961 /* CurrencyTextField.swift */; };
 		D32363BD2A2C73D200857135 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D32363BC2A2C73D200857135 /* Kingfisher */; };
 		D35939BD2A41F41F007263E8 /* ImageDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BC2A41F41F007263E8 /* ImageDownloadManager.swift */; };
 		D35939BF2A41F42B007263E8 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BE2A41F42B007263E8 /* DateFormatter.swift */; };
@@ -139,6 +140,7 @@
 		60A8E09A2A39D0E00026DA04 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
 		60A8E09C2A39DA5E0026DA04 /* CustomTabBarContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarContainerView.swift; sourceTree = "<group>"; };
 		60A8E09E2A3AABAF0026DA04 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		60C5B1D02A4D2C1C0034E961 /* CurrencyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTextField.swift; sourceTree = "<group>"; };
 		D35939BC2A41F41F007263E8 /* ImageDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadManager.swift; sourceTree = "<group>"; };
 		D35939BE2A41F42B007263E8 /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		D35939C02A41F436007263E8 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				60279EC12A492FAF000D9226 /* SaveHistoryView.swift */,
 				604F578C2A4BF13E00B9003D /* AddSaveHistoryView.swift */,
 				604F578E2A4BF3B700B9003D /* CategoryIcon.swift */,
+				60C5B1D02A4D2C1C0034E961 /* CurrencyTextField.swift */,
 			);
 			path = SaveHistory;
 			sourceTree = "<group>";
@@ -710,6 +713,7 @@
 				6001EFD72A13668B00A9A2EF /* SetNickNameView.swift in Sources */,
 				D35939DF2A41F62B007263E8 /* Reply.swift in Sources */,
 				60558D062A14BA2C007581AD /* MyPageView.swift in Sources */,
+				60C5B1D12A4D2C1C0034E961 /* CurrencyTextField.swift in Sources */,
 				60A8E09F2A3AABAF0026DA04 /* TabBarView.swift in Sources */,
 				D35939F82A42056D007263E8 /* TextEditorView.swift in Sources */,
 				D35939D52A41F4AE007263E8 /* AppColor.swift in Sources */,
