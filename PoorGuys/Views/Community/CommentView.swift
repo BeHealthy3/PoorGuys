@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct CommentView: View {
-        
-    @State var showingSheet = false
     
-    private let comment: Comment
+    @State private var showingSheet = false
+    
+    @State private var comment: Comment = Comment.dummy()
     
     @Binding private var post: Post?
     @Binding private var comments: [Comment]?
@@ -19,15 +19,16 @@ struct CommentView: View {
     @Binding private var replyingNickname: String?
     
     init(post: Binding<Post?>, comments: Binding<[Comment]?>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>) {
+        self._comment = State(initialValue: comment)
         self._post = post
         self._comments = comments
-        self.comment = comment
         self._replyingCommentID = replyingCommentID
         self._replyingNickname = replyingNickName
     }
     
     var body: some View {
         VStack {
+            
             if comment.isDeletedComment {
                 HStack {
                     Text("삭제된 댓글입니다.")
@@ -55,33 +56,34 @@ struct CommentView: View {
                             .foregroundColor(post?.userID == comment.userID ?
                                 .appColor(.primary500) : .appColor(.neutral700))
                             .font(.system(size: 12, weight: .bold))
-                            
+                        
                         Spacer()
                         Image("verticalEllipsis")
                             .onTapGesture {
                                 showingSheet = true
                             }
                             .confirmationDialog("", isPresented: $showingSheet) {
-//                                if let user = User.currentUser, comment.userID == user.uid {
-                                if comment.userID == "dummyUserIDUtVjUYszAN" {
+                                if let user = User.currentUser, comment.userID == user.uid {
+                                    //                                if comment.userID == "dummyUserIDUtVjUYszAN" {
                                     Button {
                                         Task {
                                             do {
-                                                try await FirebasePostManager().removeComment(comment.id, in: post!)
+                                                let updatedComments = removedComments()
+                                                guard var updatedPost = self.post else { return }   //🚨todo: 에러던지기
+                                                
+                                                updatedPost.comments = updatedComments
+                                                
+                                                try await FirebasePostManager().updateCommentsAndCommentsCount(with: updatedPost)
+                                                
                                                 withAnimation {
-                                                    comments! = comments!.map { comment in
-                                                        var updatedComment = comment
-                                                        if comment.id == self.comment.id {
-                                                            updatedComment.isDeletedComment = true
-                                                        }
-                                                        return updatedComment
-                                                    }
+                                                    self.comments = updatedComments
                                                 }
-                                            } catch {
-                                                print("댓글 삭제실패")
+                                            }
+                                            catch {
+                                                print("업데이트실패")
                                             }
                                         }
-
+                                        
                                     } label: {
                                         Text("삭제하기")
                                     }
@@ -121,10 +123,18 @@ struct CommentView: View {
                                 Button {
                                     do {
                                         guard let user = User.currentUser else { throw LoginError.noCurrentUser }
+//                                        let user = User(uid: "Asdfas", nickName: "ewqfg", authenticationMethod: .apple)
+                                        guard var updatedPost = post else { return }
+                                        let updatedComments = commentsAfterLike(by: user)
+                                        
+                                        updatedPost.comments = updatedComments
                                         
                                         Task {
-                                            try await FirebasePostManager(user: user).likeComment(comment.id, in: post!)
+                                            try await FirebasePostManager(user: user).updateComments(with: updatedPost)
                                         }
+                                        
+                                        comment.likeCount += 1
+                                        
                                     } catch {
                                         print("로그인 에러 또는 좋아요 에러")
                                     }
@@ -147,15 +157,36 @@ struct CommentView: View {
                 }
                 .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             }
-//            if let replies = comment.replies {
-//                VStack {
-//                    ForEach(replies) { reply in
-//                        ReplyView(reply: reply)
-//                            .frame(maxWidth: .infinity, alignment: .leading)
-//                    }
-//                }
-//            }
         }
+    }
+    
+    private func removedComments() -> [Comment]? {
+        
+        let commentRemovedComments = comments?.map({ comment in
+            var updatedComment = comment
+            if updatedComment.id == comment.id {
+                updatedComment.isDeletedComment = true
+            }
+            
+            return updatedComment
+        })
+        return commentRemovedComments
+    }
+    
+    private func commentsAfterLike(by user: User) -> [Comment]? {
+        let commentsAfterLike = comments?.map({ comment in
+            
+            var updatedComment = comment
+            
+            if comment.id == comment.id {
+                updatedComment.likeCount += 1
+                updatedComment.likedUserIDs.append(user.uid)
+            }
+            
+            return updatedComment
+        })
+        
+        return commentsAfterLike
     }
 }
 

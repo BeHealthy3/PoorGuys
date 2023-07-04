@@ -129,25 +129,17 @@ struct FirebasePostManager: PostManagable {
         return post
     }
     
-    func addComment(comment: Comment, on post: Post) async throws {
-        
-        let docRef = postCollection.document(post.id)
+    func updateComments(with updatedPost: Post) async throws {
+        let docRef = postCollection.document(updatedPost.id)
         
         Firestore.firestore().runTransaction { transaction, errorPointer in
             // 문서 가져오기
             let postDocument = try? transaction.getDocument(docRef)
             
             // 필드 업데이트
-            if let document = postDocument,
-               document.exists,
-               var post = try? document.data(as: Post.self),
-               var comments = post.comments {
-
-                comments.append(comment)
-                
-                transaction.updateData([commentsField : commentsData(from: comments), "commentCount" : post.commentCount += 1], forDocument: docRef)
-            }
-
+            guard let comments = updatedPost.comments else { return }
+            transaction.updateData([commentsField : commentsData(from: comments)], forDocument: docRef)
+            
             return nil
         } completion: { _, error in
             if let error = error {
@@ -158,71 +150,16 @@ struct FirebasePostManager: PostManagable {
         }
     }
     
-    func removeComment(_ id: ID, in post: Post) async throws {
-        
-        let docRef = postCollection.document(post.id)
+    func updateCommentsAndCommentsCount(with updatedPost: Post) async throws {
+        let docRef = postCollection.document(updatedPost.id)
         
         Firestore.firestore().runTransaction { transaction, errorPointer in
             // 문서 가져오기
             let postDocument = try? transaction.getDocument(docRef)
             
             // 필드 업데이트
-            if let document = postDocument,
-               document.exists,
-               var post = try? document.data(as: Post.self),
-               var comments = post.comments {
-
-                let commentRemovedComments = comments.map { comment in
-                    var updatedComment = comment
-                    if comment.id == id {
-                        updatedComment.isDeletedComment = true
-                    }
-                    return updatedComment
-                }
-                
-                transaction.updateData([commentsField : commentsData(from: commentRemovedComments), "commentCount" : post.commentCount - 1], forDocument: docRef)
-            }
-
-            return nil
-        } completion: { _, error in
-            if let error = error {
-                print("트랜잭션 실패: \(error)")
-            } else {
-                print("트랜잭션 성공")
-            }
-        }
-    }
-    
-    func likeComment(_ id: ID, in post: Post) async throws {
-        
-        let docRef = postCollection.document(post.id)
-        
-        Firestore.firestore().runTransaction { transaction, errorPointer in
-            // 문서 가져오기
-            let postDocument = try? transaction.getDocument(docRef)
-            
-            
-            // 필드 업데이트
-            if let document = postDocument,
-               document.exists,
-               var post = try? document.data(as: Post.self),
-               var comments = post.comments {
-
-                guard let user = user else { return }
-
-                comments = comments.map { comment in
-                    var updatedComment = comment
-                    
-                    if comment.id == id {
-                        updatedComment.likeCount += 1
-                        updatedComment.likedUserIDs.append(user.uid)
-                    }
-
-                    return updatedComment
-                }
-
-                transaction.updateData([commentsField : commentsData(from: comments)], forDocument: docRef)
-            }
+            guard let comments = updatedPost.comments else { return }
+            transaction.updateData([commentsField : commentsData(from: comments)], forDocument: docRef)
             
             return nil
         } completion: { _, error in
@@ -259,7 +196,7 @@ struct FirebasePostManager: PostManagable {
 //    func deleteReply(replyID: String) async throws {}
 }
 
-struct MockPostManager: PostManagable {    
+struct MockPostManager: PostManagable {
     static let shared = MockPostManager()
     
     private init() {}
@@ -283,10 +220,8 @@ struct MockPostManager: PostManagable {
             }
         }
     }
-    
-    func addComment(comment: Comment, on post: Post) async throws {}
-    func removeComment(_ id: ID, in post: Post) async throws {}
-    func likeComment(_ id: ID, in post: Post) async throws {}
+    func updateComments(with updatedPost: Post) async throws {}
+    func updateCommentsAndCommentsCount(with updatedPost: Post) async throws {}
 //    func deleteComment(commentID: String) async throws {}
     
 //    func uploadNewReply(_ reply: Reply) throws {}

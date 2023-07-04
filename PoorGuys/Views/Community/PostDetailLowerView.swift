@@ -65,11 +65,19 @@ struct PostDetailLowerView: View {
                                 
                                 Task {
                                     do {
-                                        try await FirebasePostManager().addComment(comment: comment, on: post)
-                                        text = ""
-                                        replyingCommentID = nil
-                                        replyingNickname = nil
-                                        insertComment(comment)
+                                        let updatedComments = updatedComments(with: comment)
+                                        var updatedPost = self.post
+                                        
+                                        updatedPost.comments = updatedComments
+                                        
+                                        try await FirebasePostManager().updateCommentsAndCommentsCount(with: updatedPost)
+                                        
+                                        withAnimation {
+                                            text = ""
+                                            replyingCommentID = nil
+                                            replyingNickname = nil
+                                            self.comments = updatedComments
+                                        }
                                     }
                                     catch {
                                         print("업데이트실패")
@@ -101,25 +109,23 @@ struct PostDetailLowerView: View {
         }
     }
     
-    func insertComment(_ newComment: Comment) {
-        withAnimation(.easeInOut) {
-            if let belongingCommentID = newComment.belongingCommentID, let comments = comments {
+    func updatedComments(with newComment: Comment) -> [Comment] {
+            if let belongingCommentID = newComment.belongingCommentID,
+               var comments = comments {
                 
                 if let lastIndex = comments.lastIndex(where: { $0.belongingCommentID == belongingCommentID }) {
-                    self.comments?.insert(newComment, at: lastIndex + 1)
-                    
+                    comments.insert(newComment, at: lastIndex + 1)
                 } else {
-                    
                     if let index = comments.firstIndex(where: { $0.id == belongingCommentID }) {
-                        self.comments?.insert(newComment, at: index + 1)
+                        comments.insert(newComment, at: index + 1)
                     }
                 }
                 
+                return comments
+                
             } else {
-                self.comments?.append(newComment)
+                return [newComment]
             }
-        }
-        
     }
 }
 

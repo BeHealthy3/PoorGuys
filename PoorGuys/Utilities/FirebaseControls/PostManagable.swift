@@ -14,9 +14,8 @@ protocol PostManagable {
     func fetchPost(postID: String) async throws -> Post
     func removePost(postID: String) async throws
     mutating func removeLocalPosts()
-    func addComment(comment: Comment, on post: Post) async throws
-    func removeComment(_ id: ID, in post: Post) async throws
-    func likeComment(_ id: ID, in post: Post) async throws
+    func updateComments(with updatedPost: Post) async throws
+    func updateCommentsAndCommentsCount(with updatedPost: Post) async throws
 //    func deleteComment(commentID: String) async throws
     
 //    func uploadNewReply(_ reply: Reply) throws
