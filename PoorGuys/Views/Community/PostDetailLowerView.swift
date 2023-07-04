@@ -61,7 +61,7 @@ struct PostDetailLowerView: View {
                             do {
                                 guard let user = User.currentUser else { throw FirebaseError.userNotFound }
                                 
-                                let comment = Comment(id: UUID().uuidString, nickName: user.nickName, profileImageURL: user.profileImageURL, userID: user.uid, postID: post.id, content: text, likeCount: 0, likedUserIDs: [], timeStamp: Date(), isDeletedComment: false, belongingCommentID: replyingCommentID)
+                                let comment = Comment(id: UUID().uuidString, nickName: user.nickName, profileImageURL: user.profileImageURL, userID: user.uid, postID: post.id, content: text, likedUserIDs: [], timeStamp: Date(), isDeletedComment: false, belongingCommentID: replyingCommentID)
                                 
                                 Task {
                                     do {

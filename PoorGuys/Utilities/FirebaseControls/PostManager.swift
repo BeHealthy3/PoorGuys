@@ -180,7 +180,6 @@ struct FirebasePostManager: PostManagable {
                 "userID": comment.userID,
                 "postID": comment.postID,
                 "content": comment.content,
-                "likeCount": comment.likeCount,
                 "timeStamp": comment.timeStamp,
                 "isDeletedComment": comment.isDeletedComment,
                 "belongingCommentID": comment.belongingCommentID,

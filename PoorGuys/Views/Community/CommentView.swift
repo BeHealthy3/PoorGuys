@@ -6,24 +6,34 @@
 //
 
 import SwiftUI
+import Combine
 
 struct CommentView: View {
     
     @State private var showingSheet = false
     
-    @State private var comment: Comment = Comment.dummy()
+    @State private var comment: Comment
     
     @Binding private var post: Post?
     @Binding private var comments: [Comment]?
     @Binding private var replyingCommentID: String?
     @Binding private var replyingNickname: String?
+    @Binding private var isCommentLikeButtonEnabled: Bool
     
-    init(post: Binding<Post?>, comments: Binding<[Comment]?>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>) {
+    @State private var showAlert = false
+    
+    @State private var cancellable: AnyCancellable?
+    
+//    🚨todo: 정상적인 user로 바꿔주기
+    private let user = User(uid: "Asdfas", nickName: "ewqfg", authenticationMethod: .apple)
+    
+    init(post: Binding<Post?>, comments: Binding<[Comment]?>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>, isLikeButtonEnabled: Binding<Bool>) {
         self._comment = State(initialValue: comment)
         self._post = post
         self._comments = comments
         self._replyingCommentID = replyingCommentID
         self._replyingNickname = replyingNickName
+        self._isCommentLikeButtonEnabled = isLikeButtonEnabled
     }
     
     var body: some View {
@@ -63,7 +73,7 @@ struct CommentView: View {
                                 showingSheet = true
                             }
                             .confirmationDialog("", isPresented: $showingSheet) {
-                                if let user = User.currentUser, comment.userID == user.uid {
+                                if comment.userID == user.uid {
                                     //                                if comment.userID == "dummyUserIDUtVjUYszAN" {
                                     Button {
                                         Task {
@@ -121,33 +131,50 @@ struct CommentView: View {
                                 }
                                 
                                 Button {
-                                    do {
-                                        guard let user = User.currentUser else { throw LoginError.noCurrentUser }
-//                                        let user = User(uid: "Asdfas", nickName: "ewqfg", authenticationMethod: .apple)
-                                        guard var updatedPost = post else { return }
-                                        let updatedComments = commentsAfterLike(by: user)
-                                        
-                                        updatedPost.comments = updatedComments
-                                        
-                                        Task {
-                                            try await FirebasePostManager(user: user).updateComments(with: updatedPost)
+                                    if isCommentLikeButtonEnabled {
+                                        do {
+                                            isCommentLikeButtonEnabled = false
+                                            
+                                            Task {
+                                                try await uploadCommentLike()
+                                            }
+                                            
+                                            if comment.likedUserIDs.contains(user.uid) {
+                                                comment.likedUserIDs = comment.likedUserIDs.filter({ $0 != user.uid })
+                                            } else {
+                                                comment.likedUserIDs.append(user.uid)
+                                            }
+                                            
+                                            cancellable = Timer.publish(every: 3, on: .main, in: .common)
+                                                .autoconnect()
+                                                .sink { _ in
+                                                    // 타이머 완료 후 버튼 활성화
+                                                    isCommentLikeButtonEnabled = true
+                                                }
+                                            
+                                        } catch {
+                                            print("로그인 에러 또는 좋아요 에러")
                                         }
-                                        
-                                        comment.likeCount += 1
-                                        
-                                    } catch {
-                                        print("로그인 에러 또는 좋아요 에러")
+                                    } else {
+                                        showAlert = true
                                     }
-                                    
                                 } label: {
                                     HStack(spacing: 4) {
-                                        Image("thumbsUp")
-                                            .renderingMode(.template)
-                                            .foregroundColor(.appColor(.neutral500))
-                                        Text(String(comment.likeCount))
+                                        if comment.likedUserIDs.contains(user.uid) {
+                                            Image("thumbsUpFilled")
+                                        } else {
+                                            Image("thumbsUp")
+                                                .renderingMode(.template)
+                                                .foregroundColor(.appColor(.neutral500))
+                                        }
+                                        
+                                        Text(String(comment.likedUserIDs.count))
                                             .foregroundColor(.appColor(.neutral500))
                                             .font(.system(size: 11))
                                     }
+                                }
+                                .alert(isPresented: $showAlert) {
+                                    Alert(title: Text("알림"), message: Text("좋아요는 3초에 한번씩 누를 수 있습니다."), dismissButton: .default(Text("확인")))
                                 }
                             }
                         }
@@ -173,13 +200,27 @@ struct CommentView: View {
         return commentRemovedComments
     }
     
+    private func uploadCommentLike() async throws {
+        guard var updatedPost = post else { return }
+        var updatedComments: [Comment]?
+        
+        if comment.likedUserIDs.contains(user.uid) {
+            updatedComments = commentsAfterUnlike(by: user)
+        } else {
+            updatedComments = commentsAfterLike(by: user)
+        }
+        
+        updatedPost.comments = updatedComments
+        
+        try await FirebasePostManager(user: user).updateComments(with: updatedPost)
+    }
+    
     private func commentsAfterLike(by user: User) -> [Comment]? {
         let commentsAfterLike = comments?.map({ comment in
             
             var updatedComment = comment
             
-            if comment.id == comment.id {
-                updatedComment.likeCount += 1
+            if comment.id == self.comment.id {
                 updatedComment.likedUserIDs.append(user.uid)
             }
             
@@ -188,10 +229,27 @@ struct CommentView: View {
         
         return commentsAfterLike
     }
+    
+    private func commentsAfterUnlike(by user: User) -> [Comment]? {
+        let commentsAfterUnlike = comments?.map({ comment in
+            
+            var updatedComment = comment
+            
+            if comment.id == self.comment.id {
+                updatedComment.likedUserIDs = updatedComment.likedUserIDs.filter({ userID in
+                    userID != user.uid
+                })
+            }
+            
+            return updatedComment
+        })
+        
+        return commentsAfterUnlike
+    }
 }
 
 struct CommentView_Previews: PreviewProvider {
     static var previews: some View {
-        CommentView(post: .constant(Post.dummy()), comments: .constant(Comment.multipleDummies(number: 1)), comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""))
+        CommentView(post: .constant(Post.dummy()), comments: .constant(Comment.multipleDummies(number: 1)), comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""), isLikeButtonEnabled: .constant(true))
     }
 }

@@ -16,12 +16,11 @@ import LoremSwiftum
             let profileImageURL: String? = "https://picsum.photos/200/300"
             let userID: String = "dummyUserID\(String.randomString(length: 10))"
             let postID: String = "dummyPostID\(String.randomString(length: 10))"
-            let likeCount: Int = Int.random(in: 1...8)
             let likedUserIDs: [String] = ["dummyUserID\(String.randomString(length: 10))"]
             let timeStamp: Date = Date().addingTimeInterval(-TimeInterval(Int.random(in: 0...1000)))
-            let content: String = likeCount.isMultiple(of: 4) ? Lorem.paragraph : Lorem.sentence
+            let content: String = Int.random(in: 1...12).isMultiple(of: 4) ? Lorem.paragraph : Lorem.sentence
             
-            return Comment(id: id, nickName: nickName, profileImageURL: profileImageURL, userID: userID, postID: postID, content: content, likeCount: likeCount, likedUserIDs: likedUserIDs, timeStamp: timeStamp, isDeletedComment: likeCount.isMultiple(of: 7) ? true : false, belongingCommentID: likeCount.isMultiple(of: 2) ? nil : "\(2)")
+            return Comment(id: id, nickName: nickName, profileImageURL: profileImageURL, userID: userID, postID: postID, content: content, likedUserIDs: likedUserIDs, timeStamp: timeStamp, isDeletedComment: Int.random(in: 1...12).isMultiple(of: 7) ? true : false, belongingCommentID: Int.random(in: 1...12).isMultiple(of: 2) ? nil : "\(2)")
         }
         
         static func multipleDummies(number: Int) -> [Comment] {
@@ -40,7 +39,6 @@ import LoremSwiftum
         var userID: String
         var postID: String
         var content: String
-        var likeCount: Int
         var likedUserIDs: [String]
         var timeStamp: Date
         var isDeletedComment: Bool

@@ -16,6 +16,7 @@ struct PostDetailView: View {
     @State private var comments: [Comment]?
     @State private var replyingCommentID: String? = nil
     @State private var replyingNickname: String? = nil
+    @State private var isCommentLikeButtonEnabled = true
     
     init(postID: String) {
         self.postID = postID
@@ -56,7 +57,7 @@ struct PostDetailView: View {
                                         .foregroundColor(.appColor(.neutral100))
                                 }
                                 
-                                CommentView(post: $post, comments: $comments, comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname)
+                                CommentView(post: $post, comments: $comments, comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname, isLikeButtonEnabled: $isCommentLikeButtonEnabled)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                     .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
                             }
