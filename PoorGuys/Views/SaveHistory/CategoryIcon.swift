@@ -30,8 +30,12 @@ struct CategoryIcon: View {
                 RoundedRectangle(cornerRadius: 12)
                     .foregroundColor(saveState == .saved ? Color("primary_500") : Color("neutral_600"))
             } else {
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(iconColor, lineWidth: 1)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .foregroundColor(Color("white"))
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(iconColor, lineWidth: 1)
+                }
             }
         }
         .onAppear {
@@ -43,6 +47,14 @@ struct CategoryIcon: View {
             }
         }
         .onChange(of: isSelected) { newValue in
+            switch saveState {
+            case .saved:
+                iconColor = isSelected ? Color("white") : Color("primary_500")
+            case .wasted:
+                iconColor = isSelected ? Color("white") : Color("neutral_600")
+            }
+        }
+        .onChange(of: saveState) { newValue in
             switch saveState {
             case .saved:
                 iconColor = isSelected ? Color("white") : Color("primary_500")
