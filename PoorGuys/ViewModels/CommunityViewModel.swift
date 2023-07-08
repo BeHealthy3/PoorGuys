@@ -28,6 +28,8 @@ class CommunityViewModel: CommunityPostsManagable {
     func fetch10Posts() async throws {
         let newPosts = try await postManager.fetch10Posts()
         
+        isEndOfList = newPosts.count < 10 ? true : false
+        
         DispatchQueue.main.async {
             self.posts += newPosts
         }
@@ -39,10 +41,7 @@ class CommunityViewModel: CommunityPostsManagable {
     }
     
     func thisIsTheThirdLast(_ post: Post) -> Bool {
-        guard posts.count >= 3 else {
-            // 배열의 크기가 3보다 작으면 끝에서 3번째 요소가 없으므로 false 반환
-            return false
-        }
+        guard !isEndOfList else { return false }
         
         let thirdLastElement = posts[posts.count - 3]
         return post == thirdLastElement
