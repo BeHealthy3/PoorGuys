@@ -74,7 +74,7 @@ struct CommentView: View {
                             }
                             .confirmationDialog("", isPresented: $showingSheet) {
                                 if comment.userID == user.uid {
-                                    //                                if comment.userID == "dummyUserIDUtVjUYszAN" {
+//                                if comment.userID == "dfkdkeltkqn" {
                                     Button {
                                         Task {
                                             do {
@@ -108,7 +108,7 @@ struct CommentView: View {
                     }
                     
                     HStack {
-                        Text(comment.content)
+                        Text($comment.content.wrappedValue)
                             .foregroundColor(.appColor(.neutral900))
                             .multilineTextAlignment(.leading)
                             .font(.system(size: 14))

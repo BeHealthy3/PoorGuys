@@ -48,15 +48,12 @@ struct PostDetailView: View {
                     
                     if let comments = self.comments {
                         VStack {
-                            ForEach(comments.indices, id: \.self) { index in
-                                let comment = comments[index]
-                                
-                                if index != 0 && comment.belongingCommentID == nil {
+                            ForEach(comments) { comment in // comments를 직접 사용하여 ForEach 뷰를 생성
+                                if comment.belongingCommentID == nil {
                                     Rectangle()
                                         .frame(height: 1)
                                         .foregroundColor(.appColor(.neutral100))
                                 }
-                                
                                 CommentView(post: $post, comments: $comments, comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname, isLikeButtonEnabled: $isCommentLikeButtonEnabled)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                     .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
@@ -107,26 +104,24 @@ struct PostDetailView: View {
         .onAppear {
             Task {
                 post = try await FirebasePostManager().fetchPost(postID: postID)
-                
-                comments = rearrangeComments(
-                    post?.comments
-                    ??
-                    [Comment]()
-                )
+                comments = post?.comments
             }
+        }
+        .onChange(of: comments) { _ in
+            rearrangeComments()
         }
     }
     
-    func rearrangeComments(_ comments: [Comment]) -> [Comment] {
-        let commentsWithBelongingID =
-        comments
+    func rearrangeComments() {
+        guard let unfilteredComments = comments else { return }
+        
+        let commentsWithBelongingID = unfilteredComments
             .filter { $0.belongingCommentID != nil }
             .sorted { lhs, rhs in
             lhs.timeStamp < rhs.timeStamp
         }
         
-        let commentsWithoutBelongingID =
-        comments
+        let commentsWithoutBelongingID = unfilteredComments
             .filter { $0.belongingCommentID == nil }
             .sorted { lhs, rhs in
             lhs.timeStamp < rhs.timeStamp
@@ -142,8 +137,7 @@ struct PostDetailView: View {
                 }
             }
         }
-        
-        return reArrangedComments
+        self.comments = reArrangedComments
     }
 }
 

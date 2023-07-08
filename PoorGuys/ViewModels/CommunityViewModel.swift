@@ -10,7 +10,7 @@ import Foundation
 protocol CommunityPostsManagable: ObservableObject {
     
     var postManager: PostManagable { get }
-    
+    var isEndOfList: Bool { get set }
     var posts: [Post] { get set }
     
     func fetch10Posts() async throws
@@ -21,6 +21,7 @@ protocol CommunityPostsManagable: ObservableObject {
 class CommunityViewModel: CommunityPostsManagable {
     
     var postManager: PostManagable = FirebasePostManager()
+    var isEndOfList = false
     
     @Published var posts: [Post] = []
     

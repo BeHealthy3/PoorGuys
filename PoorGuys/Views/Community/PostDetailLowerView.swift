@@ -20,7 +20,6 @@ struct PostDetailLowerView: View {
     @State private var backgroundNeedsHighlight = false
     
     init(post: Post, comments: Binding<[Comment]?>, replyingCommentID: Binding<String?>, replyingNickname: Binding<String?>) {
-        print(post)
         self.post = post
         self._comments = comments
         self._replyingCommentID = replyingCommentID
@@ -59,15 +58,17 @@ struct PostDetailLowerView: View {
                         Button {
                             
                             do {
-                                guard let user = User.currentUser else { throw FirebaseError.userNotFound }
+                                let user = User(uid: "dfkdkeltkqn", nickName: "hihi", profileImageURL: "https://picsum.photos/200/300", authenticationMethod: .apple)
+//                                guard let user = User.currentUser else { throw FirebaseError.userNotFound }
                                 
-                                let comment = Comment(id: UUID().uuidString, nickName: user.nickName, profileImageURL: user.profileImageURL, userID: user.uid, postID: post.id, content: text, likedUserIDs: [], timeStamp: Date(), isDeletedComment: false, belongingCommentID: replyingCommentID)
+                                let newComment = Comment(id: UUID().uuidString, nickName: user.nickName, profileImageURL: user.profileImageURL, userID: user.uid, postID: post.id, content: text, likedUserIDs: [], timeStamp: Date(), isDeletedComment: false, belongingCommentID: replyingCommentID)
                                 
                                 Task {
                                     do {
-                                        let updatedComments = updatedComments(with: comment)
-                                        var updatedPost = self.post
+                                        var updatedPost = post
+                                        var updatedComments = self.comments
                                         
+                                        updatedComments?.append(newComment)
                                         updatedPost.comments = updatedComments
                                         
                                         try await FirebasePostManager().updateCommentsAndCommentsCount(with: updatedPost)
@@ -76,7 +77,7 @@ struct PostDetailLowerView: View {
                                             text = ""
                                             replyingCommentID = nil
                                             replyingNickname = nil
-                                            self.comments = updatedComments
+                                            self.comments?.append(newComment)
                                         }
                                     }
                                     catch {
@@ -109,24 +110,24 @@ struct PostDetailLowerView: View {
         }
     }
     
-    func updatedComments(with newComment: Comment) -> [Comment] {
-            if let belongingCommentID = newComment.belongingCommentID,
-               var comments = comments {
-                
-                if let lastIndex = comments.lastIndex(where: { $0.belongingCommentID == belongingCommentID }) {
-                    comments.insert(newComment, at: lastIndex + 1)
-                } else {
-                    if let index = comments.firstIndex(where: { $0.id == belongingCommentID }) {
-                        comments.insert(newComment, at: index + 1)
-                    }
-                }
-                
-                return comments
-                
-            } else {
-                return [newComment]
-            }
-    }
+//    func updatedComments(with newComment: Comment) -> [Comment] {
+//            if let belongingCommentID = newComment.belongingCommentID,
+//               var comments = comments {
+//                
+//                if let lastIndex = comments.lastIndex(where: { $0.belongingCommentID == belongingCommentID }) {
+//                    comments.insert(newComment, at: lastIndex + 1)
+//                } else {
+//                    if let index = comments.firstIndex(where: { $0.id == belongingCommentID }) {
+//                        comments.insert(newComment, at: index + 1)
+//                    }
+//                }
+//                
+//                return comments
+//                
+//            } else {
+//                return [newComment]
+//            }
+//    }
 }
 
 struct PostDetailLowerView_Previews: PreviewProvider {
