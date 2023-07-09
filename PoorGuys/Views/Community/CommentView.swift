@@ -136,21 +136,17 @@ struct CommentView: View {
                                             isCommentLikeButtonEnabled = false
                                             
                                             Task {
-                                                try await uploadCommentLike()
+                                                try await updateCommentLike()
+                                                
+                                                cancellable = Timer.publish(every: 3, on: .main, in: .common)
+                                                    .autoconnect()
+                                                    .sink { _ in
+                                                        // 타이머 완료 후 버튼 활성화
+                                                        isCommentLikeButtonEnabled = true
+                                                    }
                                             }
                                             
-                                            if comment.likedUserIDs.contains(user.uid) {
-                                                comment.likedUserIDs = comment.likedUserIDs.filter({ $0 != user.uid })
-                                            } else {
-                                                comment.likedUserIDs.append(user.uid)
-                                            }
                                             
-                                            cancellable = Timer.publish(every: 3, on: .main, in: .common)
-                                                .autoconnect()
-                                                .sink { _ in
-                                                    // 타이머 완료 후 버튼 활성화
-                                                    isCommentLikeButtonEnabled = true
-                                                }
                                             
                                         } catch {
                                             print("로그인 에러 또는 좋아요 에러")
@@ -200,19 +196,25 @@ struct CommentView: View {
         return commentRemovedComments
     }
     
-    private func uploadCommentLike() async throws {
+    private func updateCommentLike() async throws {
         guard var updatedPost = post else { return }
         var updatedComments: [Comment]?
+        var updatedComment = comment
         
         if comment.likedUserIDs.contains(user.uid) {
+            updatedComment.likedUserIDs = updatedComment.likedUserIDs.filter({ $0 != user.uid })
             updatedComments = commentsAfterUnlike(by: user)
         } else {
+            updatedComment.likedUserIDs.append(user.uid)
             updatedComments = commentsAfterLike(by: user)
         }
         
         updatedPost.comments = updatedComments
         
         try await FirebasePostManager(user: user).updateComments(with: updatedPost)
+        
+        self.comment = updatedComment
+        self.comments = updatedComments
     }
     
     private func commentsAfterLike(by user: User) -> [Comment]? {

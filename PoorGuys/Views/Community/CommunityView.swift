@@ -79,11 +79,10 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
             }
             .onAppear {
                 Task {
-                    for _ in (1...3) {
-                        try await FirebasePostManager().uploadNewPost(Post.dummy(), with: nil)
-                    }
-                    
                     if !isViewDidLoad {
+//                    for _ in (1...3) {
+//                        try await FirebasePostManager().uploadNewPost(Post.dummy(), with: nil)
+//                    }
                         await fetch10Posts()
                         isViewDidLoad = true
                     } else {
