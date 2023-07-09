@@ -21,11 +21,12 @@ struct AddSaveHistoryView: View {
     var body: some View {
         ZStack {
             Color("primary050")
+                .ignoresSafeArea()
             VStack(spacing: 0){
-                Spacer()
                 segmentedControl()
-                    .padding(.bottom, 48)
+                    .padding(.top, 32)
                 selectCategory()
+                    .padding(.top, 48)
                 typePrice()
                     .padding(.top, 48)
                 completedButton()
@@ -35,7 +36,6 @@ struct AddSaveHistoryView: View {
         .onTapGesture {
             focusedField = nil
         }
-        .edgesIgnoringSafeArea(.bottom)
     }
     
     @ViewBuilder

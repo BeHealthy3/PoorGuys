@@ -21,24 +21,25 @@ struct CustomBottomSheet<Content: View>: View {
                     .onTapGesture {
                         isPresenting.toggle()
                     }
-                content
-                    .padding(.bottom, 42)
-                    .transition(.move(edge: .bottom))
-                    .background(
-                        Color(uiColor: .white)
-                    )
-                    .cornerRadius(16)
+                VStack(spacing: 0) {
+                    Spacer()
+                    content
+                        .frame(height: 500)
+                        .transition(.move(edge: .bottom))
+                        .cornerRadius(12)
+                }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()
         .animation(.easeInOut, value: isPresenting)
+        .zIndex(10)
     }
 }
 
 struct CustomBottomSheet_Previews: PreviewProvider {
     static var previews: some View {
-        CustomBottomSheet(isPresenting: .constant(true), content: Text("hi"))
+        CustomBottomSheet(isPresenting: .constant(true), content: AddSaveHistoryView(viewModel: SaveHistoryViewModel()))
     }
 }
 

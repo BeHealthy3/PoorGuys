@@ -10,10 +10,12 @@ import FirebaseAuth
 
 struct MainView: View {
     @EnvironmentObject var logInViewModel: LoginViewModel
+    @StateObject var saveHistoryViewModel = SaveHistoryViewModel()
     
     @State private var isShowingLaunchScreen = true
     @State private var selection: String = "community"
     @State private var tabSelection: TabBarItem = .community
+    @State var isPresentingAddSaveHistoryView = false
     
     var body: some View {
         Group {
@@ -48,17 +50,23 @@ struct MainView: View {
                 if logInViewModel.signInState == .signedOut || !logInViewModel.didSetNickName {
                     LoginView()
                 } else {
-                    CustomTabBarContainerView(selection: $tabSelection) {
-                        CommunityView(viewModel: CommunityViewModel())
-                            .tabBarItem(tab: .community, selection: $tabSelection)
+                    ZStack {
+                        CustomTabBarContainerView(selection: $tabSelection) {
+                            CommunityView(viewModel: CommunityViewModel())
+                                .tabBarItem(tab: .community, selection: $tabSelection)
+                            
+                            SaveHistoryView(viewModel: saveHistoryViewModel, isPresenting: $isPresentingAddSaveHistoryView)
+                                .tabBarItem(tab: .saveHistory, selection: $tabSelection)
+                            
+                            Text("알림 탭")
+                                .tabBarItem(tab: .alert, selection: $tabSelection)
+                        }
+                        .edgesIgnoringSafeArea(.bottom)
                         
-                        SaveHistoryView()
-                            .tabBarItem(tab: .saveHistory, selection: $tabSelection)
-                        
-                        Text("알림 탭")
-                            .tabBarItem(tab: .alert, selection: $tabSelection)
+                        if isPresentingAddSaveHistoryView {
+                            CustomBottomSheet(isPresenting: $isPresentingAddSaveHistoryView, content: AddSaveHistoryView(viewModel: saveHistoryViewModel))
+                        }
                     }
-                    .edgesIgnoringSafeArea(.bottom)
                 }
             }
         }

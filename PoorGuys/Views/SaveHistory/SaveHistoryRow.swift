@@ -30,6 +30,13 @@ struct SaveHistoryRow: View {
             .padding(.horizontal, 1)
             Divider()
         }
+        .onAppear {
+            if saveHistory.state == .saved {
+                textColor = Color("primary_500")
+            } else {
+                textColor = Color("red")
+            }
+        }
     }
 }
 

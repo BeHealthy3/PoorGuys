@@ -8,19 +8,24 @@
 import SwiftUI
 
 struct SaveHistoryView: View {
-    @StateObject var viewModel = SaveHistoryViewModel()
-    
-    init() {
-        UITableView.appearance().showsVerticalScrollIndicator = false
-    }
+    @ObservedObject var viewModel: SaveHistoryViewModel
+    @Binding var isPresenting: Bool
     
     var body: some View {
-        VStack(spacing: 0) {
-            saveHistoryCard()
-                .padding(.top, 33)
-            savedHistoryList()
-            Spacer()
+        ZStack {
+            VStack(spacing: 0) {
+                saveHistoryCard()
+                    .padding(.top, 33)
+                savedHistoryList()
+                Spacer()
+            }
+            
+            
         }
+        .onAppear {
+            UITableView.appearance().showsVerticalScrollIndicator = false
+        }
+        
     }
     
     @ViewBuilder
@@ -56,7 +61,7 @@ struct SaveHistoryView: View {
                     .padding(.vertical, 24)
                 Spacer()
                 Button {
-                    
+                    self.isPresenting = true
                 } label: {
                     Text("추가")
                         .font(.system(size: 14, weight: .bold))
@@ -93,6 +98,6 @@ struct SaveHistoryView: View {
 
 struct SaveHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        SaveHistoryView()
+        SaveHistoryView(viewModel: SaveHistoryViewModel(), isPresenting: .constant(false))
     }
 }
