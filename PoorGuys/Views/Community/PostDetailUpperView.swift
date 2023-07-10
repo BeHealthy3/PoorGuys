@@ -13,7 +13,11 @@ struct PostDetailUpperView: View {
     @State private var showingSheet = false
     @State private var isModalPresented = false
     
-    let post: Post
+    @State var post: Post
+    @State var isLiked = false
+    
+//    🚨todo: 없애기
+    let user = User(uid: "dfnekdn", nickName: "mollu", authenticationMethod: .apple)
     
     var body: some View {
         VStack(spacing: 16) {
@@ -114,11 +118,23 @@ struct PostDetailUpperView: View {
                 
                 HStack(spacing: 64) {
                     Button {
-                        print("적선")
+                        Task {
+                            do {
+                                try await FirebasePostManager(user: user).toggleLike(about: post.id)
+                            } catch {
+                                print("좋아요 혹은 좋아요 취소 실패")
+                            }
+                            isLiked.toggle()
+                        }
                     } label: {
                         HStack {
-                            Image("like")
-                                .frame(width: 16, height: 16)
+                            if isLiked {
+                                Image("likeHighlighted")
+                                    .frame(width: 16, height: 16)
+                            } else {
+                                Image("like")
+                                    .frame(width: 16, height: 16)
+                            }
                             Text("적선하기")
                                 .font(.system(size: 11))
                         }
@@ -148,25 +164,9 @@ struct PostDetailUpperView: View {
                 }
                 .foregroundColor(.appColor(.neutral600))
             }
-            
-//            HStack() {
-//                Spacer()
-//                HStack(spacing: 8) {
-//                    HStack(spacing: 2) {
-//                        Image("comments")
-//                        Text(String(post.commentCount))
-//                            .foregroundColor(.appColor(.secondary))
-//                    }
-//
-//                    HStack(spacing: 2) {
-//                        Image("thumbsUp")
-//                        Text(String(post.likeCount))
-//                            .foregroundColor(.appColor(.primary300))
-//                    }
-//                }
-//            }
-//            .font(.system(size: 11))
-//            .foregroundColor(.gray)
+            .onAppear {
+                isLiked = post.likedUserIDs.contains(user.uid)
+            }
         }
         .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
     }

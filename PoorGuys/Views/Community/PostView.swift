@@ -74,13 +74,13 @@ struct PostView: View {
                             HStack(spacing: 8) {
                                 HStack(spacing: 2) {
                                     Image("comments")
-                                    Text(String(post.commentCount))
+                                    Text(String(post.comments?.count ?? 0))
                                         .foregroundColor(.appColor(.secondary))
                                 }
                                 
                                 HStack(spacing: 2) {
                                     Image("thumbsUp")
-                                    Text(String(post.likeCount))
+                                    Text(String(post.likedUserIDs.count))
                                         .foregroundColor(.appColor(.primary300))
                                 }
                             }

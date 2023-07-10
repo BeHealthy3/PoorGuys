@@ -126,14 +126,14 @@ struct PostFillingView: View {
     
     private func uploadPost() async throws {
         guard let user = User.currentUser else { throw FirebaseError.userNotFound}
-        let post = Post(id: "", userID: user.uid, nickName: user.nickName, profileImageURL: user.profileImageURL, isAboutMoney: isAboutMoney, title: title, body: content, timeStamp: Date(), likeCount: 0, commentCount: 0, isWeirdPost: false, imageURL: nil, comments: nil)
+        let post = Post(id: "", userID: user.uid, nickName: user.nickName, profileImageURL: user.profileImageURL, isAboutMoney: isAboutMoney, title: title, body: content, timeStamp: Date(), likedUserIDs: [], isWeirdPost: false, imageURL: nil, comments: nil)
         
         try await FirebasePostManager().uploadNewPost(post, with: selectedImage)
     }
     
     private func updatePost() async throws {
 //        타이틀, 본문, 돈얘기여부 제외하고는 업데이트를하지 않아서 아무값이나 넣어줘도 됨
-        let post = Post(id: postID!, userID: "", nickName: "", profileImageURL: nil, isAboutMoney: isAboutMoney, title: title, body: content, timeStamp: Date(), likeCount: 0, commentCount: 0, isWeirdPost: false, imageURL: imageURL, comments: nil)
+        let post = Post(id: postID!, userID: "", nickName: "", profileImageURL: nil, isAboutMoney: isAboutMoney, title: title, body: content, timeStamp: Date(), likedUserIDs: [], isWeirdPost: false, imageURL: imageURL, comments: nil)
         try await FirebasePostManager().updatePost(post, with: selectedImage)
     }
 }

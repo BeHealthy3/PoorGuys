@@ -207,7 +207,7 @@ struct CommentView: View {
         
         updatedPost.comments = updatedComments
         
-        try await FirebasePostManager(user: user).updateComments(with: updatedPost)
+        try await FirebasePostManager().updateComments(with: updatedPost)
         
         self.comment = updatedComment
         self.comments = updatedComments
