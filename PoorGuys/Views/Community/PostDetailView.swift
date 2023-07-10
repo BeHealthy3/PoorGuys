@@ -49,7 +49,7 @@ struct PostDetailView: View {
                     if let comments = self.comments {
                         VStack {
                             ForEach(comments) { comment in // comments를 직접 사용하여 ForEach 뷰를 생성
-                                if comment.belongingCommentID == nil {
+                                if comment.belongingCommentID == nil, comment != comments.first {
                                     Rectangle()
                                         .frame(height: 1)
                                         .foregroundColor(.appColor(.neutral100))

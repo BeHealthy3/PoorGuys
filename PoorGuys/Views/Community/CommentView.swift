@@ -74,7 +74,6 @@ struct CommentView: View {
                             }
                             .confirmationDialog("", isPresented: $showingSheet) {
                                 if comment.userID == user.uid {
-//                                if comment.userID == "dfkdkeltkqn" {
                                     Button {
                                         Task {
                                             do {
@@ -145,9 +144,6 @@ struct CommentView: View {
                                                         isCommentLikeButtonEnabled = true
                                                     }
                                             }
-                                            
-                                            
-                                            
                                         } catch {
                                             print("로그인 에러 또는 좋아요 에러")
                                         }

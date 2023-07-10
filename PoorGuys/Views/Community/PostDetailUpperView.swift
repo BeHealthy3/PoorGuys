@@ -31,9 +31,10 @@ struct PostDetailUpperView: View {
                 Text(post.nickName)
                     .lineLimit(1)
                     .foregroundColor(.appColor(.neutral700))
-                    .font(.system(size: 12, weight: .bold
-                                 ))
+                    .font(.system(size: 12, weight: .bold))
+                
                 Spacer()
+                
                 Image("verticalEllipsis")
                     .onTapGesture {
                         showingSheet = true
@@ -93,6 +94,7 @@ struct PostDetailUpperView: View {
                     .font(.system(size: 16))
                     .foregroundColor(.appColor(.neutral900))
             }
+            
             AsyncImage(url: URL(string: post.imageURL?.first ?? "")) { image in
                 image.resizable()
                     .frame(width: 311, height: 311)
@@ -100,26 +102,71 @@ struct PostDetailUpperView: View {
                 ProgressView()
                     .frame(width: 311, height: 311)
             }
-
-            HStack() {
+            
+            VStack(alignment: .leading, spacing: 8) {
                 Text(DateFormatter().excludeYear(from: post.timeStamp))
-                Spacer()
-                HStack(spacing: 8) {
-                    HStack(spacing: 2) {
-                        Image("comments")
-                        Text(String(post.commentCount))
-                            .foregroundColor(.appColor(.secondary))
+                    .font(.system(size: 11))
+                    .foregroundColor(.gray)
+                
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.appColor(.neutral100))
+                
+                HStack(spacing: 64) {
+                    Button {
+                        print("적선")
+                    } label: {
+                        HStack {
+                            Image("like")
+                                .frame(width: 16, height: 16)
+                            Text("적선하기")
+                                .font(.system(size: 11))
+                        }
                     }
                     
-                    HStack(spacing: 2) {
-                        Image("thumbsUp")
-                        Text(String(post.likeCount))
-                            .foregroundColor(.appColor(.primary300))
+                    Button {
+                        print("댓글")
+                    } label: {
+                        HStack {
+                            Image("comment")
+                                .frame(width: 16, height: 16)
+                            Text("댓글쓰기")
+                                .font(.system(size: 11))
+                        }
+                    }
+                    
+                    Button {
+                        print("신고")
+                    } label: {
+                        HStack {
+                            Image("siren")
+                                .frame(width: 16, height: 16)
+                            Text("신고하기")
+                                .font(.system(size: 11))
+                        }
                     }
                 }
+                .foregroundColor(.appColor(.neutral600))
             }
-            .font(.system(size: 11))
-            .foregroundColor(.gray)
+            
+//            HStack() {
+//                Spacer()
+//                HStack(spacing: 8) {
+//                    HStack(spacing: 2) {
+//                        Image("comments")
+//                        Text(String(post.commentCount))
+//                            .foregroundColor(.appColor(.secondary))
+//                    }
+//
+//                    HStack(spacing: 2) {
+//                        Image("thumbsUp")
+//                        Text(String(post.likeCount))
+//                            .foregroundColor(.appColor(.primary300))
+//                    }
+//                }
+//            }
+//            .font(.system(size: 11))
+//            .foregroundColor(.gray)
         }
         .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
     }
