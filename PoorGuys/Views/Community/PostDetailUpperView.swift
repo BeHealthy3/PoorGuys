@@ -120,11 +120,23 @@ struct PostDetailUpperView: View {
                     Button {
                         Task {
                             do {
-                                try await FirebasePostManager(user: user).toggleLike(about: post.id)
+                                try FirebasePostManager(user: user).toggleLike(about: post.id, handler: { result in
+                                    switch result {
+                                    case .success(let isSuccess):
+                                        DispatchQueue.main.async {
+                                            if isSuccess {
+                                                print("🚨")
+                                                isLiked.toggle()
+                                            }
+                                        }
+                                    case .failure(let error):
+                                        print(error)
+                                    }
+                                })
+                                
                             } catch {
                                 print("좋아요 혹은 좋아요 취소 실패")
                             }
-                            isLiked.toggle()
                         }
                     } label: {
                         HStack {

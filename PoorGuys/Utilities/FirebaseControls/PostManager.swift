@@ -11,7 +11,6 @@ import FirebaseFirestoreSwift
 import FirebaseStorage
 
 struct FirebasePostManager: PostManagable {
-    
     private let postCollection = Firestore.firestore().collection("posts")
     private let storageReference = Storage.storage().reference()
     internal var lastDocument: DocumentSnapshot?
@@ -189,12 +188,13 @@ struct FirebasePostManager: PostManagable {
         }
     }
     
-    func toggleLike(about postID: ID) async throws {
+    func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void ) throws {
+        
         let postRef = postCollection.document(postID)
         let likedUserIDField = "likedUserIDs"
         guard let user = user else { throw LoginError.noCurrentUser }
         
-        try await Firestore.firestore().runTransaction { (transaction, errorPointer) -> Any? in
+        Firestore.firestore().runTransaction { (transaction, errorPointer) -> Any? in
             
             var postDocument: DocumentSnapshot
             
@@ -226,12 +226,12 @@ struct FirebasePostManager: PostManagable {
             postData[likedUserIDField] = likedUserIDs
             transaction.updateData(postData, forDocument: postRef)
             
-            return nil
-        } completion: { _, error in
+            return likedUserIDs
+        } completion: { likedUserIDs, error in
             if let error = error {
-                print("트랜잭션 실패: \(error)")
+                handler(.failure(error))
             } else {
-                print("트랜잭션 성공")
+                handler(.success(true))
             }
         }
     }
@@ -263,7 +263,7 @@ struct MockPostManager: PostManagable {
         }
         func updateComments(with updatedPost: Post) async throws {}
         func updateCommentsAndCommentsCount(with updatedPost: Post) async throws {}
-        func toggleLike(about postID: ID) async throws {}
+        func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {}
         
         //    func deleteComment(commentID: String) async throws {}
         
