@@ -23,7 +23,7 @@ struct Post: Identifiable, Equatable, Codable {
         let title = Lorem.sentence
         let body = Int.random(in: 1...10).isMultiple(of: 5) ? Lorem.paragraph : Lorem.sentence
         let timeStamp = Date()
-        let imageURL: [String]? = ["https://picsum.photos/200/300"]
+        let imageURL = ["https://picsum.photos/200/300"]
         let isAboutMoney = Int.random(in: 1...10).isMultiple(of: 5) ? true : false
         let isWeirdPost = Int.random(in: 1...10).isMultiple(of: 5) ? true : false
     
@@ -50,7 +50,7 @@ struct Post: Identifiable, Equatable, Codable {
     var timeStamp: Date
     var likedUserIDs: [String]
     var isWeirdPost: Bool
-    var imageURL: [String]?
+    var imageURL: [String]
     var comments: [Comment]
     
     enum codingKeys: String, CodingKey {

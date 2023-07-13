@@ -99,12 +99,14 @@ struct PostDetailUpperView: View {
                     .foregroundColor(.appColor(.neutral900))
             }
             
-            AsyncImage(url: URL(string: post.imageURL?.first ?? "")) { image in
-                image.resizable()
-                    .frame(width: 311, height: 311)
-            } placeholder: {
-                ProgressView()
-                    .frame(width: 311, height: 311)
+            if !post.imageURL.isEmpty {
+                AsyncImage(url: URL(string: post.imageURL.first ?? "")) { image in
+                    image.resizable()
+                        .frame(width: 311, height: 311)
+                } placeholder: {
+                    ProgressView()
+                        .frame(width: 311, height: 311)
+                }
             }
             
             VStack(alignment: .leading, spacing: 8) {

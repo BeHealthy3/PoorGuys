@@ -73,7 +73,7 @@ struct FirebasePostManager: PostManagable {
         if let image = image {
             updatedPost.imageURL = [try await uploadImage(image).absoluteString]
             
-            if let oldImageURL = post.imageURL?.first {
+            if let oldImageURL = post.imageURL.first {
                 try await removeImage(imageID: oldImageURL)
             }
         }
