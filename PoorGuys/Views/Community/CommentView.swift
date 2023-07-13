@@ -15,7 +15,7 @@ struct CommentView: View {
     @State private var comment: Comment
     
     @Binding private var post: Post?
-    @Binding private var comments: [Comment]?
+    @Binding private var comments: [Comment]
     @Binding private var replyingCommentID: String?
     @Binding private var replyingNickname: String?
     @Binding private var isCommentLikeButtonEnabled: Bool
@@ -27,7 +27,7 @@ struct CommentView: View {
 //    🚨todo: 정상적인 user로 바꿔주기
     private let user = User(uid: "Asdfas", nickName: "ewqfg", authenticationMethod: .apple)
     
-    init(post: Binding<Post?>, comments: Binding<[Comment]?>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>, isLikeButtonEnabled: Binding<Bool>) {
+    init(post: Binding<Post?>, comments: Binding<[Comment]>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>, isLikeButtonEnabled: Binding<Bool>) {
         self._comment = State(initialValue: comment)
         self._post = post
         self._comments = comments
@@ -82,7 +82,8 @@ struct CommentView: View {
                                                 
                                                 updatedPost.comments = updatedComments
                                                 
-                                                try await FirebasePostManager().updateCommentsAndCommentsCount(with: updatedPost)
+//                                                ❌
+//                                                try await FirebasePostManager().updateCommentsAndCommentsCount(with: updatedPost)
                                                 
                                                 withAnimation {
                                                     self.comments = updatedComments
@@ -179,9 +180,9 @@ struct CommentView: View {
         }
     }
     
-    private func removedComments() -> [Comment]? {
+    private func removedComments() -> [Comment] {
         
-        let commentRemovedComments = comments?.map({ comment in
+        let commentRemovedComments = comments.map({ comment in
             var updatedComment = comment
             if updatedComment.id == comment.id {
                 updatedComment.isDeletedComment = true
@@ -194,7 +195,7 @@ struct CommentView: View {
     
     private func updateCommentLike() async throws {
         guard var updatedPost = post else { return }
-        var updatedComments: [Comment]?
+        var updatedComments: [Comment] = []
         var updatedComment = comment
         
         if comment.likedUserIDs.contains(user.uid) {
@@ -207,14 +208,15 @@ struct CommentView: View {
         
         updatedPost.comments = updatedComments
         
-        try await FirebasePostManager().updateComments(with: updatedPost)
+//        ❌
+//        try await FirebasePostManager().updateComments(with: updatedPost)
         
         self.comment = updatedComment
         self.comments = updatedComments
     }
     
-    private func commentsAfterLike(by user: User) -> [Comment]? {
-        let commentsAfterLike = comments?.map({ comment in
+    private func commentsAfterLike(by user: User) -> [Comment] {
+        let commentsAfterLike = comments.map({ comment in
             
             var updatedComment = comment
             
@@ -228,8 +230,8 @@ struct CommentView: View {
         return commentsAfterLike
     }
     
-    private func commentsAfterUnlike(by user: User) -> [Comment]? {
-        let commentsAfterUnlike = comments?.map({ comment in
+    private func commentsAfterUnlike(by user: User) -> [Comment] {
+        let commentsAfterUnlike = comments.map({ comment in
             
             var updatedComment = comment
             

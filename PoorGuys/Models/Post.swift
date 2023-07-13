@@ -51,7 +51,7 @@ struct Post: Identifiable, Equatable, Codable {
     var likedUserIDs: [String]
     var isWeirdPost: Bool
     var imageURL: [String]?
-    var comments: [Comment]?
+    var comments: [Comment]
     
     enum codingKeys: String, CodingKey {
         case id, userID, nickName, profileImageURL, isAboutMoney, title, body, timeStamp, likeCount ,commentCount, isWeirdPost, imageURL, comments

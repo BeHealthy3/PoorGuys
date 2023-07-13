@@ -129,48 +129,6 @@ struct FirebasePostManager: PostManagable {
         return post
     }
     
-    func updateComments(with updatedPost: Post) async throws {
-        let docRef = postCollection.document(updatedPost.id)
-        
-        Firestore.firestore().runTransaction { transaction, errorPointer in
-            // 문서 가져오기
-            let postDocument = try? transaction.getDocument(docRef)
-            
-            // 필드 업데이트
-            guard let comments = updatedPost.comments else { return }
-            transaction.updateData([commentsField : commentsData(from: comments)], forDocument: docRef)
-            
-            return nil
-        } completion: { _, error in
-            if let error = error {
-                print("트랜잭션 실패: \(error)")
-            } else {
-                print("트랜잭션 성공")
-            }
-        }
-    }
-    
-    func updateCommentsAndCommentsCount(with updatedPost: Post) async throws {
-        let docRef = postCollection.document(updatedPost.id)
-        
-        Firestore.firestore().runTransaction { transaction, errorPointer in
-            // 문서 가져오기
-            let postDocument = try? transaction.getDocument(docRef)
-            
-            // 필드 업데이트
-            guard let comments = updatedPost.comments else { return }
-            transaction.updateData([commentsField : commentsData(from: comments)], forDocument: docRef)
-            
-            return nil
-        } completion: { _, error in
-            if let error = error {
-                print("트랜잭션 실패: \(error)")
-            } else {
-                print("트랜잭션 성공")
-            }
-        }
-    }
-    
     private func commentsData(from comments: [Comment]) -> [[String : Any]] {
         comments.map { comment in
             return [
@@ -261,8 +219,6 @@ struct MockPostManager: PostManagable {
                 }
             }
         }
-        func updateComments(with updatedPost: Post) async throws {}
-        func updateCommentsAndCommentsCount(with updatedPost: Post) async throws {}
         func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {}
         
         //    func deleteComment(commentID: String) async throws {}

@@ -11,7 +11,7 @@ struct PostDetailLowerView: View {
     
     var post: Post
     
-    @Binding private var comments: [Comment]?
+    @Binding private var comments: [Comment]
     @Binding private var replyingCommentID: String?
     @Binding private var replyingNickname: String?
     
@@ -19,7 +19,7 @@ struct PostDetailLowerView: View {
     @State private var viewHeight: CGFloat = 60
     @State private var backgroundNeedsHighlight = false
     
-    init(post: Post, comments: Binding<[Comment]?>, replyingCommentID: Binding<String?>, replyingNickname: Binding<String?>) {
+    init(post: Post, comments: Binding<[Comment]>, replyingCommentID: Binding<String?>, replyingNickname: Binding<String?>) {
         self.post = post
         self._comments = comments
         self._replyingCommentID = replyingCommentID
@@ -68,16 +68,17 @@ struct PostDetailLowerView: View {
                                         var updatedPost = post
                                         var updatedComments = self.comments
                                         
-                                        updatedComments?.append(newComment)
+                                        updatedComments.append(newComment)
                                         updatedPost.comments = updatedComments
                                         
-                                        try await FirebasePostManager().updateCommentsAndCommentsCount(with: updatedPost)
+//                                        ❌
+//                                        try await FirebasePostManager().updateCommentsAndCommentsCount(with: updatedPost)
                                         
                                         withAnimation {
                                             text = ""
                                             replyingCommentID = nil
                                             replyingNickname = nil
-                                            self.comments?.append(newComment)
+                                            self.comments.append(newComment)
                                         }
                                     }
                                     catch {
@@ -132,6 +133,6 @@ struct PostDetailLowerView: View {
 
 struct PostDetailLowerView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailLowerView(post: Post.dummy(), comments: .constant(nil), replyingCommentID: .constant(String.randomString(length: 10)), replyingNickname: .constant(nil))
+        PostDetailLowerView(post: Post.dummy(), comments: .constant([]), replyingCommentID: .constant(String.randomString(length: 10)), replyingNickname: .constant(nil))
     }
 }

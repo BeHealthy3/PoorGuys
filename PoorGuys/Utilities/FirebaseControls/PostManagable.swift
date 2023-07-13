@@ -14,8 +14,6 @@ protocol PostManagable {
     func fetchPost(postID: String) async throws -> Post
     func removePost(postID: String) async throws
     mutating func removeLocalPosts()
-    func updateComments(with updatedPost: Post) async throws
-    func updateCommentsAndCommentsCount(with updatedPost: Post) async throws
     func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void ) throws
 //    func deleteComment(commentID: String) async throws
     

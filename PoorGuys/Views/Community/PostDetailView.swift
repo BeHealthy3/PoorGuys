@@ -13,7 +13,7 @@ struct PostDetailView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var post: Post?
-    @State private var comments: [Comment]?
+    @State private var comments = [Comment]()
     @State private var replyingCommentID: String? = nil
     @State private var replyingNickname: String? = nil
     @State private var isCommentLikeButtonEnabled = true
@@ -46,7 +46,7 @@ struct PostDetailView: View {
                             )
                     }
                     
-                    if let comments = self.comments {
+                    if !comments.isEmpty {
                         VStack {
                             ForEach(comments) { comment in // comments를 직접 사용하여 ForEach 뷰를 생성
                                 if comment.belongingCommentID == nil, comment != comments.first {
@@ -104,7 +104,7 @@ struct PostDetailView: View {
         .onAppear {
             Task {
                 post = try await FirebasePostManager().fetchPost(postID: postID)
-                comments = post?.comments
+                comments = post?.comments ?? []
             }
         }
         .onChange(of: comments) { _ in
@@ -113,8 +113,7 @@ struct PostDetailView: View {
     }
     
     func rearrangeComments() {
-        guard let unfilteredComments = comments else { return }
-        
+        let unfilteredComments = comments
         let commentsWithBelongingID = unfilteredComments
             .filter { $0.belongingCommentID != nil }
             .sorted { lhs, rhs in
