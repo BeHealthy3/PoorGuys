@@ -39,6 +39,38 @@ struct Post: Identifiable, Equatable, Codable {
         
         return posts
     }
+    func postData() -> [String : Any] {
+        [
+            "id" : self.id,
+            "userID" : self.userID,
+            "nickName" : self.nickName,
+            "profileImageURL" : self.profileImageURL,
+            "isAboutMoney" : self.isAboutMoney,
+            "title" : self.title,
+            "timeStamp" : self.timeStamp,
+            "likedUserIDs" : self.likedUserIDs,
+            "isWeirdPost" : self.isWeirdPost,
+            "imageURL" : self.imageURL,
+            "comments" : commentsData(from: self.comments)
+        ]
+    }
+    
+    func commentsData(from comments: [Comment]) -> [[String : Any]] {
+        comments.map { comment in
+            return [
+                "id": comment.id,
+                "nickName": comment.nickName,
+                "profileImageURL": comment.profileImageURL,
+                "userID": comment.userID,
+                "postID": comment.postID,
+                "content": comment.content,
+                "timeStamp": comment.timeStamp,
+                "isDeletedComment": comment.isDeletedComment,
+                "belongingCommentID": comment.belongingCommentID,
+                "likedUserIDs": comment.likedUserIDs
+            ]
+        }
+    }
     
     var id: String
     var userID: String

@@ -7,13 +7,16 @@
 
 import SwiftUI
 
-protocol PostManagable {    
+protocol PostManagable {
     func uploadNewPost(_ post: Post, with image: UIImage?) async throws
     func updatePost(_ post: Post, with image: UIImage?) async throws
     mutating func fetch10Posts() async throws -> [Post]
     func fetchPost(postID: String) async throws -> Post
     func removePost(postID: String) async throws
     mutating func removeLocalPosts()
+    func removeComment(id: ID, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws
+    func updateComments(with updatedPost: Post) async throws
+    func updateCommentsAndCommentsCount(with updatedPost: Post) async throws
     func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void ) throws
 //    func deleteComment(commentID: String) async throws
     

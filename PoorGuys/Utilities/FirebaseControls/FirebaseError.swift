@@ -13,6 +13,7 @@ enum FirebaseError: Error {
     case userNotFound
     case updateFailed
     case encodingError
+    case serverError
     
     var nsError: NSError {
         return NSError(domain: "FirebaseError", code: 0, userInfo: [NSLocalizedDescriptionKey: localizedDescription])
@@ -30,6 +31,8 @@ enum FirebaseError: Error {
             return "Update failed."
         case .encodingError:
             return "Encoding error."
+        case .serverError:
+            return "Server Error"
         }
     }
 }

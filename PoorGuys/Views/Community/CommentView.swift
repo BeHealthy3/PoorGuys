@@ -73,21 +73,25 @@ struct CommentView: View {
                                 showingSheet = true
                             }
                             .confirmationDialog("", isPresented: $showingSheet) {
-                                if comment.userID == user.uid {
+                                if let post = post {
                                     Button {
                                         Task {
                                             do {
-                                                let updatedComments = removedComments()
-                                                guard var updatedPost = self.post else { return }   //🚨todo: 에러던지기
                                                 
-                                                updatedPost.comments = updatedComments
-                                                
-//                                                ❌
-//                                                try await FirebasePostManager().updateCommentsAndCommentsCount(with: updatedPost)
-                                                
-                                                withAnimation {
-                                                    self.comments = updatedComments
-                                                }
+                                                try await FirebasePostManager().removeComment(id: comment.id, postID: post.id, handler: { result in
+                                                    switch result {
+                                                    case .success(let isDeleted):
+                                                        if isDeleted {
+                                                            withAnimation {
+                                                                comment.isDeletedComment = true
+                                                            }
+                                                            
+                                                        }
+                                                        
+                                                    case .failure(let error):
+                                                        print(error)    //🚨todo: 에러 보여주기
+                                                    }
+                                                })
                                             }
                                             catch {
                                                 print("업데이트실패")
