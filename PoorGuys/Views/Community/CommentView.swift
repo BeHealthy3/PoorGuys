@@ -198,25 +198,22 @@ struct CommentView: View {
     }
     
     private func updateCommentLike() async throws {
-        guard var updatedPost = post else { return }
-        var updatedComments: [Comment] = []
-        var updatedComment = comment
+        guard var post = post else { return }
         
-        if comment.likedUserIDs.contains(user.uid) {
-            updatedComment.likedUserIDs = updatedComment.likedUserIDs.filter({ $0 != user.uid })
-            updatedComments = commentsAfterUnlike(by: user)
-        } else {
-            updatedComment.likedUserIDs.append(user.uid)
-            updatedComments = commentsAfterLike(by: user)
-        }
-        
-        updatedPost.comments = updatedComments
-        
-//        ❌
-//        try await FirebasePostManager().updateComments(with: updatedPost)
-        
-        self.comment = updatedComment
-        self.comments = updatedComments
+        try FirebasePostManager(user: user).toggleCommentLike(commentID: comment.id, postID: post.id, handler: { result in
+            switch result {
+            case .success(let isLiked):
+                DispatchQueue.main.async {
+                    if isLiked {
+                        comment.likedUserIDs.append(user.uid)
+                    } else {
+                        comment.likedUserIDs = comment.likedUserIDs.filter { $0 != user.uid }
+                    }
+                }
+            case .failure:
+                print("실패")
+            }
+        })
     }
     
     private func commentsAfterLike(by user: User) -> [Comment] {

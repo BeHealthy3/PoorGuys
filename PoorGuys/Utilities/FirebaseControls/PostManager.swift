@@ -129,135 +129,6 @@ struct FirebasePostManager: PostManagable {
         return post
     }
     
-    func removeComment(id: ID, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {
-        let postRef = postCollection.document(postID)
-        let commentsField = "comments"
-        
-        Firestore.firestore().runTransaction { (transaction, errorPointer) -> Any? in
-            
-            var postDocument: DocumentSnapshot
-            
-            do {
-                try postDocument = transaction.getDocument(postRef)
-            } catch let fetchError as NSError {
-                errorPointer?.pointee = fetchError
-                return nil
-            }
-            
-            guard var postData = postDocument.data() else {
-                let error = NSError(domain: "firebase post now found", code: -1, userInfo: [NSLocalizedDescriptionKey: "Post not found"])
-                errorPointer?.pointee = error
-                return nil
-            }
-            
-            var commentsData = postData[commentsField] as? [[String : Any]]
-            let commentRemovedCommentsData = commentsData?.map({ commentData -> [String : Any] in
-                var modifiedCommentData = commentData
-                if commentData["id"] as? ID == id {
-                    modifiedCommentData["isDeletedComment"] = true
-                }
-                return modifiedCommentData
-            })
-            postData[commentsField] = commentRemovedCommentsData
-            
-            transaction.updateData(postData, forDocument: postRef)
-            
-            return nil
-            
-        } completion: { comments, error in
-            if let error = error {
-                handler(.failure(error))
-            } else {
-                handler(.success(true))
-            }
-        }
-    }
-    
-    func updateComments(with updatedPost: Post) async throws {
-//        let docRef = postCollection.document(updatedPost.id)
-//
-//        Firestore.firestore().runTransaction { transaction, errorPointer in
-//            // 문서 가져오기
-//            let postDocument = try? transaction.getDocument(docRef)
-//
-//            // 필드 업데이트
-//            guard let comments = updatedPost.comments else { return }
-//            transaction.updateData([commentsField : commentsData(from: comments)], forDocument: docRef)
-//
-//            return nil
-//        } completion: { _, error in
-//            if let error = error {
-//                print("트랜잭션 실패: \(error)")
-//            } else {
-//                print("트랜잭션 성공")
-//            }
-//        }
-    }
-    
-    func updateCommentsAndCommentsCount(with updatedPost: Post) async throws {
-//        let docRef = postCollection.document(updatedPost.id)
-//
-//        Firestore.firestore().runTransaction { transaction, errorPointer in
-//            // 문서 가져오기
-//            let postDocument = try? transaction.getDocument(docRef)
-//
-//            // 필드 업데이트
-//            guard let comments = updatedPost.comments else { return }
-//            transaction.updateData([commentsField : commentsData(from: comments)], forDocument: docRef)
-//
-//            return nil
-//        } completion: { _, error in
-//            if let error = error {
-//                print("트랜잭션 실패: \(error)")
-//            } else {
-//                print("트랜잭션 성공")
-        //            }
-        //        }
-    }
-    
-    private func comments(from commentsArray: [[String : Any]]) -> [Comment] {
-        var comments: [Comment] = []
-        
-        for comment in commentsArray {
-            guard let id = comment["id"] as? String,
-                  let nickName = comment["nickName"] as? String,
-                  let profileImageURL = comment["profileImageURL"] as? String?,
-                  let userID = comment["userID"] as? String,
-                  let postID = comment["postID"] as? String,
-                  let content = comment["content"] as? String,
-                  let isDeletedComment = comment["isDeletedComment"] as? Bool,
-                  let belongingCommentID = comment["belongingCommentID"] as? String?,
-                  let likedUserIDs = comment["likedUserIDs"] as? [String],
-                  let timeStamp = (comment["timeStamp"] as? Timestamp)?.dateValue() else {
-                continue // 하나라도 옵셔널 바인딩이 실패하면 다음 반복으로 넘어감
-            }
-            
-            let commentObject = Comment(id: id, nickName: nickName, profileImageURL: profileImageURL, userID: userID, postID: postID, content: content, likedUserIDs: likedUserIDs, timeStamp: timeStamp, isDeletedComment: isDeletedComment, belongingCommentID: belongingCommentID)
-            comments.append(commentObject)
-        }
-        print("📣📣📣📣📣")
-        print(comments)
-        print("📣📣📣📣📣")
-        return comments
-    }
-    
-    private func commentsData(from comments: [Comment]) -> [[String : Any]] {
-        comments.map { comment in
-            return [
-                "id": comment.id,
-                "nickName": comment.nickName,
-                "profileImageURL": comment.profileImageURL,
-                "userID": comment.userID,
-                "postID": comment.postID,
-                "content": comment.content,
-                "timeStamp": comment.timeStamp,
-                "isDeletedComment": comment.isDeletedComment,
-                "belongingCommentID": comment.belongingCommentID,
-                "likedUserIDs": comment.likedUserIDs
-            ]
-        }
-    }
-    
     func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void ) throws {
         
         let postRef = postCollection.document(postID)
@@ -305,6 +176,152 @@ struct FirebasePostManager: PostManagable {
             }
         }
     }
+    
+    func removeComment(id: ID, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {
+        let postRef = postCollection.document(postID)
+        let commentsField = "comments"
+        
+        Firestore.firestore().runTransaction { (transaction, errorPointer) -> Any? in
+            
+            var postDocument: DocumentSnapshot
+            
+            do {
+                try postDocument = transaction.getDocument(postRef)
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
+            }
+            
+            guard var postData = postDocument.data() else {
+                let error = NSError(domain: "firebase post now found", code: -1, userInfo: [NSLocalizedDescriptionKey: "Post not found"])
+                errorPointer?.pointee = error
+                return nil
+            }
+            
+            var commentsData = postData[commentsField] as? [[String : Any]]
+            let commentRemovedCommentsData = commentsData?.map({ commentData -> [String : Any] in
+                var modifiedCommentData = commentData
+                if commentData["id"] as? ID == id {
+                    modifiedCommentData["isDeletedComment"] = true
+                }
+                return modifiedCommentData
+            })
+            postData[commentsField] = commentRemovedCommentsData
+            
+            transaction.updateData(postData, forDocument: postRef)
+            
+            return nil
+            
+        } completion: { _, error in
+            if let error = error {
+                handler(.failure(error))
+            } else {
+                handler(.success(true))
+            }
+        }
+    }
+    
+    func toggleCommentLike(commentID: ID, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {
+        let postRef = postCollection.document(postID)
+        let commentsField = "comments"
+        let likedUserIDsField = "likedUserIDs"
+        
+        Firestore.firestore().runTransaction { (transaction, errorPointer) -> Any? in
+            
+            var postDocument: DocumentSnapshot
+            
+            do {
+                try postDocument = transaction.getDocument(postRef)
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
+            }
+            
+            guard var postData = postDocument.data() else {
+                let error = NSError(domain: "firebase post now found", code: -1, userInfo: [NSLocalizedDescriptionKey: "Post not found"])
+                errorPointer?.pointee = error
+                return nil
+            }
+            
+            let commentsData = postData[commentsField] as? [[String : Any]]
+            var isLiked = false
+            
+            let updatedCommentsData = commentsData?.map({ commentData -> [String : Any] in
+                
+                var modifiedCommentData = commentData
+                
+                if let id = commentData["id"] as? String,
+                   let user = user, id == commentID {
+                    print("여기")
+                    if var likedUserIDs = commentData[likedUserIDsField] as? [String] {
+                        if likedUserIDs.contains(user.uid) {
+                            modifiedCommentData[likedUserIDsField] = likedUserIDs.filter { $0 != user.uid }
+                        } else {
+                            likedUserIDs.append(user.uid)
+                            modifiedCommentData[likedUserIDsField] = likedUserIDs
+                            isLiked = true
+                        }
+                    }
+                }
+                
+                return modifiedCommentData
+            })
+            postData[commentsField] = updatedCommentsData
+            
+            transaction.updateData(postData, forDocument: postRef)
+            
+            return isLiked
+            
+        } completion: { isLiked, error in
+            if let error = error {
+                handler(.failure(error))
+            } else {
+                if let isLiked = isLiked as? Bool {
+                    handler(.success(isLiked))
+                }
+            }
+        }
+    }
+    
+    private func comments(from commentsArray: [[String : Any]]) -> [Comment] {
+        var comments: [Comment] = []
+        
+        for comment in commentsArray {
+            guard let id = comment["id"] as? String,
+                  let nickName = comment["nickName"] as? String,
+                  let profileImageURL = comment["profileImageURL"] as? String?,
+                  let userID = comment["userID"] as? String,
+                  let postID = comment["postID"] as? String,
+                  let content = comment["content"] as? String,
+                  let isDeletedComment = comment["isDeletedComment"] as? Bool,
+                  let belongingCommentID = comment["belongingCommentID"] as? String?,
+                  let likedUserIDs = comment["likedUserIDs"] as? [String],
+                  let timeStamp = (comment["timeStamp"] as? Timestamp)?.dateValue() else {
+                continue // 하나라도 옵셔널 바인딩이 실패하면 다음 반복으로 넘어감
+            }
+            
+            let commentObject = Comment(id: id, nickName: nickName, profileImageURL: profileImageURL, userID: userID, postID: postID, content: content, likedUserIDs: likedUserIDs, timeStamp: timeStamp, isDeletedComment: isDeletedComment, belongingCommentID: belongingCommentID)
+            comments.append(commentObject)
+        }
+        return comments
+    }
+    
+    private func commentsData(from comments: [Comment]) -> [[String : Any]] {
+        comments.map { comment in
+            return [
+                "id": comment.id,
+                "nickName": comment.nickName,
+                "profileImageURL": comment.profileImageURL,
+                "userID": comment.userID,
+                "postID": comment.postID,
+                "content": comment.content,
+                "timeStamp": comment.timeStamp,
+                "isDeletedComment": comment.isDeletedComment,
+                "belongingCommentID": comment.belongingCommentID,
+                "likedUserIDs": comment.likedUserIDs
+            ]
+        }
+    }
 }
 
 struct MockPostManager: PostManagable {
@@ -339,7 +356,7 @@ struct MockPostManager: PostManagable {
         }
     }
     func removeComment(id: ID, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {}
-    func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {}
+    func toggleCommentLike(commentID: ID, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {}
     
     //    func deleteComment(commentID: String) async throws {}
     
