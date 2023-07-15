@@ -118,7 +118,7 @@ struct PostDetailUpperView: View {
                     .frame(height: 1)
                     .foregroundColor(.appColor(.neutral100))
                 
-                HStack(spacing: 64) {
+                HStack {
                     Button {
                         Task {
                             do {
@@ -151,8 +151,11 @@ struct PostDetailUpperView: View {
                             }
                             Text("적선하기")
                                 .font(.system(size: 11))
+                                .lineLimit(1)
                         }
                     }
+                    
+                    Spacer()
                     
                     Button {
                         NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
@@ -162,8 +165,11 @@ struct PostDetailUpperView: View {
                                 .frame(width: 16, height: 16)
                             Text("댓글쓰기")
                                 .font(.system(size: 11))
+                                .lineLimit(1)
                         }
                     }
+                    
+                    Spacer()
                     
                     Button {
                         print("신고")
@@ -173,6 +179,7 @@ struct PostDetailUpperView: View {
                                 .frame(width: 16, height: 16)
                             Text("신고하기")
                                 .font(.system(size: 11))
+                                .lineLimit(1)
                         }
                     }
                 }

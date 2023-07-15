@@ -5,7 +5,7 @@
 //  Created by 신동훈 on 2023/07/15.
 //
 
-import Foundation
+import SwiftUI
 
 extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
     override open func viewDidLoad() {
