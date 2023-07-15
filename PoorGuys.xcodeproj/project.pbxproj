@@ -75,6 +75,7 @@
 		D35939F92A42056D007263E8 /* PostDetailUpperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939EF2A42056D007263E8 /* PostDetailUpperView.swift */; };
 		D35939FB2A420C66007263E8 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939FA2A420C66007263E8 /* CommunityViewModel.swift */; };
 		D37956C02A41A16C00E7724F /* SecretConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37956BF2A41A16C00E7724F /* SecretConstants.swift */; };
+		D38714B82A6284C0002DFA84 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38714B72A6284C0002DFA84 /* UINavigationController+Extensions.swift */; };
 		D39A57AB2A41A67C0033DAD5 /* PoorGuysApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39A57A92A41A67C0033DAD5 /* PoorGuysApp.swift */; };
 		D39A57AC2A41A67C0033DAD5 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39A57AA2A41A67C0033DAD5 /* MainView.swift */; };
 		D39A57AE2A41A6920033DAD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39A57AD2A41A6920033DAD5 /* Assets.xcassets */; };
@@ -154,6 +155,7 @@
 		D35939EF2A42056D007263E8 /* PostDetailUpperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailUpperView.swift; sourceTree = "<group>"; };
 		D35939FA2A420C66007263E8 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
 		D37956BF2A41A16C00E7724F /* SecretConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretConstants.swift; sourceTree = "<group>"; };
+		D38714B72A6284C0002DFA84 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
 		D39A57A92A41A67C0033DAD5 /* PoorGuysApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PoorGuysApp.swift; sourceTree = "<group>"; };
 		D39A57AA2A41A67C0033DAD5 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D39A57AD2A41A6920033DAD5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 				D35939D22A41F49A007263E8 /* String+Extensions.swift */,
 				D35939CB2A41F44C007263E8 /* UIDevice+Extensions.swift */,
 				D35939CA2A41F44C007263E8 /* View+Extensions.swift */,
+				D38714B72A6284C0002DFA84 /* UINavigationController+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -658,6 +661,7 @@
 				6001EFD72A13668B00A9A2EF /* SetNickNameView.swift in Sources */,
 				D35939DF2A41F62B007263E8 /* Reply.swift in Sources */,
 				60558D062A14BA2C007581AD /* MyPageView.swift in Sources */,
+				D38714B82A6284C0002DFA84 /* UINavigationController+Extensions.swift in Sources */,
 				60A8E09F2A3AABAF0026DA04 /* TabBarView.swift in Sources */,
 				D35939F82A42056D007263E8 /* TextEditorView.swift in Sources */,
 				D35939D52A41F4AE007263E8 /* AppColor.swift in Sources */,
