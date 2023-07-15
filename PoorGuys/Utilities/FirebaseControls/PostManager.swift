@@ -177,6 +177,45 @@ struct FirebasePostManager: PostManagable {
         }
     }
     
+    func addNewComment(with newComment: Comment, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {
+        let postRef = postCollection.document(postID)
+        let commentsField = "comments"
+        
+        Firestore.firestore().runTransaction { (transaction, errorPointer) -> Any? in
+            
+            var postDocument: DocumentSnapshot
+            
+            do {
+                try postDocument = transaction.getDocument(postRef)
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
+            }
+            
+            guard var postData = postDocument.data() else {
+                let error = NSError(domain: "firebase post now found", code: -1, userInfo: [NSLocalizedDescriptionKey: "Post not found"])
+                errorPointer?.pointee = error
+                return nil
+            }
+            
+            var commentsData = postData[commentsField] as? [[String : Any]]
+            
+            commentsData?.append(commentData(from: newComment))
+            postData[commentsField] = commentsData
+            
+            transaction.updateData(postData, forDocument: postRef)
+            
+            return nil
+            
+        } completion: { _, error in
+            if let error = error {
+                handler(.failure(error))
+            } else {
+                handler(.success(true))
+            }
+        }
+    }
+    
     func removeComment(id: ID, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {
         let postRef = postCollection.document(postID)
         let commentsField = "comments"
@@ -252,7 +291,6 @@ struct FirebasePostManager: PostManagable {
                 
                 if let id = commentData["id"] as? String,
                    let user = user, id == commentID {
-                    print("여기")
                     if var likedUserIDs = commentData[likedUserIDsField] as? [String] {
                         if likedUserIDs.contains(user.uid) {
                             modifiedCommentData[likedUserIDsField] = likedUserIDs.filter { $0 != user.uid }
@@ -306,21 +344,19 @@ struct FirebasePostManager: PostManagable {
         return comments
     }
     
-    private func commentsData(from comments: [Comment]) -> [[String : Any]] {
-        comments.map { comment in
-            return [
-                "id": comment.id,
-                "nickName": comment.nickName,
-                "profileImageURL": comment.profileImageURL,
-                "userID": comment.userID,
-                "postID": comment.postID,
-                "content": comment.content,
-                "timeStamp": comment.timeStamp,
-                "isDeletedComment": comment.isDeletedComment,
-                "belongingCommentID": comment.belongingCommentID,
-                "likedUserIDs": comment.likedUserIDs
-            ]
-        }
+    private func commentData(from comment: Comment) -> [String : Any] {
+        return [
+            "id": comment.id,
+            "nickName": comment.nickName,
+            "profileImageURL": comment.profileImageURL,
+            "userID": comment.userID,
+            "postID": comment.postID,
+            "content": comment.content,
+            "timeStamp": comment.timeStamp,
+            "isDeletedComment": comment.isDeletedComment,
+            "belongingCommentID": comment.belongingCommentID,
+            "likedUserIDs": comment.likedUserIDs
+        ]
     }
 }
 

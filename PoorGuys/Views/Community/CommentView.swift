@@ -25,7 +25,7 @@ struct CommentView: View {
     @State private var cancellable: AnyCancellable?
     
 //    🚨todo: 정상적인 user로 바꿔주기
-    private let user = User(uid: "Asdfas", nickName: "ewqfg", authenticationMethod: .apple)
+    private let user = User(uid: "Asdfaasndsiqz", nickName: "ewqfg", authenticationMethod: .apple)
     
     init(post: Binding<Post?>, comments: Binding<[Comment]>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>, isLikeButtonEnabled: Binding<Bool>) {
         self._comment = State(initialValue: comment)
@@ -140,7 +140,7 @@ struct CommentView: View {
                                             isCommentLikeButtonEnabled = false
                                             
                                             Task {
-                                                try await updateCommentLike()
+                                                try await toggleCommentLike()
                                                 
                                                 cancellable = Timer.publish(every: 3, on: .main, in: .common)
                                                     .autoconnect()
@@ -197,8 +197,8 @@ struct CommentView: View {
         return commentRemovedComments
     }
     
-    private func updateCommentLike() async throws {
-        guard var post = post else { return }
+    private func toggleCommentLike() async throws {
+        guard let post = post else { return }
         
         try FirebasePostManager(user: user).toggleCommentLike(commentID: comment.id, postID: post.id, handler: { result in
             switch result {

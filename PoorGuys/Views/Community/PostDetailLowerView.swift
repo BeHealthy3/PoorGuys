@@ -65,20 +65,18 @@ struct PostDetailLowerView: View {
                                 
                                 Task {
                                     do {
-                                        var updatedPost = post
-                                        var updatedComments = self.comments
-                                        
-                                        updatedComments.append(newComment)
-                                        updatedPost.comments = updatedComments
-                                        
-//                                        ❌
-//                                        try await FirebasePostManager().updateCommentsAndCommentsCount(with: updatedPost)
-                                        
-                                        withAnimation {
-                                            text = ""
-                                            replyingCommentID = nil
-                                            replyingNickname = nil
-                                            self.comments.append(newComment)
+                                        try FirebasePostManager().addNewComment(with: newComment, postID: post.id) { result in
+                                            switch result {
+                                            case .success:
+                                                withAnimation {
+                                                    text = ""
+                                                    replyingCommentID = nil
+                                                    replyingNickname = nil
+                                                    comments.append(newComment)
+                                                }
+                                            case .failure(let error):
+                                                print(error)    //🚨todo: 에러표시
+                                            }
                                         }
                                     }
                                     catch {
