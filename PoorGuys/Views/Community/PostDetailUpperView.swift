@@ -155,7 +155,7 @@ struct PostDetailUpperView: View {
                     }
                     
                     Button {
-                        print("댓글")
+                        NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
                     } label: {
                         HStack {
                             Image("comment")
