@@ -17,6 +17,7 @@ struct PostDetailView: View {
     @State private var replyingCommentID: String? = nil
     @State private var replyingNickname: String? = nil
     @State private var isCommentLikeButtonEnabled = true
+    @State private var newlyAddedComment: Comment?
     
     init(postID: String) {
         self.postID = postID
@@ -29,86 +30,90 @@ struct PostDetailView: View {
     }
     
     var body: some View {
-        VStack(spacing: replyingNickname == nil ? 16 : 0) {
-            if let post = post {
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack {
-                        PostDetailUpperView(post: post)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .strokeShadow(
-                                        color: post.isAboutMoney && !post.isWeirdPost ?
-                                        Color.appColor(.primary500).opacity(0.1) : Color.appColor(.neutral900).opacity(0.1),
-                                        radius: 7,
-                                        x: 0,
-                                        y: 0
-                                    )
-                            )
+        ScrollViewReader { proxy in
+            VStack(spacing: replyingNickname == nil ? 16 : 0) {
+                if let post = post {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack {
+                            PostDetailUpperView(post: post)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .strokeShadow(
+                                            color: post.isAboutMoney && !post.isWeirdPost ?
+                                            Color.appColor(.primary500).opacity(0.1) : Color.appColor(.neutral900).opacity(0.1),
+                                            radius: 7,
+                                            x: 0,
+                                            y: 0
+                                        )
+                                )
+                        }
+                        
+                        if !comments.isEmpty {
+                            VStack {
+                                ForEach(comments) { comment in // comments를 직접 사용하여 ForEach 뷰를 생성
+                                    if comment.belongingCommentID == nil, comment != comments.first {
+                                        Rectangle()
+                                            .frame(height: 1)
+                                            .foregroundColor(.appColor(.neutral100))
+                                    }
+                                    CommentView(post: $post, comments: $comments, comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname, isLikeButtonEnabled: $isCommentLikeButtonEnabled)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                                        .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
+                                        .id(comments.firstIndex(of: comment))
+                                }
+                                .transition(.slide)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 0)
+                    
+                    if let replyingNickname = replyingNickname {
+                        VStack(spacing: 0) {
+                            HStack {
+                                Text("\(replyingNickname)님에게 답글을 남기는 중")
+                                    .font(.system(size: 12, weight: .bold))
+                                    .foregroundColor(Color.appColor(.neutral600))
+                                
+                                Spacer()
+                                
+                                Button {
+                                    self.replyingNickname = nil
+                                    self.replyingCommentID = nil
+                                } label: {
+                                    Image("xmark")
+                                        .renderingMode(.template)
+                                        .foregroundColor(Color.appColor(.neutral600))
+                                        .frame(width: 24, height: 24)
+                                }
+                            }
+                            .padding(.all, 10)
+                            .background(Color.appColor(.neutral050))
+                            
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundColor(.appColor(.neutral200))
+                        }
                     }
                     
-                    if !comments.isEmpty {
-                        VStack {
-                            ForEach(comments) { comment in // comments를 직접 사용하여 ForEach 뷰를 생성
-                                if comment.belongingCommentID == nil, comment != comments.first {
-                                    Rectangle()
-                                        .frame(height: 1)
-                                        .foregroundColor(.appColor(.neutral100))
-                                }
-                                CommentView(post: $post, comments: $comments, comment: comment, replyingCommentID: $replyingCommentID, replyingNickName: $replyingNickname, isLikeButtonEnabled: $isCommentLikeButtonEnabled)
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                                    .padding(.leading, comment.belongingCommentID == nil ?  0 : 35)
-                            }
-                            .transition(.slide)
-                        }
-                    }
+                    PostDetailLowerView(post: post, comments: $comments, replyingCommentID: $replyingCommentID, replyingNickname: $replyingNickname, newlyAddedComment: $newlyAddedComment)
+                        .padding(EdgeInsets(top: 0, leading: 18, bottom: 16, trailing: 18))
+                } else {
+                    ProgressView()
                 }
-                .padding(.horizontal, 18)
-                .padding(.vertical, 0)
-                
-                if let replyingNickname = replyingNickname {
-                    VStack(spacing: 0) {
-                        HStack {
-                            Text("\(replyingNickname)님에게 답글을 남기는 중")
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundColor(Color.appColor(.neutral600))
-                            
-                            Spacer()
-                            
-                            Button {
-                                self.replyingNickname = nil
-                                self.replyingCommentID = nil
-                            } label: {
-                                Image("xmark")
-                                    .renderingMode(.template)
-                                    .foregroundColor(Color.appColor(.neutral600))
-                                    .frame(width: 24, height: 24)
-                            }
-                        }
-                        .padding(.all, 10)
-                        .background(Color.appColor(.neutral050))
-                        
-                        Rectangle()
-                            .frame(height: 1)
-                            .foregroundColor(.appColor(.neutral200))
-                    }
+            }
+            .navigationBarBackButtonHidden()
+            .navigationBarItems(leading: BackButton(presentationMode: presentationMode))
+            .onAppear {
+                Task {
+                    post = try await FirebasePostManager().fetchPost(postID: postID)
+                    comments = post?.comments ?? []
                 }
-                
-                PostDetailLowerView(post: post, comments: $comments, replyingCommentID: $replyingCommentID, replyingNickname: $replyingNickname)
-                    .padding(EdgeInsets(top: 0, leading: 18, bottom: 16, trailing: 18))
-            } else {
-                ProgressView()
             }
-        }
-        .navigationBarBackButtonHidden()
-        .navigationBarItems(leading: BackButton(presentationMode: presentationMode))
-        .onAppear {
-            Task {
-                post = try await FirebasePostManager().fetchPost(postID: postID)
-                comments = post?.comments ?? []
+            .onChange(of: comments) { _ in
+                rearrangeComments()
+                scrollToComment(proxy: proxy)
             }
-        }
-        .onChange(of: comments) { _ in
-            rearrangeComments()
         }
     }
     
@@ -138,6 +143,19 @@ struct PostDetailView: View {
         }
         self.comments = reArrangedComments
     }
+    
+    private func scrollToComment(proxy: ScrollViewProxy) {
+        guard let newlyAddedComment = newlyAddedComment,
+              let newlyAddedCommentIndex = comments.firstIndex(of: newlyAddedComment) else { return }
+        
+        scrollToView(proxy, index: newlyAddedCommentIndex)
+    }
+    
+    private func scrollToView(_ proxy: ScrollViewProxy, index: Int) {
+        withAnimation {
+            proxy.scrollTo(index, anchor: .bottom)
+        }
+    }
 }
 
 struct PostDetailView_Previews: PreviewProvider {
@@ -163,3 +181,9 @@ extension Publishers {
             .eraseToAnyPublisher()
     }
 }
+
+private func scrollToView(_ proxy: ScrollViewProxy, index: Int) {
+        withAnimation {
+            proxy.scrollTo(index, anchor: .top)
+        }
+    }

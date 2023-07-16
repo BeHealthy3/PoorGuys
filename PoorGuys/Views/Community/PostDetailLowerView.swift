@@ -14,16 +14,18 @@ struct PostDetailLowerView: View {
     @Binding private var comments: [Comment]
     @Binding private var replyingCommentID: String?
     @Binding private var replyingNickname: String?
+    @Binding private var newlyAddedComment: Comment?
     
     @State private var text: String = ""
     @State private var viewHeight: CGFloat = 60
     @State private var backgroundNeedsHighlight = false
     
-    init(post: Post, comments: Binding<[Comment]>, replyingCommentID: Binding<String?>, replyingNickname: Binding<String?>) {
+    init(post: Post, comments: Binding<[Comment]>, replyingCommentID: Binding<String?>, replyingNickname: Binding<String?>, newlyAddedComment: Binding<Comment?>) {
         self.post = post
         self._comments = comments
         self._replyingCommentID = replyingCommentID
         self._replyingNickname = replyingNickname
+        self._newlyAddedComment = newlyAddedComment
     }
     
     var body: some View {
@@ -73,6 +75,7 @@ struct PostDetailLowerView: View {
                                                     replyingCommentID = nil
                                                     replyingNickname = nil
                                                     comments.append(newComment)
+                                                    newlyAddedComment = newComment
                                                 }
                                             case .failure(let error):
                                                 print(error)    //🚨todo: 에러표시
@@ -131,6 +134,6 @@ struct PostDetailLowerView: View {
 
 struct PostDetailLowerView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailLowerView(post: Post.dummy(), comments: .constant([]), replyingCommentID: .constant(String.randomString(length: 10)), replyingNickname: .constant(nil))
+        PostDetailLowerView(post: Post.dummy(), comments: .constant([]), replyingCommentID: .constant(String.randomString(length: 10)), replyingNickname: .constant(nil), newlyAddedComment: .constant(nil))
     }
 }
