@@ -11,13 +11,14 @@ struct PostDetailUpperView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @State private var showingSheet = false
+    @State private var showingAlert = false
     @State private var isModalPresented = false
     
     @State var post: Post
     @State var isLiked = false
     
 //    🚨todo: 없애기
-    let user = User(uid: "dfnekdn", nickName: "mollu", authenticationMethod: .apple)
+    let user = User(uid: "nklasdkfqwe", nickName: "mollu", authenticationMethod: .apple)
     
     var body: some View {
         VStack(spacing: 16) {
@@ -120,26 +121,31 @@ struct PostDetailUpperView: View {
                 
                 HStack {
                     Button {
-                        Task {
-                            do {
-                                try FirebasePostManager(user: user).toggleLike(about: post.id, handler: { result in
-                                    switch result {
-                                    case .success(let isSuccess):
-                                        DispatchQueue.main.async {
-                                            if isSuccess {
-                                                print("🚨")
-                                                isLiked.toggle()
+                        if post.userID != user.uid {
+                            Task {
+                                do {
+                                    try FirebasePostManager(user: user).toggleLike(about: post.id, handler: { result in
+                                        switch result {
+                                        case .success(let isSuccess):
+                                            DispatchQueue.main.async {
+                                                if isSuccess {
+                                                    print("🚨")
+                                                    isLiked.toggle()
+                                                }
                                             }
+                                        case .failure(let error):
+                                            print(error)
                                         }
-                                    case .failure(let error):
-                                        print(error)
-                                    }
-                                })
-                                
-                            } catch {
-                                print("좋아요 혹은 좋아요 취소 실패")
+                                    })
+                                    
+                                } catch {
+                                    print("좋아요 혹은 좋아요 취소 실패")
+                                }
                             }
+                        } else {
+                            showingAlert = true
                         }
+                        
                     } label: {
                         HStack {
                             if isLiked {
@@ -153,6 +159,9 @@ struct PostDetailUpperView: View {
                                 .font(.system(size: 11))
                                 .lineLimit(1)
                         }
+                    }
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text(""), message: Text("자신의 글에는 적선할 수 없습니다."), dismissButton: .default(Text("확인")))
                     }
                     
                     Spacer()

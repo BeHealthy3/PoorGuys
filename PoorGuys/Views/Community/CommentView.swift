@@ -21,11 +21,12 @@ struct CommentView: View {
     @Binding private var isCommentLikeButtonEnabled: Bool
     
     @State private var showAlert = false
+    @State private var alertMessage: CommentViewAlertMessage = .threeSeconds
     
     @State private var cancellable: AnyCancellable?
     
 //    🚨todo: 정상적인 user로 바꿔주기
-    private let user = User(uid: "Asdfaasndsiqz", nickName: "ewqfg", authenticationMethod: .apple)
+    private let user = User(uid: "dfkdkeltkqn", nickName: "ewqfg", authenticationMethod: .apple)
     
     init(post: Binding<Post?>, comments: Binding<[Comment]>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>, isLikeButtonEnabled: Binding<Bool>) {
         self._comment = State(initialValue: comment)
@@ -85,7 +86,6 @@ struct CommentView: View {
                                                             withAnimation {
                                                                 comment.isDeletedComment = true
                                                             }
-                                                            
                                                         }
                                                         
                                                     case .failure(let error):
@@ -136,23 +136,29 @@ struct CommentView: View {
                                 
                                 Button {
                                     if isCommentLikeButtonEnabled {
-                                        do {
-                                            isCommentLikeButtonEnabled = false
-                                            
-                                            Task {
-                                                try await toggleCommentLike()
+                                        if comment.userID == user.uid {
+                                            alertMessage = .myComment
+                                            showAlert = true
+                                        } else {
+                                            do {
+                                                isCommentLikeButtonEnabled = false
                                                 
-                                                cancellable = Timer.publish(every: 3, on: .main, in: .common)
-                                                    .autoconnect()
-                                                    .sink { _ in
-                                                        // 타이머 완료 후 버튼 활성화
-                                                        isCommentLikeButtonEnabled = true
-                                                    }
+                                                Task {
+                                                    try await toggleCommentLike()
+                                                    
+                                                    cancellable = Timer.publish(every: 3, on: .main, in: .common)
+                                                        .autoconnect()
+                                                        .sink { _ in
+                                                            // 타이머 완료 후 버튼 활성화
+                                                            isCommentLikeButtonEnabled = true
+                                                        }
+                                                }
+                                            } catch {
+                                                print("로그인 에러 또는 좋아요 에러")
                                             }
-                                        } catch {
-                                            print("로그인 에러 또는 좋아요 에러")
                                         }
                                     } else {
+                                        alertMessage = .threeSeconds
                                         showAlert = true
                                     }
                                 } label: {
@@ -171,7 +177,7 @@ struct CommentView: View {
                                     }
                                 }
                                 .alert(isPresented: $showAlert) {
-                                    Alert(title: Text("알림"), message: Text("좋아요는 3초에 한번씩 누를 수 있습니다."), dismissButton: .default(Text("확인")))
+                                    Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
                                 }
                             }
                         }
@@ -253,4 +259,9 @@ struct CommentView_Previews: PreviewProvider {
     static var previews: some View {
         CommentView(post: .constant(Post.dummy()), comments: .constant(Comment.multipleDummies(number: 1)), comment: Comment.dummy(), replyingCommentID: .constant(""), replyingNickName: .constant(""), isLikeButtonEnabled: .constant(true))
     }
+}
+
+enum CommentViewAlertMessage: String {
+    case threeSeconds = "적선하기는 3초에 한번씩 누를 수 있습니다."
+    case myComment = "자신의 글에는 적선할 수 없습니다."
 }
