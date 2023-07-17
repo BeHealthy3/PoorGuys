@@ -10,6 +10,20 @@ import LoremSwiftum
 
 struct Comment: Identifiable, Codable, Equatable {
     
+    static func == (lhs: Comment, rhs: Comment) -> Bool {
+        lhs.id == rhs.id
+        && lhs.content == rhs.content
+        && lhs.userID == rhs.userID
+        && lhs.likedUserIDs == rhs.likedUserIDs
+        && lhs.profileImageURL == rhs.profileImageURL
+        && lhs.nickName == rhs.nickName
+        && lhs.userID == rhs.userID
+        && lhs.postID == rhs.postID
+        && lhs.timeStamp == rhs.timeStamp
+        && lhs.isDeletedComment == rhs.isDeletedComment
+        && lhs.belongingCommentID == rhs.belongingCommentID
+    }
+    
     static func dummy() -> Comment {
         let id: String = "\(Int.random(in: 1...10))"
         let nickName: String = Lorem.word

@@ -76,6 +76,9 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                     }
                     .padding(EdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16))
                 }
+                .refreshable {
+                    await refresh()
+                }
             }
             .onAppear {
                 Task {
@@ -95,9 +98,6 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .refreshable {
-            await refresh()
-        }
     }
     
     private func fetchPostsTask(post: Post) async {

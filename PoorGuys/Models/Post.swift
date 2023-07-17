@@ -12,6 +12,17 @@ struct Post: Identifiable, Equatable, Codable {
     
     static func == (lhs: Post, rhs: Post) -> Bool {
         lhs.id == rhs.id
+        && lhs.body == rhs.body
+        && lhs.title == rhs.title
+        && lhs.isAboutMoney == rhs.isAboutMoney
+        && lhs.isWeirdPost == rhs.isWeirdPost
+        && lhs.timeStamp == rhs.timeStamp
+        && lhs.userID == rhs.userID
+        && lhs.profileImageURL == rhs.profileImageURL
+        && lhs.nickName == rhs.nickName
+        && lhs.comments == rhs.comments
+        && lhs.imageURL == rhs.imageURL
+        && lhs.likedUserIDs == rhs.likedUserIDs
     }
     
     static func dummy() -> Post {

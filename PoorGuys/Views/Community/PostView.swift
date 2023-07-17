@@ -74,7 +74,8 @@ struct PostView: View {
                             HStack(spacing: 8) {
                                 HStack(spacing: 2) {
                                     Image("comments")
-                                    Text(String(post.comments.count ?? 0))
+                                    
+                                    Text(String(post.comments.filter { $0.isDeletedComment == false }.count) ?? "N/A")
                                         .foregroundColor(.appColor(.secondary))
                                 }
                                 
