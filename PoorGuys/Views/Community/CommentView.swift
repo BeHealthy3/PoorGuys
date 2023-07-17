@@ -52,14 +52,18 @@ struct CommentView: View {
             } else {
                 LazyVStack(spacing: 4) {
                     HStack(spacing: 8) {
-                        AsyncImage(url: URL(string: comment.profileImageURL ?? "")) { image in
-                            image.resizable()
-                                .frame(width: 24, height: 24)
-                                .clipShape(Circle())
-                            
-                        } placeholder: {
-                            ProgressView()
-                                .frame(width: 24, height: 24)
+                        AsyncImage(url: URL(string: comment.profileImageURL ?? "")) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .frame(width: 24, height: 24)
+                                    .clipShape(Circle())
+                            @unknown default:
+                                Color.appColor(.neutral100)
+                                    .frame(width: 24, height: 24)
+                                    .clipShape(Circle())
+                            }
                         }
                         
                         Text(comment.nickName + (post?.userID == comment.userID ? " (작성자)" : ""))
@@ -185,19 +189,6 @@ struct CommentView: View {
                 .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             }
         }
-    }
-    
-    private func removedComments() -> [Comment] {
-        
-        let commentRemovedComments = comments.map({ comment in
-            var updatedComment = comment
-            if updatedComment.id == comment.id {
-                updatedComment.isDeletedComment = true
-            }
-            
-            return updatedComment
-        })
-        return commentRemovedComments
     }
     
     private func toggleCommentLike() async throws {

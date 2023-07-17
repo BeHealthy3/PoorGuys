@@ -58,8 +58,9 @@ struct PostView: View {
                                         .frame(width: 60, height: 60, alignment: .trailing)
                                         .cornerRadius(12)
                                 } placeholder: {
-                                    ProgressView()
+                                    Color.appColor(.neutral100)
                                         .frame(width: 60, height: 60)
+                                        .cornerRadius(12)
                                 }
                             }
                         }

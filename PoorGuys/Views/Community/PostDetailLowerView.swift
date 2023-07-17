@@ -39,14 +39,18 @@ struct PostDetailLowerView: View {
                 VStack {
                     Spacer(minLength: 0)
                         .frame(height: viewHeight - 50 > 0 ? viewHeight - 50 : 0)
-                    AsyncImage(url: URL(string: post.profileImageURL ?? "")) { image in
-                        image.resizable()
-                            .frame(width: 40, height: 40)
-                            .clipShape(Circle())
-
-                    } placeholder: {
-                        ProgressView()
-                            .frame(width: 40, height: 40)
+                    AsyncImage(url: URL(string: post.profileImageURL ?? "")) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                        @unknown default:
+                            Color.appColor(.neutral100)
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                        }
                     }
                 }
 

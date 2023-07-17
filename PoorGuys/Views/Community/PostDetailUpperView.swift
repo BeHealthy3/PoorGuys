@@ -23,14 +23,17 @@ struct PostDetailUpperView: View {
     var body: some View {
         VStack(spacing: 16) {
             HStack(spacing: 8) {
-                AsyncImage(url: URL(string: post.profileImageURL ?? "")) { image in
-                    image.resizable()
-                        .frame(width: 40, height: 40)
-                        .clipShape(Circle())
-                    
-                } placeholder: {
-                    ProgressView()
-                        .frame(width: 40, height: 40)
+                AsyncImage(url: URL(string: post.profileImageURL ?? "")) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                    @unknown default:
+                        Color.appColor(.neutral100)
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                    }
                 }
 
                 Text(post.nickName)
@@ -105,7 +108,7 @@ struct PostDetailUpperView: View {
                     image.resizable()
                         .frame(width: 311, height: 311)
                 } placeholder: {
-                    ProgressView()
+                    Color.appColor(.neutral100)
                         .frame(width: 311, height: 311)
                 }
             }
