@@ -45,7 +45,7 @@ struct PostDetailUpperView: View {
                         showingSheet = true
                     }
                     .confirmationDialog("", isPresented: $showingSheet) {
-                        if User.currentUser?.uid == post.userID {
+                        if user.uid == post.userID {
                             Button(role: .destructive) {
                                 
                                 Task.detached {

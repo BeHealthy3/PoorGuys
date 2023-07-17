@@ -121,65 +121,62 @@ struct CommentView: View {
                     
                     HStack() {
                         Text(DateFormatter().excludeYear(from: comment.timeStamp))
+                        
+                        if comment.belongingCommentID == nil {
+                            Text("답글 쓰기")
+                                .onTapGesture {
+                                    NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
+                                    replyingCommentID = comment.id
+                                    replyingNickname = comment.nickName
+                                }
+                        }
+                        
                         Spacer()
-                        HStack(spacing: 8) {
-                            
-                            HStack(spacing: 10) {
-                                if comment.belongingCommentID == nil {
-                                    Text("답글 쓰기")
-                                        .onTapGesture {
-                                            NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
-                                            replyingCommentID = comment.id
-                                            replyingNickname = comment.nickName
+                        
+                        Button {
+                            if isCommentLikeButtonEnabled {
+                                if comment.userID == user.uid {
+                                    alertMessage = .myComment
+                                    showAlert = true
+                                } else {
+                                    do {
+                                        isCommentLikeButtonEnabled = false
+                                        
+                                        Task {
+                                            try await toggleCommentLike()
+                                            
+                                            cancellable = Timer.publish(every: 3, on: .main, in: .common)
+                                                .autoconnect()
+                                                .sink { _ in
+                                                    // 타이머 완료 후 버튼 활성화
+                                                    isCommentLikeButtonEnabled = true
+                                                }
                                         }
+                                    } catch {
+                                        print("로그인 에러 또는 좋아요 에러")
+                                    }
+                                }
+                            } else {
+                                alertMessage = .threeSeconds
+                                showAlert = true
+                            }
+                        } label: {
+                            HStack(spacing: 4) {
+                                if comment.likedUserIDs.contains(user.uid) {
+                                    Image("thumbsUpFilled")
+                                } else {
+                                    Image("thumbsUp")
+                                        .renderingMode(.template)
+                                        .foregroundColor(.appColor(.neutral500))
                                 }
                                 
-                                Button {
-                                    if isCommentLikeButtonEnabled {
-                                        if comment.userID == user.uid {
-                                            alertMessage = .myComment
-                                            showAlert = true
-                                        } else {
-                                            do {
-                                                isCommentLikeButtonEnabled = false
-                                                
-                                                Task {
-                                                    try await toggleCommentLike()
-                                                    
-                                                    cancellable = Timer.publish(every: 3, on: .main, in: .common)
-                                                        .autoconnect()
-                                                        .sink { _ in
-                                                            // 타이머 완료 후 버튼 활성화
-                                                            isCommentLikeButtonEnabled = true
-                                                        }
-                                                }
-                                            } catch {
-                                                print("로그인 에러 또는 좋아요 에러")
-                                            }
-                                        }
-                                    } else {
-                                        alertMessage = .threeSeconds
-                                        showAlert = true
-                                    }
-                                } label: {
-                                    HStack(spacing: 4) {
-                                        if comment.likedUserIDs.contains(user.uid) {
-                                            Image("thumbsUpFilled")
-                                        } else {
-                                            Image("thumbsUp")
-                                                .renderingMode(.template)
-                                                .foregroundColor(.appColor(.neutral500))
-                                        }
-                                        
-                                        Text(String(comment.likedUserIDs.count))
-                                            .foregroundColor(.appColor(.neutral500))
-                                            .font(.system(size: 11))
-                                    }
-                                }
-                                .alert(isPresented: $showAlert) {
-                                    Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
-                                }
+                                Text(String(comment.likedUserIDs.count))
+                                    .foregroundColor(.appColor(.neutral500))
+                                    .font(.system(size: 11))
                             }
+                        }
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
                         }
                     }
                     .font(.system(size: 11))
