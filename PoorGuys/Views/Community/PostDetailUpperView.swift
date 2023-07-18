@@ -19,7 +19,7 @@ struct PostDetailUpperView: View {
     @State private var isModalPresented = false
     @State private var alertMessage: PostDetailUpperViewAlertMessage = .alreadyReportedPost
     
-//    🚨todo: 없애기
+    //    🚨todo: user 없애기
     let user = User(uid: "nklasdkfqwe", nickName: "mollu", authenticationMethod: .apple)
     
     var body: some View {
@@ -37,7 +37,7 @@ struct PostDetailUpperView: View {
                             .clipShape(Circle())
                     }
                 }
-
+                
                 Text(post.nickName)
                     .lineLimit(1)
                     .foregroundColor(.appColor(.neutral700))
@@ -45,12 +45,12 @@ struct PostDetailUpperView: View {
                 
                 Spacer()
                 
-                Image("verticalEllipsis")
-                    .onTapGesture {
-                        showingSheet = true
-                    }
-                    .confirmationDialog("", isPresented: $showingSheet) {
-                        if user.uid == post.userID {
+                if user.uid == post.userID {
+                    Image("verticalEllipsis")
+                        .onTapGesture {
+                            showingSheet = true
+                        }
+                        .confirmationDialog("", isPresented: $showingSheet) {
                             Button(role: .destructive) {
                                 
                                 Task.detached {
@@ -76,24 +76,8 @@ struct PostDetailUpperView: View {
                             .fullScreenCover(isPresented: $isModalPresented) {
                                 PostFillingView(isPresented: $isModalPresented, needsRefresh: .constant(false), postID: .constant(post.id))
                             }
-                            
-                        } else {
-                            Button {
-                                Task {
-                                    FirebasePostManager(user: user).reportPost(id: post.id,userID: post.userID,nickName: post.nickName, title: post.title, body: post.body) { result in
-                                        switch result {
-                                        case .success:
-                                            print("성공")
-                                        case .failure(let error):
-                                            print(error)    //🚨todo: 얼럿띄우기
-                                        }
-                                    }
-                                }
-                            } label: {
-                                Text("닉네임 신고하기")
-                            }
                         }
-                    }
+                }
             }
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .top, spacing: 8) {
