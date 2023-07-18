@@ -12,7 +12,6 @@ import LoremSwiftum
 struct PostFillingCenterView: View {
 
     @Binding var content: String
-//    @Binding var imageURL: String?
     @Binding var isAboutMoney: Bool
     @Binding var selectedImage: UIImage?
     @State private var isShowingImagePicker = false
@@ -20,7 +19,6 @@ struct PostFillingCenterView: View {
 
     init(content: Binding<String>, isAboutMoney: Binding<Bool>, image: Binding<UIImage?>) {
         _content = content
-//        _imageURL = imageURL
         _selectedImage = image
         UITextView.appearance().backgroundColor = .clear
         _isAboutMoney = isAboutMoney
@@ -61,35 +59,12 @@ struct PostFillingCenterView: View {
                 }
             }
             
-            //            if imageURL != nil || image != nil {
-            //
-            //            }
             if let selectedImage = selectedImage {
                 HStack {
                     
                     ZStack {
-                        //                    if let imageURL = imageURL,
-                        //                       let url = URL(string: imageURL) {
-                        //
-                        //                        AsyncImage(url: url) { image in
-                        //                            image
-                        //                                .resizable()
-                        //                                .frame(width: 100, height: 100)
-                        //                                .cornerRadius(12)
-                        //                        } placeholder: {
-                        //                            ProgressView()
-                        //                        }
-                        //                    } else {
-                        //                        if let selectedImage = selectedImage {
-                        //                            Image(uiImage: selectedImage)
-                        //                                .resizable()
-                        //                                .frame(width: 100, height: 100)
-                        //                                .cornerRadius(12)
-                        //                        }
-                        //                    }
                         Image(uiImage: selectedImage)
                             .resizable()
-                        //                            .frame(width: 100, height: 100)
                             .cornerRadius(12)
                         
                         HStack {

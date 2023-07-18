@@ -197,7 +197,7 @@ struct PostDetailUpperView: View {
                     
                     Button {
                         Task {
-                            FirebasePostManager(user: user).reportPost(id: post.id,userID: post.userID,nickName: post.nickName, title: post.title, body: post.body) { result in
+                            FirebasePostManager(user: user).reportPost(id: post.id, userID: post.userID, nickName: post.nickName, title: post.title, body: post.body) { result in
                                 switch result {
                                 case .success:
                                     alertMessage = .reportSucceeded

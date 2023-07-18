@@ -370,66 +370,56 @@ struct FirebasePostManager: PostManagable {
                 }
             }
         }
-
+    }
+    
+    func reportComment(id: ID, userID: ID, nickName: String, content: String, completion: @escaping (Result<Bool, FirebaseError>) -> Void) {
+        guard let user = user else { return completion(.failure(.unknownError)) }
+        let db = Firestore.firestore()
+        let reportedCommentRef = db.collection("reportedComments").document(id)
+        let reportedUserIDsField = "reportedUserIDs"
         
-//        reportedPostRef.getDocument { document, error in
-//            if let document = document, document.exists {
-//
-//                if var reportedUsers = document.data()?[reportedUserIDsField] as? [ID],
-//                   let user = user {
-//
-//                    if reportedUsers.contains(user.uid) {
-//                        completion(.failure(.alreadyReported))
-//
-//                    } else {
-//                        reportedUsers.append(userID)
-//
-//                        reportedPostRef.updateData([reportedUserIDsField : reportedUsers]) { error in
-//
-//                            if let _ = error {
-//                                completion(.failure(.serverError))
-//                            } else {
-//                                completion(.success(true))
-//                            }
-//                        }
-//                    }
-//                }
-//            } else {
-//                let data =
-//                [
-//                    "postID" : id,
-//                    "userID" : userID,
-//                    reportedUserIDsField : [user?.uid],
-//                    "nickName" : nickName,
-//                    "title" : title,
-//                    "body" : body
-//                ]
-//
-//                reportedPostRef.setData(data) { error in
-//                    if let _ = error {
-//                        completion(.failure(.serverError))
-//                    } else {
-//                        completion(.success(true))
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    func reportComment(id: ID, userID: ID, content: String,completion: @escaping (Result<Bool, FirebaseError>) -> Void) {
-//        let data = [
-//            "commentID" : id,
-//            "userID" : userID,
-//            "content" : content
-//        ]
-//
-//        Firestore.firestore().collection("reportedComments").addDocument(data: data) { error in
-//            if let _ = error {
-//                completion(.failure(.serverError))
-//            } else {
-//                completion(.success(true))
-//            }
-//        }
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            var reportedPostDocument: DocumentSnapshot
+            
+            do {
+                try reportedPostDocument = transaction.getDocument(reportedCommentRef)
+            } catch let fetchError as NSError {
+                completion(.failure(.serverError))
+                return nil
+            }
+            
+            if let reportedPostData = reportedPostDocument.data(),
+               var reportedUsers = reportedPostData[reportedUserIDsField] as? [String] {
+                
+                if reportedUsers.contains(user.uid) {
+                    completion(.failure(.alreadyReported))
+                    return nil
+                } else {
+                    reportedUsers.append(user.uid)
+                    transaction.updateData([reportedUserIDsField: reportedUsers], forDocument: reportedCommentRef)
+                    return true
+                }
+                
+            } else {
+                let data: [String: Any] = [
+                    "commentID": id,
+                    "userID": userID,
+                    reportedUserIDsField: [user.uid],
+                    "nickName": nickName,
+                    "content" : content
+                ]
+                transaction.setData(data, forDocument: reportedCommentRef)
+                return true
+            }
+        }) { (result, error) in
+            if let _ = error {
+                completion(.failure(.serverError))
+            } else {
+                if let isSucceed = result as? Bool, isSucceed {
+                    completion(.success(true))
+                }
+            }
+        }
     }
     
     private func comments(from commentsArray: [[String : Any]]) -> [Comment] {

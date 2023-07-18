@@ -25,8 +25,8 @@ struct CommentView: View {
     
     @State private var cancellable: AnyCancellable?
     
-//    🚨todo: 정상적인 user로 바꿔주기
-    private let user = User(uid: "dfkdkeltkqn", nickName: "ewqfg", authenticationMethod: .apple)
+    //    🚨todo: 정상적인 user로 바꿔주기
+    private let user = User(uid: "dfkdkeltkqn2", nickName: "ewqfg", authenticationMethod: .apple)
     
     init(post: Binding<Post?>, comments: Binding<[Comment]>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>, isLikeButtonEnabled: Binding<Bool>) {
         self._comment = State(initialValue: comment)
@@ -79,37 +79,51 @@ struct CommentView: View {
                             }
                             .confirmationDialog("", isPresented: $showingSheet) {
                                 if let post = post {
-                                    Button {
-                                        Task {
-                                            do {
-                                                
-                                                try await FirebasePostManager().removeComment(id: comment.id, postID: post.id, handler: { result in
-                                                    switch result {
-                                                    case .success(let isDeleted):
-                                                        if isDeleted {
-                                                            withAnimation {
-                                                                comment.isDeletedComment = true
+                                    if comment.userID == user.uid {
+                                        Button {
+                                            Task {
+                                                do {
+                                                    try await FirebasePostManager().removeComment(id: comment.id, postID: post.id, handler: { result in
+                                                        switch result {
+                                                        case .success(let isDeleted):
+                                                            if isDeleted {
+                                                                withAnimation {
+                                                                    comment.isDeletedComment = true
+                                                                }
                                                             }
+                                                            
+                                                        case .failure(let error):
+                                                            print(error)    //🚨todo: 에러 보여주기
                                                         }
-                                                        
-                                                    case .failure(let error):
-                                                        print(error)    //🚨todo: 에러 보여주기
-                                                    }
-                                                })
+                                                    })
+                                                }
+                                                catch {
+                                                    print("업데이트실패")
+                                                }
                                             }
-                                            catch {
-                                                print("업데이트실패")
-                                            }
+                                            
+                                        } label: {
+                                            Text("삭제하기")
                                         }
-                                        
-                                    } label: {
-                                        Text("삭제하기")
-                                    }
-                                } else {
-                                    Button {
-                                        print("신고하기")
-                                    } label: {
-                                        Text("신고하기")
+                                    } else {
+                                        Button {
+                                            Task {
+                                                FirebasePostManager(user: user).reportComment(id: comment.id, userID: comment.userID, nickName: comment.nickName, content: comment.content) { result in
+                                                    switch result {
+                                                    case .success:
+                                                        alertMessage = .reportSucceded
+                                                        showAlert = true
+                                                    case .failure(let error):
+                                                        if error == .alreadyReported {
+                                                            alertMessage = .alreadyReported
+                                                            showAlert = true
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } label: {
+                                            Text("신고하기")
+                                        }
                                     }
                                 }
                             }
@@ -251,5 +265,7 @@ struct CommentView_Previews: PreviewProvider {
 
 enum CommentViewAlertMessage: String {
     case threeSeconds = "적선하기는 3초에 한번씩 누를 수 있습니다."
-    case myComment = "자신의 글에는 적선할 수 없습니다."
+    case myComment = "자신의 댓글에는 적선할 수 없습니다."
+    case alreadyReported = "이미 신고한 댓글/유저 입니다."
+    case reportSucceded = "신고가 완료되었습니다."
 }
