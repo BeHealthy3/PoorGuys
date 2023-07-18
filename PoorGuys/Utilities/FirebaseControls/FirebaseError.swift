@@ -14,6 +14,8 @@ enum FirebaseError: Error {
     case updateFailed
     case encodingError
     case serverError
+    case alreadyReported
+    case unknownError
     
     var nsError: NSError {
         return NSError(domain: "FirebaseError", code: 0, userInfo: [NSLocalizedDescriptionKey: localizedDescription])
@@ -33,6 +35,8 @@ enum FirebaseError: Error {
             return "Encoding error."
         case .serverError:
             return "Server Error"
+        default:
+            return ""
         }
     }
 }

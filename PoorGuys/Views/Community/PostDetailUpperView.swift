@@ -10,12 +10,14 @@ import SwiftUI
 struct PostDetailUpperView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @State private var showingSheet = false
-    @State private var showingAlert = false
-    @State private var isModalPresented = false
     
     @State var post: Post
     @State var isLiked = false
+    
+    @State private var showingSheet = false
+    @State private var showingAlert = false
+    @State private var isModalPresented = false
+    @State private var alertMessage: PostDetailUpperViewAlertMessage = .alreadyReportedPost
     
 //    🚨todo: 없애기
     let user = User(uid: "nklasdkfqwe", nickName: "mollu", authenticationMethod: .apple)
@@ -77,9 +79,18 @@ struct PostDetailUpperView: View {
                             
                         } else {
                             Button {
-                                print("신고하기")
+                                Task {
+                                    FirebasePostManager(user: user).reportPost(id: post.id,userID: post.userID,nickName: post.nickName, title: post.title, body: post.body) { result in
+                                        switch result {
+                                        case .success:
+                                            print("성공")
+                                        case .failure(let error):
+                                            print(error)    //🚨todo: 얼럿띄우기
+                                        }
+                                    }
+                                }
                             } label: {
-                                Text("신고하기")
+                                Text("닉네임 신고하기")
                             }
                         }
                     }
@@ -146,6 +157,7 @@ struct PostDetailUpperView: View {
                                 }
                             }
                         } else {
+                            alertMessage = .cantLikeMyPost
                             showingAlert = true
                         }
                         
@@ -164,7 +176,7 @@ struct PostDetailUpperView: View {
                         }
                     }
                     .alert(isPresented: $showingAlert) {
-                        Alert(title: Text(""), message: Text("자신의 글에는 적선할 수 없습니다."), dismissButton: .default(Text("확인")))
+                        Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
                     }
                     
                     Spacer()
@@ -184,7 +196,20 @@ struct PostDetailUpperView: View {
                     Spacer()
                     
                     Button {
-                        print("신고")
+                        Task {
+                            FirebasePostManager(user: user).reportPost(id: post.id,userID: post.userID,nickName: post.nickName, title: post.title, body: post.body) { result in
+                                switch result {
+                                case .success:
+                                    alertMessage = .reportSucceeded
+                                    showingAlert = true
+                                case .failure(let error):
+                                    if error == .alreadyReported {
+                                        alertMessage = .alreadyReportedPost
+                                        showingAlert = true
+                                    }
+                                }
+                            }
+                        }
                     } label: {
                         HStack {
                             Image("siren")
@@ -193,6 +218,9 @@ struct PostDetailUpperView: View {
                                 .font(.system(size: 11))
                                 .lineLimit(1)
                         }
+                    }
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
                     }
                 }
                 .foregroundColor(.appColor(.neutral600))
@@ -209,4 +237,10 @@ struct PostDetailUpperView_Previews: PreviewProvider {
     static var previews: some View {
         PostDetailUpperView(post: Post.dummy())
     }
+}
+
+enum PostDetailUpperViewAlertMessage: String {
+    case cantLikeMyPost = "자신의 글에는 적선할 수 없습니다."
+    case alreadyReportedPost = "이미 신고한 게시글/유저 입니다."
+    case reportSucceeded = "신고가 완료되었습니다."
 }
