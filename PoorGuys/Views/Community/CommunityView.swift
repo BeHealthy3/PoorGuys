@@ -15,6 +15,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     @State private var isModalPresented = false
     @State private var isDetailViewActive = false
     @State private var needsRefresh = false
+    @State private var detailViewNeedsRefresh = false
     @State private var nowLookingPostID = ""
     
     init(viewModel: ViewModel) {
@@ -61,7 +62,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                                     .shadow(color: post.isAboutMoney && !post.isWeirdPost ?
                                             Color.appColor(.primary500).opacity(0.1) : Color.black.opacity(0.1), radius: 7, x: 0, y: 0)
                             } else {
-                                NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID), label: {
+                                NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh), label: {
                                     PostView(post: post)
                                 })
                                 .task { await fetchPostsTask(post: post) }
@@ -87,18 +88,21 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
 //                    }
                         await fetch10Posts()
                         isViewDidLoad = true
-                    } else {
-                        if needsRefresh {
-                            await refresh()
-                            needsRefresh = false
-                        }
-                    }                    
+                    }
+                }
+            }
+            .onChange(of: needsRefresh) { needsRefresh in
+                Task {
+                    if needsRefresh {
+                        await refresh()
+                        self.needsRefresh = false
+                    }
                 }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .fullScreenCover(isPresented: $isModalPresented) {
-            PostFillingView(postID: $nowLookingPostID, isPresented: $isModalPresented, needsRefresh: $needsRefresh)
+            PostFillingView(postID: $nowLookingPostID, isPresented: $isModalPresented, communityViewNeedsRefresh: $needsRefresh, detailViewNeedsRefresh: $detailViewNeedsRefresh)
         }
     }
     

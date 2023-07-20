@@ -18,15 +18,16 @@ struct PostDetailView: View {
     @State private var replyingNickname: String? = nil
     @State private var isCommentLikeButtonEnabled = true
     @State private var newlyAddedComment: Comment?
-    @State private var needsRefresh = true
     
     @Binding private var nowLookingPostID: ID
     @Binding private var isModalPresented: Bool
+    @Binding private var needsUpperViewRefresh:Bool
     
-    init(postID: String, isModalPresented: Binding<Bool>, nowLookingPostID: Binding<ID>) {
+    init(postID: String, isModalPresented: Binding<Bool>, nowLookingPostID: Binding<ID>, needsUpperViewRefresh: Binding<Bool>) {
         self.postID = postID
         _isModalPresented = isModalPresented
         _nowLookingPostID = nowLookingPostID
+        _needsUpperViewRefresh = needsUpperViewRefresh
         
         let appearance = UINavigationBarAppearance()
         appearance.shadowColor = .clear
@@ -41,7 +42,7 @@ struct PostDetailView: View {
                 if let post = post {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack {
-                            PostDetailUpperView(post: post, needsRefresh: $needsRefresh, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID)
+                            PostDetailUpperView(post: post, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $needsUpperViewRefresh)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
                                         .strokeShadow(
@@ -114,10 +115,7 @@ struct PostDetailView: View {
                 Task {
                     post = try await FirebasePostManager().fetchPost(postID: postID)
                     comments = post?.comments ?? []
-//                    needsRefresh = false
-                    print(nowLookingPostID, "📱")
                     nowLookingPostID = postID
-                    print(nowLookingPostID,"📱📱")
                 }
             }
             .onChange(of: comments) { _ in
@@ -165,12 +163,6 @@ struct PostDetailView: View {
         withAnimation {
             proxy.scrollTo(index, anchor: .bottom)
         }
-    }
-}
-
-struct PostDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        PostDetailView(postID: "", isModalPresented: .constant(false), nowLookingPostID: .constant(""))
     }
 }
 

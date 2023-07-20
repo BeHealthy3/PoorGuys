@@ -14,7 +14,8 @@ struct PostFillingView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @Binding var isPresented: Bool
-    @Binding var needsRefresh: Bool
+    @Binding var communityViewNeedsRefresh: Bool
+    @Binding var detailViewNeedsRefresh: Bool
     
     @FocusState private var isTextEditorFocused: Bool
     @State private var isAboutMoney: Bool = false
@@ -43,14 +44,13 @@ struct PostFillingView: View {
                             Task {
                                 do {
                                     if !postID.isEmpty {
-                                        print("😂")
                                         try await updatePost()
+                                        detailViewNeedsRefresh = true
                                     } else {
-                                        print("😂😂")
                                         try await uploadPost()
+                                        communityViewNeedsRefresh = true
                                     }
                                     
-                                    needsRefresh = true
                                     presentationMode.wrappedValue.dismiss()
                                     
                                 } catch {
@@ -120,14 +120,14 @@ struct PostFillingView: View {
                 do {
                     print(postID, postID.isEmpty,"❤️")
                     if !postID.isEmpty {
-                        print("🍓")
+                        
                         let post = try await FirebasePostManager().fetchPost(postID: postID)
-                        print("🍓🍓")
+                        
                         title = post.title
                         content = post.body
                         imageURL = post.imageURL
                         
-//                        default 이미지 디자인 받아서 나중에 올려줘야할 듯.
+//                        🚨todo: default 이미지 디자인 받아서 나중에 올려줘야할 듯.
                         if let imageURL = imageURL?.first {
                             let url = URL(string: imageURL)!
                             selectedImage = try await ImageDownloadManager().downloadImageAndSaveAsUIImage(url: url)
@@ -152,13 +152,6 @@ struct PostFillingView: View {
 //        타이틀, 본문, 돈얘기여부 제외하고는 업데이트를하지 않아서 아무값이나 넣어줘도 됨
         let post = Post(id: postID, userID: "", nickName: "", profileImageURL: nil, isAboutMoney: isAboutMoney, title: title, body: content, timeStamp: Date(), likedUserIDs: [], isWeirdPost: false, imageURL: [], comments: [])
         try await FirebasePostManager().updatePost(post, with: selectedImage)
-    }
-}
-
-struct PostFillingView_Previews: PreviewProvider {
-    static var previews: some View {
-    
-        PostFillingView(postID: .constant(""), isPresented: .constant(true), needsRefresh: .constant(false))
     }
 }
 

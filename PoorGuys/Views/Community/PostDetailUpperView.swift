@@ -12,14 +12,14 @@ struct PostDetailUpperView: View {
     @State var post: Post
     
     @Environment(\.presentationMode) var presentationMode
-    @Binding var needsRefresh: Bool
     @Binding var isModalPresented: Bool
+    @Binding var nowLookingPostID: ID
+    @Binding var needsUpperViewRefresh: Bool
     
     @State private var isLiked = false
     @State private var showingSheet = false
     @State private var showingAlert = false
     @State private var alertMessage: PostDetailUpperViewAlertMessage = .alreadyReportedPost
-    @Binding var nowLookingPostID: ID
     
     //    🚨todo: user 없애기
     let user = User.currentUser!
@@ -72,10 +72,6 @@ struct PostDetailUpperView: View {
                                 Text("삭제하기")
                             }
                             Button {
-                                print(nowLookingPostID, "😚")
-                                print(post.id,"😅")
-                                nowLookingPostID = post.id
-                                print(nowLookingPostID, "😚😚")
                                 isModalPresented = true
                             } label: {
                                 Text("수정하기")
@@ -131,7 +127,6 @@ struct PostDetailUpperView: View {
                                         case .success(let isSuccess):
                                             DispatchQueue.main.async {
                                                 if isSuccess {
-                                                    print("🚨")
                                                     isLiked.toggle()
                                                 }
                                             }
@@ -218,12 +213,24 @@ struct PostDetailUpperView: View {
             }
         }
         .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
+        .onChange(of: needsUpperViewRefresh) { needsRefresh in
+            Task {
+                if needsRefresh {
+                    do {
+                        post = try await FirebasePostManager().fetchPost(postID: post.id)
+                        needsUpperViewRefresh = false
+                    } catch {
+                        print("실패") //🚨todo: 에러처리
+                    }
+                }
+            }
+        }
     }
 }
 
 struct PostDetailUpperView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailUpperView(post: Post.dummy(), needsRefresh: .constant(false), isModalPresented: .constant(false), nowLookingPostID: .constant(""))
+        PostDetailUpperView(post: Post.dummy(), isModalPresented: .constant(false), nowLookingPostID: .constant(""), needsUpperViewRefresh: .constant(false))
     }
 }
 
