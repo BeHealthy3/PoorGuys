@@ -15,6 +15,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     @State private var isModalPresented = false
     @State private var isDetailViewActive = false
     @State private var needsRefresh = false
+    @State private var nowLookingPostID = ""
     
     init(viewModel: ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -29,14 +30,12 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                     Spacer()
                     
                     Button {
+                        nowLookingPostID = ""
                         isModalPresented = true
                     } label: {
                         Image("edit")
                             .imageScale(.large)
                             .foregroundColor(.accentColor)
-                    }
-                    .fullScreenCover(isPresented: $isModalPresented) {
-                        PostFillingView(isPresented: $isModalPresented, needsRefresh: $needsRefresh, postID: .constant(""))
                     }
                     
                     Button(action: {
@@ -62,7 +61,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                                     .shadow(color: post.isAboutMoney && !post.isWeirdPost ?
                                             Color.appColor(.primary500).opacity(0.1) : Color.black.opacity(0.1), radius: 7, x: 0, y: 0)
                             } else {
-                                NavigationLink(destination: PostDetailView(postID: post.id), label: {
+                                NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID), label: {
                                     PostView(post: post)
                                 })
                                 .task { await fetchPostsTask(post: post) }
@@ -98,6 +97,9 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .fullScreenCover(isPresented: $isModalPresented) {
+            PostFillingView(postID: $nowLookingPostID, isPresented: $isModalPresented, needsRefresh: $needsRefresh)
+        }
     }
     
     private func fetchPostsTask(post: Post) async {

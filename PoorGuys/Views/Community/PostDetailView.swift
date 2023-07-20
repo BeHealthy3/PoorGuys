@@ -18,9 +18,15 @@ struct PostDetailView: View {
     @State private var replyingNickname: String? = nil
     @State private var isCommentLikeButtonEnabled = true
     @State private var newlyAddedComment: Comment?
+    @State private var needsRefresh = true
     
-    init(postID: String) {
+    @Binding private var nowLookingPostID: ID
+    @Binding private var isModalPresented: Bool
+    
+    init(postID: String, isModalPresented: Binding<Bool>, nowLookingPostID: Binding<ID>) {
         self.postID = postID
+        _isModalPresented = isModalPresented
+        _nowLookingPostID = nowLookingPostID
         
         let appearance = UINavigationBarAppearance()
         appearance.shadowColor = .clear
@@ -35,7 +41,7 @@ struct PostDetailView: View {
                 if let post = post {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack {
-                            PostDetailUpperView(post: post)
+                            PostDetailUpperView(post: post, needsRefresh: $needsRefresh, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
                                         .strokeShadow(
@@ -108,6 +114,10 @@ struct PostDetailView: View {
                 Task {
                     post = try await FirebasePostManager().fetchPost(postID: postID)
                     comments = post?.comments ?? []
+//                    needsRefresh = false
+                    print(nowLookingPostID, "📱")
+                    nowLookingPostID = postID
+                    print(nowLookingPostID,"📱📱")
                 }
             }
             .onChange(of: comments) { _ in
@@ -160,7 +170,7 @@ struct PostDetailView: View {
 
 struct PostDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailView(postID: "")
+        PostDetailView(postID: "", isModalPresented: .constant(false), nowLookingPostID: .constant(""))
     }
 }
 

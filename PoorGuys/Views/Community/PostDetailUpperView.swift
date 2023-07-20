@@ -9,18 +9,20 @@ import SwiftUI
 
 struct PostDetailUpperView: View {
     
-    @Environment(\.presentationMode) var presentationMode
-    
     @State var post: Post
-    @State var isLiked = false
     
+    @Environment(\.presentationMode) var presentationMode
+    @Binding var needsRefresh: Bool
+    @Binding var isModalPresented: Bool
+    
+    @State private var isLiked = false
     @State private var showingSheet = false
     @State private var showingAlert = false
-    @State private var isModalPresented = false
     @State private var alertMessage: PostDetailUpperViewAlertMessage = .alreadyReportedPost
+    @Binding var nowLookingPostID: ID
     
     //    🚨todo: user 없애기
-    let user = User(uid: "nklasdkfqwe", nickName: "mollu", authenticationMethod: .apple)
+    let user = User.currentUser!
     
     var body: some View {
         VStack(spacing: 16) {
@@ -30,6 +32,7 @@ struct PostDetailUpperView: View {
                     case .success(let image):
                         image
                             .frame(width: 40, height: 40)
+                            .clipShape(Circle())
                             .clipShape(Circle())
                     @unknown default:
                         Color.appColor(.neutral100)
@@ -69,12 +72,13 @@ struct PostDetailUpperView: View {
                                 Text("삭제하기")
                             }
                             Button {
+                                print(nowLookingPostID, "😚")
+                                print(post.id,"😅")
+                                nowLookingPostID = post.id
+                                print(nowLookingPostID, "😚😚")
                                 isModalPresented = true
                             } label: {
                                 Text("수정하기")
-                            }
-                            .fullScreenCover(isPresented: $isModalPresented) {
-                                PostFillingView(isPresented: $isModalPresented, needsRefresh: .constant(false), postID: .constant(post.id))
                             }
                         }
                 }
@@ -219,7 +223,7 @@ struct PostDetailUpperView: View {
 
 struct PostDetailUpperView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailUpperView(post: Post.dummy())
+        PostDetailUpperView(post: Post.dummy(), needsRefresh: .constant(false), isModalPresented: .constant(false), nowLookingPostID: .constant(""))
     }
 }
 

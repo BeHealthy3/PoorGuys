@@ -26,7 +26,7 @@ struct CommentView: View {
     @State private var cancellable: AnyCancellable?
     
     //    🚨todo: 정상적인 user로 바꿔주기
-    private let user = User(uid: "dfkdkeltkqn2", nickName: "ewqfg", authenticationMethod: .apple)
+    private let user = User.currentUser!
     
     init(post: Binding<Post?>, comments: Binding<[Comment]>, comment: Comment, replyingCommentID: Binding<String?>, replyingNickName: Binding<String?>, isLikeButtonEnabled: Binding<Bool>) {
         self._comment = State(initialValue: comment)

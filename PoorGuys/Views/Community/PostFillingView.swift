@@ -9,20 +9,22 @@ import SwiftUI
 
 struct PostFillingView: View {
 
+    @Binding var postID: ID
+    
     @Environment(\.presentationMode) var presentationMode
     
     @Binding var isPresented: Bool
     @Binding var needsRefresh: Bool
     
-    @Binding var postID: String?
-    
+    @FocusState private var isTextEditorFocused: Bool
     @State private var isAboutMoney: Bool = false
     @State private var title: String = ""
     @State private var content: String = ""
     @State private var imageURL: [String]?
     @State private var selectedImage: UIImage?
-    @FocusState private var isTextEditorFocused: Bool
     @State private var editorHeight: CGFloat = 300
+    @State private var showAlert = false
+    @State private var alertMessage: PostFillingViewAlertMessage = .fillContents
     
     var body: some View {
         ScrollView(.vertical) {
@@ -37,21 +39,29 @@ struct PostFillingView: View {
 
                     Spacer()
                     Button(action: {
-                        Task {
-                            do {
-                                if let postID = postID, !postID.isEmpty {
-                                    try await updatePost()
-                                } else {
-                                    try await uploadPost()
+                        if !title.isEmpty && !content.isEmpty {
+                            Task {
+                                do {
+                                    if !postID.isEmpty {
+                                        print("😂")
+                                        try await updatePost()
+                                    } else {
+                                        print("😂😂")
+                                        try await uploadPost()
+                                    }
+                                    
+                                    needsRefresh = true
+                                    presentationMode.wrappedValue.dismiss()
+                                    
+                                } catch {
+                                    alertMessage = .uploadFailed
+                                    showAlert = true
                                 }
-                                needsRefresh = true
-                            } catch {
-                                print("등록 또는 수정 실패")
                             }
+                        } else {
+                            alertMessage = .fillContents
+                            showAlert = true
                         }
-                        
-                        presentationMode.wrappedValue.dismiss()
-                        
                     }) {
                         Text("등록")
                             .foregroundColor(.white)
@@ -60,6 +70,9 @@ struct PostFillingView: View {
                             .padding(.vertical, 4)
                             .background(Color.appColor(.primary500))
                             .cornerRadius(12)
+                    }
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
                     }
                 }
                 
@@ -105,17 +118,20 @@ struct PostFillingView: View {
         .onAppear {
             Task {
                 do {
-                    if let postID = postID, !postID.isEmpty {
-                        let post = try await MockPostManager.shared.fetchPost(postID: postID)
-                        
+                    print(postID, postID.isEmpty,"❤️")
+                    if !postID.isEmpty {
+                        print("🍓")
+                        let post = try await FirebasePostManager().fetchPost(postID: postID)
+                        print("🍓🍓")
                         title = post.title
                         content = post.body
                         imageURL = post.imageURL
                         
 //                        default 이미지 디자인 받아서 나중에 올려줘야할 듯.
-                        let url = URL(string: imageURL?.first ?? "")!
-                        
-                        selectedImage = try await ImageDownloadManager().downloadImageAndSaveAsUIImage(url: url)
+                        if let imageURL = imageURL?.first {
+                            let url = URL(string: imageURL)!
+                            selectedImage = try await ImageDownloadManager().downloadImageAndSaveAsUIImage(url: url)
+                        }
                     }
                 } catch {
                     print("포스트 불러오기 실패")
@@ -126,7 +142,7 @@ struct PostFillingView: View {
     
     private func uploadPost() async throws {
 //        guard let user = User.currentUser else { throw FirebaseError.userNotFound}
-        let user = User(uid: "nklasdkfqwe", nickName: "yo", authenticationMethod: .apple)
+        let user = User.currentUser!    //🚨todo: user바꾸기
         let post = Post(id: "", userID: user.uid, nickName: user.nickName, profileImageURL: user.profileImageURL, isAboutMoney: isAboutMoney, title: title, body: content, timeStamp: Date(), likedUserIDs: [], isWeirdPost: false, imageURL: [], comments: [])
         
         try await FirebasePostManager().uploadNewPost(post, with: selectedImage)
@@ -134,7 +150,7 @@ struct PostFillingView: View {
     
     private func updatePost() async throws {
 //        타이틀, 본문, 돈얘기여부 제외하고는 업데이트를하지 않아서 아무값이나 넣어줘도 됨
-        let post = Post(id: postID!, userID: "", nickName: "", profileImageURL: nil, isAboutMoney: isAboutMoney, title: title, body: content, timeStamp: Date(), likedUserIDs: [], isWeirdPost: false, imageURL: [], comments: [])
+        let post = Post(id: postID, userID: "", nickName: "", profileImageURL: nil, isAboutMoney: isAboutMoney, title: title, body: content, timeStamp: Date(), likedUserIDs: [], isWeirdPost: false, imageURL: [], comments: [])
         try await FirebasePostManager().updatePost(post, with: selectedImage)
     }
 }
@@ -142,7 +158,7 @@ struct PostFillingView: View {
 struct PostFillingView_Previews: PreviewProvider {
     static var previews: some View {
     
-        PostFillingView(isPresented: .constant(true), needsRefresh: .constant(false), postID: .constant(""))
+        PostFillingView(postID: .constant(""), isPresented: .constant(true), needsRefresh: .constant(false))
     }
 }
 
@@ -152,4 +168,9 @@ struct FittingFontSizeModifier: ViewModifier {
       .font(.system(size: 12))
       .minimumScaleFactor(0.001)
   }
+}
+
+enum PostFillingViewAlertMessage: String {
+    case uploadFailed = "게시글 업로드에 실패했습니다.\n 다시 시도해주세요."
+    case fillContents = "제목과 내용을 작성해 주세요"
 }
