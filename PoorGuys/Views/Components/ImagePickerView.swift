@@ -5,7 +5,7 @@
 //  Created by 신동훈 on 2023/06/03.
 //
 
-import SwiftUㅑ
+import SwiftUI
 
 struct ImagePickerView: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode

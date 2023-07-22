@@ -55,17 +55,17 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                             
                             if post.isWeirdPost {
                                 PostView(post: post)
-                                    .task { await fetchPostsTask(post: post) }
+                                    .task { await fetch10PostsIfThisPostsIsLastThird(post: post) }
                                     .padding(5)
                                     .background(Color.white)
                                     .cornerRadius(12)
                                     .shadow(color: post.isAboutMoney && !post.isWeirdPost ?
                                             Color.appColor(.primary500).opacity(0.1) : Color.black.opacity(0.1), radius: 7, x: 0, y: 0)
                             } else {
-                                NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh), label: {
+                                NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh, communityViewNeedsRefresh: $needsRefresh), label: {
                                     PostView(post: post)
                                 })
-                                .task { await fetchPostsTask(post: post) }
+                                .task { await fetch10PostsIfThisPostsIsLastThird(post: post) }
                                 .padding(5)
                                 .background(Color.white)
                                 .cornerRadius(12)
@@ -106,7 +106,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
         }
     }
     
-    private func fetchPostsTask(post: Post) async {
+    private func fetch10PostsIfThisPostsIsLastThird(post: Post) async {
         if viewModel.thisIsTheThirdLast(post) {
             await fetch10Posts()
         }

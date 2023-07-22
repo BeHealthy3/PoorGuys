@@ -22,12 +22,14 @@ struct PostDetailView: View {
     @Binding private var nowLookingPostID: ID
     @Binding private var isModalPresented: Bool
     @Binding private var needsUpperViewRefresh:Bool
+    @Binding private var communityViewNeedsRefresh: Bool
     
-    init(postID: String, isModalPresented: Binding<Bool>, nowLookingPostID: Binding<ID>, needsUpperViewRefresh: Binding<Bool>) {
+    init(postID: String, isModalPresented: Binding<Bool>, nowLookingPostID: Binding<ID>, needsUpperViewRefresh: Binding<Bool>, communityViewNeedsRefresh: Binding<Bool>) {
         self.postID = postID
         _isModalPresented = isModalPresented
         _nowLookingPostID = nowLookingPostID
         _needsUpperViewRefresh = needsUpperViewRefresh
+        _communityViewNeedsRefresh = communityViewNeedsRefresh
         
         let appearance = UINavigationBarAppearance()
         appearance.shadowColor = .clear
@@ -42,7 +44,7 @@ struct PostDetailView: View {
                 if let post = post {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack {
-                            PostDetailUpperView(post: post, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $needsUpperViewRefresh)
+                            PostDetailUpperView(post: post, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, upperViewNeedsRefresh: $needsUpperViewRefresh, communityViewNeedsRefresh: $communityViewNeedsRefresh)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
                                         .strokeShadow(
