@@ -50,6 +50,8 @@ struct PostView: View {
                                     .foregroundColor(.appColor(.neutral800))
                             }
                             
+                            Spacer()
+                            
                             if let strImageURL = post.imageURL.first, strImageURL != "", let imageURL = URL(string: strImageURL) {
                                 
                                 AsyncImage(url: imageURL) { image in

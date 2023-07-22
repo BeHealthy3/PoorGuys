@@ -60,7 +60,7 @@ struct PostDetailUpperView: View {
                                     do {
                                         try await FirebasePostManager().removePost(postID: post.id)
                                     } catch {
-                                        print("삭제 실패")
+                                        print("삭제 실패")  //todo: 얼럿 띄우기
                                     }
                                     
                                     DispatchQueue.main.async {

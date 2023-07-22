@@ -5,7 +5,7 @@
 //  Created by 신동훈 on 2023/06/03.
 //
 
-import SwiftUI
+import SwiftUㅑ
 
 struct ImagePickerView: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
@@ -22,7 +22,8 @@ struct ImagePickerView: UIViewControllerRepresentable {
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let selectedImage = info[.originalImage] as? UIImage {
-                self.selectedImage = selectedImage
+                // 이미지를 1:1 비율로 자립니다.
+                self.selectedImage = selectedImage.croppedToSquare()
             }
             
             presentationMode.dismiss()
