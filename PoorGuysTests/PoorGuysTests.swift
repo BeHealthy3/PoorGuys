@@ -1,5 +1,5 @@
 //
-//  PoorGuysTests.swift
+//  PoorGuysPostTests.swift
 //  PoorGuysTests
 //
 //  Created by 권승용 on 2023/05/16.

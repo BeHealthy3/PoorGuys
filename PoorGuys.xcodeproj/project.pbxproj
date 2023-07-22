@@ -44,7 +44,9 @@
 		60A8E09B2A39D0E00026DA04 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E09A2A39D0E00026DA04 /* CustomTabBarView.swift */; };
 		60A8E09D2A39DA5E0026DA04 /* CustomTabBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E09C2A39DA5E0026DA04 /* CustomTabBarContainerView.swift */; };
 		60A8E09F2A3AABAF0026DA04 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A8E09E2A3AABAF0026DA04 /* TabBarView.swift */; };
+		D3013C202A6B03EF005E4A8A /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3013C1F2A6B03EF005E4A8A /* UIImage+Extensions.swift */; };
 		D32363BD2A2C73D200857135 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D32363BC2A2C73D200857135 /* Kingfisher */; };
+		D32770222A50369A002C34C6 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32770212A50369A002C34C6 /* Typealias.swift */; };
 		D35939BD2A41F41F007263E8 /* ImageDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BC2A41F41F007263E8 /* ImageDownloadManager.swift */; };
 		D35939BF2A41F42B007263E8 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BE2A41F42B007263E8 /* DateFormatter.swift */; };
 		D35939C12A41F436007263E8 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939C02A41F436007263E8 /* Notification.swift */; };
@@ -74,6 +76,7 @@
 		D35939F92A42056D007263E8 /* PostDetailUpperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939EF2A42056D007263E8 /* PostDetailUpperView.swift */; };
 		D35939FB2A420C66007263E8 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939FA2A420C66007263E8 /* CommunityViewModel.swift */; };
 		D37956C02A41A16C00E7724F /* SecretConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37956BF2A41A16C00E7724F /* SecretConstants.swift */; };
+		D38714B82A6284C0002DFA84 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38714B72A6284C0002DFA84 /* UINavigationController+Extensions.swift */; };
 		D39A57AB2A41A67C0033DAD5 /* PoorGuysApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39A57A92A41A67C0033DAD5 /* PoorGuysApp.swift */; };
 		D39A57AC2A41A67C0033DAD5 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39A57AA2A41A67C0033DAD5 /* MainView.swift */; };
 		D39A57AE2A41A6920033DAD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39A57AD2A41A6920033DAD5 /* Assets.xcassets */; };
@@ -123,6 +126,8 @@
 		60A8E09A2A39D0E00026DA04 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
 		60A8E09C2A39DA5E0026DA04 /* CustomTabBarContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarContainerView.swift; sourceTree = "<group>"; };
 		60A8E09E2A3AABAF0026DA04 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		D3013C1F2A6B03EF005E4A8A /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
+		D32770212A50369A002C34C6 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D35939BC2A41F41F007263E8 /* ImageDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadManager.swift; sourceTree = "<group>"; };
 		D35939BE2A41F42B007263E8 /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		D35939C02A41F436007263E8 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
@@ -152,6 +157,7 @@
 		D35939EF2A42056D007263E8 /* PostDetailUpperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailUpperView.swift; sourceTree = "<group>"; };
 		D35939FA2A420C66007263E8 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
 		D37956BF2A41A16C00E7724F /* SecretConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretConstants.swift; sourceTree = "<group>"; };
+		D38714B72A6284C0002DFA84 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
 		D39A57A92A41A67C0033DAD5 /* PoorGuysApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PoorGuysApp.swift; sourceTree = "<group>"; };
 		D39A57AA2A41A67C0033DAD5 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D39A57AD2A41A6920033DAD5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -227,6 +233,7 @@
 		6001EFE52A1390DD00A9A2EF /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				D35939FA2A420C66007263E8 /* CommunityViewModel.swift */,
 				6001EFEB2A13911100A9A2EF /* Login */,
 			);
 			path = ViewModels;
@@ -236,7 +243,6 @@
 			isa = PBXGroup;
 			children = (
 				6001EFE72A13910B00A9A2EF /* LoginViewModel.swift */,
-				D35939FA2A420C66007263E8 /* CommunityViewModel.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -249,6 +255,8 @@
 				D35939D22A41F49A007263E8 /* String+Extensions.swift */,
 				D35939CB2A41F44C007263E8 /* UIDevice+Extensions.swift */,
 				D35939CA2A41F44C007263E8 /* View+Extensions.swift */,
+				D38714B72A6284C0002DFA84 /* UINavigationController+Extensions.swift */,
+				D3013C1F2A6B03EF005E4A8A /* UIImage+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -310,6 +318,7 @@
 				D35939DE2A41F62B007263E8 /* Post.swift */,
 				D35939DC2A41F62B007263E8 /* Reply.swift */,
 				606782F52A14D50F00BF1E12 /* UserModel.swift */,
+				D32770212A50369A002C34C6 /* Typealias.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -628,11 +637,13 @@
 				D35939F42A42056D007263E8 /* PostDetailLowerView.swift in Sources */,
 				D35939CF2A41F44C007263E8 /* View+Extensions.swift in Sources */,
 				D39A57AB2A41A67C0033DAD5 /* PoorGuysApp.swift in Sources */,
+				D32770222A50369A002C34C6 /* Typealias.swift in Sources */,
 				D35939CE2A41F44C007263E8 /* Debounce+View+Extension.swift in Sources */,
 				D35939F12A42056D007263E8 /* CommentView.swift in Sources */,
 				D35939E52A420561007263E8 /* ImagePickerView.swift in Sources */,
 				D35939F02A42056D007263E8 /* PostFillingCenterView.swift in Sources */,
 				D37956C02A41A16C00E7724F /* SecretConstants.swift in Sources */,
+				D3013C202A6B03EF005E4A8A /* UIImage+Extensions.swift in Sources */,
 				6074FE342A27AC090020FBF2 /* PhotoPicker.swift in Sources */,
 				D35939E42A420561007263E8 /* BackButton.swift in Sources */,
 				D35939CD2A41F44C007263E8 /* Shape+Extensions.swift in Sources */,
@@ -654,6 +665,7 @@
 				6001EFD72A13668B00A9A2EF /* SetNickNameView.swift in Sources */,
 				D35939DF2A41F62B007263E8 /* Reply.swift in Sources */,
 				60558D062A14BA2C007581AD /* MyPageView.swift in Sources */,
+				D38714B82A6284C0002DFA84 /* UINavigationController+Extensions.swift in Sources */,
 				60A8E09F2A3AABAF0026DA04 /* TabBarView.swift in Sources */,
 				D35939F82A42056D007263E8 /* TextEditorView.swift in Sources */,
 				D35939D52A41F4AE007263E8 /* AppColor.swift in Sources */,
@@ -833,7 +845,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PoorGuys/Preview Content\"";
-				DEVELOPMENT_TEAM = MV89SHQKF4;
+				DEVELOPMENT_TEAM = 887U9L3L57;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PoorGuys/Info.plist;
@@ -869,7 +881,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PoorGuys/Preview Content\"";
-				DEVELOPMENT_TEAM = MV89SHQKF4;
+				DEVELOPMENT_TEAM = 887U9L3L57;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PoorGuys/Info.plist;

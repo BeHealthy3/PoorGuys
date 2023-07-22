@@ -9,4 +9,5 @@ import Foundation
 
 extension Notification.Name {
     static let replyTapped = Notification.Name(rawValue: "replyTapped")
+    static let refreshDetailView = Notification.Name(rawValue: "refreshDetailView")
 }

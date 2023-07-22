@@ -13,6 +13,10 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     @StateObject private var viewModel: ViewModel
     @State private var isViewDidLoad: Bool = false
     @State private var isModalPresented = false
+    @State private var isDetailViewActive = false
+    @State private var needsRefresh = false
+    @State private var detailViewNeedsRefresh = false
+    @State private var nowLookingPostID = ""
     
     init(viewModel: ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -27,14 +31,12 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                     Spacer()
                     
                     Button {
+                        nowLookingPostID = ""
                         isModalPresented = true
                     } label: {
                         Image("edit")
                             .imageScale(.large)
                             .foregroundColor(.accentColor)
-                    }
-                    .fullScreenCover(isPresented: $isModalPresented) {
-                        PostFillingView(postID: .constant(""), isPresented: $isModalPresented)
                     }
                     
                     Button(action: {
@@ -53,17 +55,17 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                             
                             if post.isWeirdPost {
                                 PostView(post: post)
-                                    .task { await fetchPostsTask(post: post) }
+                                    .task { await fetch10PostsIfThisPostsIsLastThird(post: post) }
                                     .padding(5)
                                     .background(Color.white)
                                     .cornerRadius(12)
                                     .shadow(color: post.isAboutMoney && !post.isWeirdPost ?
                                             Color.appColor(.primary500).opacity(0.1) : Color.black.opacity(0.1), radius: 7, x: 0, y: 0)
                             } else {
-                                NavigationLink(destination: PostDetailView(postID: post.id), label: {
+                                NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh, communityViewNeedsRefresh: $needsRefresh), label: {
                                     PostView(post: post)
                                 })
-                                .task { await fetchPostsTask(post: post) }
+                                .task { await fetch10PostsIfThisPostsIsLastThird(post: post) }
                                 .padding(5)
                                 .background(Color.white)
                                 .cornerRadius(12)
@@ -74,21 +76,52 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                     }
                     .padding(EdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16))
                 }
+                .refreshable {
+                    await refresh()
+                }
             }
             .onAppear {
-                if !isViewDidLoad {
-                    Task {
-                        await viewModel.fetch10Posts()
+                Task {
+                    if !isViewDidLoad {
+//                    for _ in (1...3) {
+//                        try await FirebasePostManager().uploadNewPost(Post.dummy(), with: nil)
+//                    }
+                        await fetch10Posts()
                         isViewDidLoad = true
                     }
                 }
             }
+            .onChange(of: needsRefresh) { needsRefresh in
+                Task {
+                    if needsRefresh {
+                        await refresh()
+                        self.needsRefresh = false
+                    }
+                }
+            }
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .fullScreenCover(isPresented: $isModalPresented) {
+            PostFillingView(postID: $nowLookingPostID, isPresented: $isModalPresented, communityViewNeedsRefresh: $needsRefresh, detailViewNeedsRefresh: $detailViewNeedsRefresh)
         }
     }
     
-    func fetchPostsTask(post: Post) async {
+    private func fetch10PostsIfThisPostsIsLastThird(post: Post) async {
         if viewModel.thisIsTheThirdLast(post) {
-            await viewModel.fetch10Posts()
+            await fetch10Posts()
+        }
+    }
+    
+    private func refresh() async {
+        viewModel.removePosts()
+        await fetch10Posts()
+    }
+    
+    private func fetch10Posts() async {
+        do {
+            try await viewModel.fetch10Posts()
+        } catch {
+            print("포스팅 패치 실패")
         }
     }
 }
