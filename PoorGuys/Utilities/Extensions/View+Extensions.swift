@@ -17,4 +17,11 @@ extension View {
         }
     }
     
+    func onlyIf(_ condition: Bool) -> Self? {
+        if condition {
+            return self
+        } else {
+            return nil
+        }
+    }
 }

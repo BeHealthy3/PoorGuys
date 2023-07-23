@@ -13,7 +13,7 @@ struct TabBarView: View {
     
     var body: some View {
         CustomTabBarContainerView(selection: $tabSelection) {
-            Text("커뮤니티 탭")
+            CommunityView(viewModel: CommunityViewModel())
                 .tabBarItem(tab: .community, selection: $tabSelection)
             
             Text("아낌내역 탭")

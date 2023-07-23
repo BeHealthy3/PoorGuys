@@ -22,7 +22,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let selectedImage = info[.originalImage] as? UIImage {
-                // 이미지를 1:1 비율로 자립니다.
+                // 이미지를 1:1 비율로 크롭
                 self.selectedImage = selectedImage.croppedToSquare()
             }
             
