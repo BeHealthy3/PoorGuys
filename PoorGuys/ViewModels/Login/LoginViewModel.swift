@@ -20,6 +20,7 @@ enum SignInState {
 enum LoginError: Error {
     case noCurrentUser
     case noNickName
+    case noProfileImageURL
     case authResultNil
 }
 
@@ -127,7 +128,7 @@ final class LoginViewModel: ObservableObject {
                 // MARK: - 유저 firestore 추가
                 db.collection("users").document(uid).setData([
                     "nickName" : "",
-                    "profileImageURL" : "" // TODO : 기본 프로필 이미지 URL 넣기
+                    "profileImageURL" : "gs://poorguys-ad187.appspot.com/profile_images/default_profile_image"
                 ]) { error in
                     if let error = error {
                         /* TODO : 유저 등록 중 오류가 났을 때 앱에서 어떤 동작을 취해주어야 할까? */
@@ -207,7 +208,15 @@ final class LoginViewModel: ObservableObject {
                     
                     if let _profileImageURL = document.get("profileImageURL") as? String {
                         profileImageURL = _profileImageURL
-                        URLSession.shared.dataTask(with: URL(string: profileImageURL!)!) { data, response, error in
+                        guard let profileImageURL = profileImageURL else {
+                            completion(false, LoginError.noProfileImageURL)
+                            return
+                        }
+                        guard let url = URL(string: profileImageURL) else {
+                            completion(false, LoginError.noProfileImageURL)
+                            return
+                        }
+                        URLSession.shared.dataTask(with: url) { data, response, error in
                             guard let data = data, error == nil else {
                                 completion(false, error)
                                 return
