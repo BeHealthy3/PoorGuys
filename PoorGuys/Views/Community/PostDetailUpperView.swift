@@ -49,44 +49,30 @@ struct PostDetailUpperView: View {
                 
                 Spacer()
                 
-                if user.uid == post.userID {
-                    Image("verticalEllipsis")
-                        .onTapGesture {
-                            showingSheet = true
+                Image("verticalEllipsis")
+                    .onlyIf(user.uid == post.userID)
+                    .onTapGesture {
+                        showingSheet = true
+                    }
+                    .confirmationDialog("", isPresented: $showingSheet) {
+                        Button(role: .destructive) {
+                            removePost()
+                        } label: {
+                            Text("삭제하기")
                         }
-                        .confirmationDialog("", isPresented: $showingSheet) {
-                            Button(role: .destructive) {
-                                
-                                Task.detached {
-                                    do {
-                                        try await FirebasePostManager().removePost(postID: post.id)
-                                    } catch {
-                                        print("삭제 실패")  //todo: 얼럿 띄우기
-                                    }
-                                    
-                                    DispatchQueue.main.async {
-                                        communityViewNeedsRefresh = true
-                                        presentationMode.wrappedValue.dismiss()
-                                    }
-                                }
-                                
-                            } label: {
-                                Text("삭제하기")
-                            }
-                            Button {
-                                isModalPresented = true
-                            } label: {
-                                Text("수정하기")
-                            }
+                        Button {
+                            isModalPresented = true
+                        } label: {
+                            Text("수정하기")
                         }
-                }
+                    }
             }
+            
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .top, spacing: 8) {
-                    if post.isAboutMoney {
-                        Image("stamp")
-                            .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 0))
-                    }
+                    Image("stamp")
+                        .onlyIf(post.isAboutMoney)
+                        .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 0))
                     
                     Text(post.title)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
@@ -100,15 +86,14 @@ struct PostDetailUpperView: View {
                     .foregroundColor(.appColor(.neutral900))
             }
             
-            if !post.imageURL.isEmpty {
-                AsyncImage(url: URL(string: post.imageURL.first ?? "")) { image in
-                    image.resizable()
-                        .frame(width: 311, height: 311)
-                } placeholder: {
-                    Color.appColor(.neutral100)
-                        .frame(width: 311, height: 311)
-                }
+            AsyncImage(url: URL(string: post.imageURL.first ?? "")) { image in
+                image.resizable()
+                    .frame(width: 311, height: 311)
+            } placeholder: {
+                Color.appColor(.neutral100)
+                    .frame(width: 311, height: 311)
             }
+            .onlyIf(!post.imageURL.isEmpty)
             
             VStack(alignment: .leading, spacing: 8) {
                 Text(DateFormatter().excludeYear(from: post.timeStamp))
@@ -119,96 +104,7 @@ struct PostDetailUpperView: View {
                     .frame(height: 1)
                     .foregroundColor(.appColor(.neutral100))
                 
-                HStack {
-                    Button {
-                        if post.userID != user.uid {
-                            Task {
-                                do {
-                                    try FirebasePostManager(user: user).toggleLike(about: post.id, handler: { result in
-                                        switch result {
-                                        case .success(let isSuccess):
-                                            DispatchQueue.main.async {
-                                                if isSuccess {
-                                                    isLiked.toggle()
-                                                }
-                                            }
-                                        case .failure(let error):
-                                            print(error)
-                                        }
-                                    })
-                                    
-                                } catch {
-                                    print("좋아요 혹은 좋아요 취소 실패")
-                                }
-                            }
-                        } else {
-                            alertMessage = .cantLikeMyPost
-                            showingAlert = true
-                        }
-                        
-                    } label: {
-                        HStack {
-                            if isLiked {
-                                Image("likeHighlighted")
-                                    .frame(width: 16, height: 16)
-                            } else {
-                                Image("like")
-                                    .frame(width: 16, height: 16)
-                            }
-                            Text("적선하기")
-                                .font(.system(size: 11))
-                                .lineLimit(1)
-                        }
-                    }
-                    .alert(isPresented: $showingAlert) {
-                        Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
-                    }
-                    
-                    Spacer()
-                    
-                    Button {
-                        NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
-                    } label: {
-                        HStack {
-                            Image("comment")
-                                .frame(width: 16, height: 16)
-                            Text("댓글쓰기")
-                                .font(.system(size: 11))
-                                .lineLimit(1)
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    Button {
-                        Task {
-                            FirebasePostManager(user: user).reportPost(id: post.id, userID: post.userID, nickName: post.nickName, title: post.title, body: post.body) { result in
-                                switch result {
-                                case .success:
-                                    alertMessage = .reportSucceeded
-                                    showingAlert = true
-                                case .failure(let error):
-                                    if error == .alreadyReported {
-                                        alertMessage = .alreadyReportedPost
-                                        showingAlert = true
-                                    }
-                                }
-                            }
-                        }
-                    } label: {
-                        HStack {
-                            Image("siren")
-                                .frame(width: 16, height: 16)
-                            Text("신고하기")
-                                .font(.system(size: 11))
-                                .lineLimit(1)
-                        }
-                    }
-                    .alert(isPresented: $showingAlert) {
-                        Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
-                    }
-                }
-                .foregroundColor(.appColor(.neutral600))
+                bottomThreeButtons()
             }
             .onAppear {
                 isLiked = post.likedUserIDs.contains(user.uid)
@@ -223,6 +119,123 @@ struct PostDetailUpperView: View {
                         upperViewNeedsRefresh = false
                     } catch {
                         print("실패") //🚨todo: 에러처리
+                    }
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func bottomThreeButtons() -> some View {
+        HStack {
+            Button {
+                if post.userID != user.uid {
+                    toggleLike()
+                } else {
+                    showCantLikeAlert()
+                }
+                
+            } label: {
+                HStack {
+                    DivergeView(if: isLiked, true: Image("likeHighlighted"), false: Image("like"))
+                        .frame(width: 16, height: 16)
+                    
+                    Text("적선하기")
+                        .font(.system(size: 11))
+                        .lineLimit(1)
+                }
+            }
+            .alert(isPresented: $showingAlert) {
+                Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
+            }
+            
+            Spacer()
+            
+            Button {
+                NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
+            } label: {
+                HStack {
+                    Image("comment")
+                        .frame(width: 16, height: 16)
+                    Text("댓글쓰기")
+                        .font(.system(size: 11))
+                        .lineLimit(1)
+                }
+            }
+            
+            Spacer()
+            
+            Button {
+                reportPost()
+            } label: {
+                HStack {
+                    Image("siren")
+                        .frame(width: 16, height: 16)
+                    Text("신고하기")
+                        .font(.system(size: 11))
+                        .lineLimit(1)
+                }
+            }
+            .alert(isPresented: $showingAlert) {
+                Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
+            }
+        }
+        .foregroundColor(.appColor(.neutral600))
+    }
+    
+    private func removePost() {
+        Task.detached {
+            do {
+                try await FirebasePostManager().removePost(postID: post.id)
+            } catch {
+                print("삭제 실패")  //todo: 얼럿 띄우기
+            }
+            
+            DispatchQueue.main.async {
+                communityViewNeedsRefresh = true
+                presentationMode.wrappedValue.dismiss()
+            }
+        }
+    }
+    
+    private func toggleLike() {
+        Task {
+            do {
+                try FirebasePostManager(user: user).toggleLike(about: post.id, handler: { result in
+                    switch result {
+                    case .success(let isSuccess):
+                        DispatchQueue.main.async {
+                            if isSuccess {
+                                isLiked.toggle()
+                            }
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                })
+                
+            } catch {
+                print("좋아요 혹은 좋아요 취소 실패")
+            }
+        }
+    }
+    
+    private func showCantLikeAlert() {
+        alertMessage = .cantLikeMyPost
+        showingAlert = true
+    }
+    
+    private func reportPost() {
+        Task {
+            FirebasePostManager(user: user).reportPost(id: post.id, userID: post.userID, nickName: post.nickName, title: post.title, body: post.body) { result in
+                switch result {
+                case .success:
+                    alertMessage = .reportSucceeded
+                    showingAlert = true
+                case .failure(let error):
+                    if error == .alreadyReported {
+                        alertMessage = .alreadyReportedPost
+                        showingAlert = true
                     }
                 }
             }
