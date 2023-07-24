@@ -34,17 +34,14 @@ struct TextEditorView: View {
                 .focused($isTextFieldFocused)
                 .foregroundColor(.appColor(.neutral900))
             
-            if text == "" && !isTextFieldFocused {
-                Text("댓글 쓰기")
-                    .padding(.leading, 16)
-                    .font(.system(size: 16))
-                    .foregroundColor(.appColor(.neutral500))
-                    .onTapGesture {
-                        isTextFieldFocused = true
-                    }
-            } else {
-                
-            }
+            Text("댓글 쓰기")
+                .onlyIf(text == "" && !isTextFieldFocused )
+                .padding(.leading, 16)
+                .font(.system(size: 16))
+                .foregroundColor(.appColor(.neutral500))
+                .onTapGesture {
+                    isTextFieldFocused = true
+                }
         }
         .onPreferenceChange(ViewHeightKey.self) { textEditorHeight = $0 }
         .onReceive(NotificationCenter.default.publisher(for: .replyTapped)) { _ in

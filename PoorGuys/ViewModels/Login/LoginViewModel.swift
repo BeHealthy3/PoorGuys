@@ -207,7 +207,7 @@ final class LoginViewModel: ObservableObject {
                     
                     if let _profileImageURL = document.get("profileImageURL") as? String {
                         profileImageURL = _profileImageURL
-                        URLSession.shared.dataTask(with: URL(string: profileImageURL!)!) { data, response, error in
+                        URLSession.shared.dataTask(with: URL(string: "https://picsum.photos/200/300")!) { data, response, error in
                             guard let data = data, error == nil else {
                                 completion(false, error)
                                 return
