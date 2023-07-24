@@ -11,7 +11,6 @@ import Combine
 struct CommentView: View {
     
     @State private var showingSheet = false
-    
     @State private var comment: Comment
     
     @Binding private var post: Post?
@@ -39,170 +38,187 @@ struct CommentView: View {
     
     var body: some View {
         VStack {
-            
-            if comment.isDeletedComment {
-                HStack {
-                    Text("삭제된 댓글입니다.")
-                        .foregroundColor(.appColor(.neutral600))
-                        .font(.system(size: 14))
-                    Spacer()
+            DivergeView(if: !comment.isDeletedComment, true: commentView(), false: deletedCommentView())
+        }
+    }
+    
+    @ViewBuilder
+    func commentView() -> some View {
+        LazyVStack(spacing: 4) {
+            HStack(spacing: 8) {
+                AsyncImage(url: URL(string: comment.profileImageURL ?? "")) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .frame(width: 24, height: 24)
+                            .clipShape(Circle())
+                    @unknown default:
+                        Color.appColor(.neutral100)
+                            .frame(width: 24, height: 24)
+                            .clipShape(Circle())
+                    }
                 }
-                .padding(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
                 
-            } else {
-                LazyVStack(spacing: 4) {
-                    HStack(spacing: 8) {
-                        AsyncImage(url: URL(string: comment.profileImageURL ?? "")) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .frame(width: 24, height: 24)
-                                    .clipShape(Circle())
-                            @unknown default:
-                                Color.appColor(.neutral100)
-                                    .frame(width: 24, height: 24)
-                                    .clipShape(Circle())
-                            }
-                        }
-                        
-                        Text(comment.nickName + (post?.userID == comment.userID ? " (작성자)" : ""))
-                            .lineLimit(1)
-                            .foregroundColor(post?.userID == comment.userID ?
-                                .appColor(.primary500) : .appColor(.neutral700))
-                            .font(.system(size: 12, weight: .bold))
-                        
-                        Spacer()
-                        Image("verticalEllipsis")
-                            .onTapGesture {
-                                showingSheet = true
-                            }
-                            .confirmationDialog("", isPresented: $showingSheet) {
-                                if let post = post {
-                                    if comment.userID == user.uid {
-                                        Button {
-                                            Task {
-                                                do {
-                                                    try await FirebasePostManager().removeComment(id: comment.id, postID: post.id, handler: { result in
-                                                        switch result {
-                                                        case .success(let isDeleted):
-                                                            if isDeleted {
-                                                                withAnimation {
-                                                                    comment.isDeletedComment = true
-                                                                }
-                                                            }
-                                                            
-                                                        case .failure(let error):
-                                                            print(error)    //🚨todo: 에러 보여주기
-                                                        }
-                                                    })
-                                                }
-                                                catch {
-                                                    print("업데이트실패")
-                                                }
-                                            }
-                                            
-                                        } label: {
-                                            Text("삭제하기")
-                                        }
-                                    } else {
-                                        Button {
-                                            Task {
-                                                FirebasePostManager(user: user).reportComment(id: comment.id, userID: comment.userID, nickName: comment.nickName, content: comment.content) { result in
-                                                    switch result {
-                                                    case .success:
-                                                        alertMessage = .reportSucceded
-                                                        showAlert = true
-                                                    case .failure(let error):
-                                                        if error == .alreadyReported {
-                                                            alertMessage = .alreadyReported
-                                                            showAlert = true
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } label: {
-                                            Text("신고하기")
-                                        }
-                                    }
-                                }
-                            }
+                Text(comment.nickName + (post?.userID == comment.userID ? " (작성자)" : ""))
+                    .lineLimit(1)
+                    .foregroundColor(post?.userID == comment.userID ?
+                        .appColor(.primary500) : .appColor(.neutral700))
+                    .font(.system(size: 12, weight: .bold))
+                
+                Spacer()
+                Image("verticalEllipsis")
+                    .onTapGesture {
+                        showingSheet = true
                     }
-                    
-                    HStack {
-                        Text($comment.content.wrappedValue)
-                            .foregroundColor(.appColor(.neutral900))
-                            .multilineTextAlignment(.leading)
-                            .font(.system(size: 14))
-                        Spacer()
-                    }
-                    
-                    HStack() {
-                        Text(DateFormatter().excludeYear(from: comment.timeStamp))
-                        
-                        if comment.belongingCommentID == nil {
-                            Text("답글 쓰기")
-                                .onTapGesture {
-                                    NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
-                                    replyingCommentID = comment.id
-                                    replyingNickname = comment.nickName
-                                }
-                        }
-                        
-                        Spacer()
-                        
-                        Button {
-                            if isCommentLikeButtonEnabled {
-                                if comment.userID == user.uid {
-                                    alertMessage = .myComment
-                                    showAlert = true
-                                } else {
-                                    do {
-                                        isCommentLikeButtonEnabled = false
-                                        
-                                        Task {
-                                            try await toggleCommentLike()
-                                            
-                                            cancellable = Timer.publish(every: 3, on: .main, in: .common)
-                                                .autoconnect()
-                                                .sink { _ in
-                                                    // 타이머 완료 후 버튼 활성화
-                                                    isCommentLikeButtonEnabled = true
-                                                }
-                                        }
-                                    } catch {
-                                        print("로그인 에러 또는 좋아요 에러")
-                                    }
-                                }
-                            } else {
-                                alertMessage = .threeSeconds
-                                showAlert = true
-                            }
-                        } label: {
-                            HStack(spacing: 4) {
-                                if comment.likedUserIDs.contains(user.uid) {
-                                    Image("thumbsUpFilled")
-                                } else {
-                                    Image("thumbsUp")
-                                        .renderingMode(.template)
-                                        .foregroundColor(.appColor(.neutral500))
-                                }
-                                
-                                Text(String(comment.likedUserIDs.count))
-                                    .foregroundColor(.appColor(.neutral500))
-                                    .font(.system(size: 11))
-                            }
-                        }
-                        .alert(isPresented: $showAlert) {
-                            Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
+                    .confirmationDialog("", isPresented: $showingSheet) {
+                        if let post = post {
+                            DivergeView(if: comment.userID == user.uid, true: deleteButton(post: post), false: reportButton())
                         }
                     }
-                    .font(.system(size: 11))
-                    .foregroundColor(.gray)
+            }
+            
+            HStack {
+                Text($comment.content.wrappedValue)
+                    .foregroundColor(.appColor(.neutral900))
+                    .multilineTextAlignment(.leading)
+                    .font(.system(size: 14))
+                Spacer()
+            }
+            
+            HStack() {
+                Text(DateFormatter().excludeYear(from: comment.timeStamp))
+                
+                Text("답글 쓰기")
+                    .onlyIf(comment.belongingCommentID == nil)
+                    .onTapGesture {
+                        NotificationCenter.default.post(name: .replyTapped, object: nil, userInfo: nil)
+                        replyingCommentID = comment.id
+                        replyingNickname = comment.nickName
+                    }
+                
+                
+                Spacer()
+                
+                likeButton()
+            }
+            .font(.system(size: 11))
+            .foregroundColor(.gray)
+        }
+        .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+        
+        
+    }
+    
+    @ViewBuilder
+    func deleteButton(post: Post) -> some View {
+        Button {
+            Task {
+                do {
+                    try FirebasePostManager().removeComment(id: comment.id, postID: post.id, handler: { result in
+                        switch result {
+                        case .success(let isDeleted):
+                            if isDeleted {
+                                withAnimation {
+                                    comment.isDeletedComment = true
+                                }
+                            }
+                            
+                        case .failure(let error):
+                            print(error)    //🚨todo: 에러 보여주기
+                        }
+                    })
                 }
-                .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                catch {
+                    print("업데이트실패")
+                }
+            }
+            
+        } label: {
+            Text("삭제하기")
+        }
+    }
+    
+    @ViewBuilder
+    func reportButton() -> some View {
+        Button {
+            Task {
+                FirebasePostManager(user: user).reportComment(id: comment.id, userID: comment.userID, nickName: comment.nickName, content: comment.content) { result in
+                    switch result {
+                    case .success:
+                        alertMessage = .reportSucceded
+                        showAlert = true
+                    case .failure(let error):
+                        if error == .alreadyReported {
+                            alertMessage = .alreadyReported
+                            showAlert = true
+                        }
+                    }
+                }
+            }
+        } label: {
+            Text("신고하기")
+        }
+    }
+    
+    @ViewBuilder
+    func likeButton() -> some View {
+        Button {
+            if isCommentLikeButtonEnabled {
+                if comment.userID == user.uid {
+                    alertMessage = .myComment
+                    showAlert = true
+                } else {
+                    do {
+                        isCommentLikeButtonEnabled = false
+                        
+                        Task {
+                            try await toggleCommentLike()
+                            
+                            cancellable = Timer.publish(every: 3, on: .main, in: .common)
+                                .autoconnect()
+                                .sink { _ in
+                                    // 타이머 완료 후 버튼 활성화
+                                    isCommentLikeButtonEnabled = true
+                                }
+                        }
+                    } catch {
+                        print("로그인 에러 또는 좋아요 에러")
+                    }
+                }
+            } else {
+                alertMessage = .threeSeconds
+                showAlert = true
+            }
+        } label: {
+            HStack(spacing: 4) {
+                if comment.likedUserIDs.contains(user.uid) {
+                    Image("thumbsUpFilled")
+                } else {
+                    Image("thumbsUp")
+                        .renderingMode(.template)
+                        .foregroundColor(.appColor(.neutral500))
+                }
+                
+                Text(String(comment.likedUserIDs.count))
+                    .foregroundColor(.appColor(.neutral500))
+                    .font(.system(size: 11))
             }
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
+        }
+    }
+    
+    @ViewBuilder
+    func deletedCommentView() -> some View {
+        HStack {
+            Text("삭제된 댓글입니다.")
+                .foregroundColor(.appColor(.neutral600))
+                .font(.system(size: 14))
+            Spacer()
+        }
+        .padding(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
     }
     
     private func toggleCommentLike() async throws {

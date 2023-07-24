@@ -208,6 +208,7 @@ final class LoginViewModel: ObservableObject {
                     
                     if let _profileImageURL = document.get("profileImageURL") as? String {
                         profileImageURL = _profileImageURL
+                      
                         guard let profileImageURL = profileImageURL else {
                             completion(false, LoginError.noProfileImageURL)
                             return
@@ -217,6 +218,7 @@ final class LoginViewModel: ObservableObject {
                             return
                         }
                         URLSession.shared.dataTask(with: url) { data, response, error in
+                                                               
                             guard let data = data, error == nil else {
                                 completion(false, error)
                                 return

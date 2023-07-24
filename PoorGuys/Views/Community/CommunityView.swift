@@ -27,51 +27,17 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
         NavigationView {
             
             VStack {
-                HStack {
-                    Spacer()
-                    
-                    Button {
-                        nowLookingPostID = ""
-                        isModalPresented = true
-                    } label: {
-                        Image("edit")
-                            .imageScale(.large)
-                            .foregroundColor(.accentColor)
-                    }
-                    
-                    Button(action: {
-                        
-                    }, label: {
-                        Image("profile")
-                            .imageScale(.large)
-                            .foregroundColor(.accentColor)
-                    })
-                    .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 16))
-                }
+                navigationBar()
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack {
                         ForEach(viewModel.posts, id: \.id) { post in
-                            
-                            if post.isWeirdPost {
-                                PostView(post: post)
-                                    .task { await fetch10PostsIfThisPostsIsLastThird(post: post) }
-                                    .padding(5)
-                                    .background(Color.white)
-                                    .cornerRadius(12)
-                                    .shadow(color: post.isAboutMoney && !post.isWeirdPost ?
-                                            Color.appColor(.primary500).opacity(0.1) : Color.black.opacity(0.1), radius: 7, x: 0, y: 0)
-                            } else {
-                                NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh, communityViewNeedsRefresh: $needsRefresh), label: {
-                                    PostView(post: post)
-                                })
+                            postView(for: post)
                                 .task { await fetch10PostsIfThisPostsIsLastThird(post: post) }
                                 .padding(5)
                                 .background(Color.white)
                                 .cornerRadius(12)
-                                .shadow(color: post.isAboutMoney ?
-                                        Color("primary500").opacity(0.1) : Color.black.opacity(0.1), radius: 7, x: 0, y: 0)
-                            }
+                                .shadow(color: postShadowColor(for: post), radius: 7, x: 0, y: 0)
                         }
                     }
                     .padding(EdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16))
@@ -99,11 +65,57 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                     }
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .fullScreenCover(isPresented: $isModalPresented) {
             PostFillingView(postID: $nowLookingPostID, isPresented: $isModalPresented, communityViewNeedsRefresh: $needsRefresh, detailViewNeedsRefresh: $detailViewNeedsRefresh)
         }
+    }
+    
+    @ViewBuilder
+    private func navigationBar() -> some View {
+        HStack {
+            Spacer()
+            
+            Button {
+                showPostFillingView()
+            } label: {
+                Image("edit")
+                    .imageScale(.large)
+                    .foregroundColor(.accentColor)
+            }
+            
+            Button(action: {
+                
+            }, label: {
+                Image("profile")
+                    .imageScale(.large)
+                    .foregroundColor(.accentColor)
+            })
+            .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 16))
+        }
+    }
+    
+    @ViewBuilder
+    private func postView(for post: Post) -> some View {
+        if post.isWeirdPost {
+            PostView(post: post)
+        } else {
+            NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh, communityViewNeedsRefresh: $needsRefresh)) {
+                PostView(post: post)
+            }
+        }
+    }
+
+    private func postShadowColor(for post: Post) -> Color {
+        return post.isAboutMoney ? Color("primary500").opacity(0.1) : Color.black.opacity(0.1)
+    }
+    
+    private func showPostFillingView() {
+        nowLookingPostID = ""
+        isModalPresented = true
     }
     
     private func fetch10PostsIfThisPostsIsLastThird(post: Post) async {
@@ -130,13 +142,6 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
 struct CommunityView_Previews: PreviewProvider {
     static var previews: some View {
         CommunityView(viewModel: CommunityViewModel())
-    }
-}
-
-struct EmptyView: View {
-    var body: some View {
-        Text("")
-            .buttonStyle(PlainButtonStyle())
     }
 }
 

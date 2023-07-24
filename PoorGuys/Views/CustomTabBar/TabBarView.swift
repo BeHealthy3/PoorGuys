@@ -13,14 +13,14 @@ struct TabBarView: View {
     
     var body: some View {
         CustomTabBarContainerView(selection: $tabSelection) {
-//            Text("커뮤니티 탭")
-//                .tabBarItem(tab: .community, selection: $tabSelection)
-//            
-//            Text("아낌내역 탭")
-//                .tabBarItem(tab: .saveHistory, selection: $tabSelection)
-//            
-//            Text("알림 탭")
-//                .tabBarItem(tab: .alert, selection: $tabSelection)
+            CommunityView(viewModel: CommunityViewModel())
+                .tabBarItem(tab: .community, selection: $tabSelection)
+            
+            Text("아낌내역 탭")
+                .tabBarItem(tab: .saveHistory, selection: $tabSelection)
+            
+            Text("알림 탭")
+                .tabBarItem(tab: .alert, selection: $tabSelection)
         }
         .edgesIgnoringSafeArea(.bottom)
     }

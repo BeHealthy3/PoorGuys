@@ -31,111 +31,146 @@ struct PostFillingView: View {
         ScrollView(.vertical) {
             VStack {
                 HStack {
-                    Button {
-                        isPresented.toggle()
-                    } label: {
-                        Image(systemName: "xmark")
-                            .tint(.appColor(.neutral900))
-                    }
-
+                    xButton()
                     Spacer()
-                    Button(action: {
-                        if !title.isEmpty && !content.isEmpty {
-                            Task {
-                                do {
-                                    if !postID.isEmpty {
-                                        try await updatePost()
-                                        detailViewNeedsRefresh = true
-                                    } else {
-                                        try await uploadPost()
-                                        communityViewNeedsRefresh = true
-                                    }
-                                    
-                                    presentationMode.wrappedValue.dismiss()
-                                    
-                                } catch {
-                                    alertMessage = .uploadFailed
-                                    showAlert = true
-                                }
-                            }
-                        } else {
-                            alertMessage = .fillContents
-                            showAlert = true
-                        }
-                    }) {
-                        Text("등록")
-                            .foregroundColor(.white)
-                            .font(.system(size: 14, weight: .bold))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color.appColor(.primary500))
-                            .cornerRadius(12)
-                    }
-                    .alert(isPresented: $showAlert) {
-                        Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
-                    }
+                    registerButton()
                 }
                 
-                HStack {
-                    Text("오늘의 지출 내역에 대한 이야기인가요?")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundColor(.appColor(.neutral700))
-                    Spacer()
-                    Toggle("", isOn: $isAboutMoney)
-                        .tint(.appColor(.primary500))
-                        .scaleEffect(0.5)
-                        .labelsHidden()
-                }
-                .frame(maxWidth: .infinity)
-                .padding(EdgeInsets(top: 15, leading: 5, bottom: -5, trailing: -10))
+                isAboutMoneyToggle()
                     
-                ZStack(alignment: .leading) {
-                    TextField("제목", text: $title)
-                        .padding(.horizontal, isAboutMoney ? 40 : 16)
-                        .frame(height: 48)
-                        .foregroundColor(title == "" ? .appColor(.neutral600) : .appColor(.neutral900))
-                        .font(.system(size: 18, weight: .bold))
-                        .background(isAboutMoney ? Color.appColor(.primary050) : Color.appColor(.neutral050))
-                        .cornerRadius(12)
-                        .animation(.easeInOut, value: isAboutMoney)
-                    
-                    if isAboutMoney {
-                        Image("stamp")
-                            .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0))
-                    }
-                }
+                titleField()
                 
                 PostFillingCenterView(content: $content, isAboutMoney: $isAboutMoney, image: $selectedImage)
                     .padding(.bottom, 16)
                 
-                Text("어푸어푸는 깨끗한 커뮤니티를 만들기 위해 비방, 욕설, 광고, 명의 도용, 권리 침해, 음란성 내용의 게시글 등 타인에게 피해를 주거나 주제에 맞지 않는 게시글이라고 판단될 경우 삭제 조치할 수 있습니다. 지속적인 위반 시 서비스 이용이 일정 기간 제한될 수 있습니다.")
-                    .foregroundColor(.appColor(.neutral600))
-                    .modifier(FittingFontSizeModifier())
-                    .frame(maxWidth: .infinity)
+                termsAndContions()
             }
             .padding(.horizontal, 16)
         }
         .onAppear {
-            Task {
-                do {
-                    print(postID, postID.isEmpty,"❤️")
-                    if !postID.isEmpty {
-                        
-                        let post = try await FirebasePostManager().fetchPost(postID: postID)
-                        
-                        title = post.title
-                        content = post.body
-                        imageURL = post.imageURL
-                        
-//                        🚨todo: default 이미지 디자인 받아서 나중에 올려줘야할 듯.
-                        if let imageURL = imageURL?.first {
-                            let url = URL(string: imageURL)!
-                            selectedImage = try await ImageDownloadManager().downloadImageAndSaveAsUIImage(url: url)
-                        }
-                    }
-                } catch {
-                    print("포스트 불러오기 실패")
+            if !postID.isEmpty {
+                fillInWithPostFromFirebase()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func xButton() -> some View {
+        Button {
+            isPresented.toggle()
+        } label: {
+            Image(systemName: "xmark")
+                .tint(.appColor(.neutral900))
+        }
+    }
+    
+    @ViewBuilder
+    private func registerButton() -> some View {
+        Button(action: {
+            
+            if !title.isEmpty && !content.isEmpty {
+                updatePostAndRefresh()
+            } else {
+                fillContentsAlert()
+            }
+            
+        }) {
+            Text("등록")
+                .foregroundColor(.white)
+                .font(.system(size: 14, weight: .bold))
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(Color.appColor(.primary500))
+                .cornerRadius(12)
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("알림"), message: Text(alertMessage.rawValue), dismissButton: .default(Text("확인")))
+        }
+    }
+    
+    @ViewBuilder
+    private func isAboutMoneyToggle() -> some View {
+        HStack {
+            Text("오늘의 지출 내역에 대한 이야기인가요?")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundColor(.appColor(.neutral700))
+            Spacer()
+            Toggle("", isOn: $isAboutMoney)
+                .tint(.appColor(.primary500))
+                .scaleEffect(0.5)
+                .labelsHidden()
+        }
+        .frame(maxWidth: .infinity)
+        .padding(EdgeInsets(top: 15, leading: 5, bottom: -5, trailing: -10))
+    }
+    
+    @ViewBuilder
+    private func titleField() -> some View {
+        ZStack(alignment: .leading) {
+            TextField("제목", text: $title)
+                .padding(.horizontal, isAboutMoney ? 40 : 16)
+                .frame(height: 48)
+                .foregroundColor(title == "" ? .appColor(.neutral600) : .appColor(.neutral900))
+                .font(.system(size: 18, weight: .bold))
+                .background(isAboutMoney ? Color.appColor(.primary050) : Color.appColor(.neutral050))
+                .cornerRadius(12)
+                .animation(.easeInOut, value: isAboutMoney)
+            
+            Image("stamp")
+                .onlyIf(isAboutMoney)
+                .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0))
+        }
+    }
+    
+    @ViewBuilder
+    private func termsAndContions() -> some View {
+        Text("어푸어푸는 깨끗한 커뮤니티를 만들기 위해 비방, 욕설, 광고, 명의 도용, 권리 침해, 음란성 내용의 게시글 등 타인에게 피해를 주거나 주제에 맞지 않는 게시글이라고 판단될 경우 삭제 조치할 수 있습니다. 지속적인 위반 시 서비스 이용이 일정 기간 제한될 수 있습니다.")
+            .foregroundColor(.appColor(.neutral600))
+            .modifier(FittingFontSizeModifier())
+            .frame(maxWidth: .infinity)
+    }
+    
+    private func updatePostAndRefresh() {
+        Task {
+            do {
+                if !postID.isEmpty {
+                    try await updatePost()
+                    detailViewNeedsRefresh = true
+                } else {
+                    try await uploadPost()
+                    communityViewNeedsRefresh = true
                 }
+                
+                presentationMode.wrappedValue.dismiss()
+                
+            } catch {
+                alertMessage = .uploadFailed
+                showAlert = true
+            }
+        }
+    }
+    
+    private func fillContentsAlert() {
+        alertMessage = .fillContents
+        showAlert = true
+    }
+    
+    private func fillInWithPostFromFirebase() {
+        Task {
+            do {
+                let post = try await FirebasePostManager().fetchPost(postID: postID)
+                
+                title = post.title
+                content = post.body
+                imageURL = post.imageURL
+                
+//                🚨todo: default 이미지 디자인 받아서 나중에 올려줘야할 듯.
+                if let imageURL = imageURL?.first {
+                    let url = URL(string: imageURL)!
+                    selectedImage = try await ImageDownloadManager().downloadImageAndSaveAsUIImage(url: url)
+                }
+            } catch {
+                print("포스트 불러오기 실패")
             }
         }
     }

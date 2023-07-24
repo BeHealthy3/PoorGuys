@@ -27,18 +27,18 @@ struct PostFillingCenterView: View {
     var body: some View {
         VStack {
             ZStack {
-                if content.isEmpty {
-                    VStack {
-                        HStack {
-                            Text("내용을 입력하세요.")
-                                .foregroundColor(.appColor(.neutral600))
-                                .padding(.all, 16)
-                                .font(.system(size: 16))
-                            Spacer()
-                        }
+                
+                VStack {
+                    HStack {
+                        Text("내용을 입력하세요.")
+                            .foregroundColor(.appColor(.neutral600))
+                            .padding(.all, 16)
+                            .font(.system(size: 16))
                         Spacer()
                     }
+                    Spacer()
                 }
+                .onlyIf(content.isEmpty)
                 
                 if #available(iOS 16.0, *) {
                     TextEditor(text: $content)
@@ -52,7 +52,7 @@ struct PostFillingCenterView: View {
                 } else {
                     TextEditor(text: $content)
                         .font(.system(size: 16))
-                        .padding(.all, 11)
+                        .padding(.all, 10)
                         .frame(maxWidth: .infinity, minHeight: 300)
                         .multilineTextAlignment(.leading)
                         .lineSpacing(10.0)

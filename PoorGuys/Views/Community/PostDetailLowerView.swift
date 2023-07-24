@@ -30,10 +30,9 @@ struct PostDetailLowerView: View {
     
     var body: some View {
         VStack {
-            if replyingCommentID != nil {
-                EmptyView()
-                    .frame(height: 8, alignment: .top)
-            }
+            EmptyView()
+                .onlyIf(replyingCommentID != nil)
+                .frame(height: 8, alignment: .top)
             
             HStack(spacing: 8) {
                 VStack {
@@ -61,38 +60,10 @@ struct PostDetailLowerView: View {
                     VStack {
                         Spacer(minLength: 0)
                             .frame(height: viewHeight - 50 > 0 ? viewHeight - 50 : 0)
+                        
                         Button {
+                            addNewComment()
                             
-                            do {
-                                let user = User.currentUser!    //🚨todo: user바꾸기
-//                                guard let user = User.currentUser else { throw FirebaseError.userNotFound }
-                                
-                                let newComment = Comment(id: UUID().uuidString, nickName: user.nickName, profileImageURL: user.profileImageURL, userID: user.uid, postID: post.id, content: text, likedUserIDs: [], timeStamp: Date(), isDeletedComment: false, belongingCommentID: replyingCommentID)
-                                
-                                Task {
-                                    do {
-                                        try FirebasePostManager().addNewComment(with: newComment, postID: post.id) { result in
-                                            switch result {
-                                            case .success:
-                                                withAnimation {
-                                                    text = ""
-                                                    replyingCommentID = nil
-                                                    replyingNickname = nil
-                                                    comments.append(newComment)
-                                                    newlyAddedComment = newComment
-                                                }
-                                            case .failure(let error):
-                                                print(error)    //🚨todo: 에러표시
-                                            }
-                                        }
-                                    }
-                                    catch {
-                                        print("업데이트실패")
-                                    }
-                                }
-                            } catch {
-                                print("인증 정보 오류")
-                            }
                         } label: {
                             Image("sendButton")
                                 .padding(EdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 16))
@@ -116,24 +87,37 @@ struct PostDetailLowerView: View {
         }
     }
     
-//    func updatedComments(with newComment: Comment) -> [Comment] {
-//            if let belongingCommentID = newComment.belongingCommentID,
-//               var comments = comments {
-//                
-//                if let lastIndex = comments.lastIndex(where: { $0.belongingCommentID == belongingCommentID }) {
-//                    comments.insert(newComment, at: lastIndex + 1)
-//                } else {
-//                    if let index = comments.firstIndex(where: { $0.id == belongingCommentID }) {
-//                        comments.insert(newComment, at: index + 1)
-//                    }
-//                }
-//                
-//                return comments
-//                
-//            } else {
-//                return [newComment]
-//            }
-//    }
+    private func addNewComment() {
+        do {
+            let user = User.currentUser!    //🚨todo: user바꾸기
+            
+            let newComment = Comment(id: UUID().uuidString, nickName: user.nickName, profileImageURL: user.profileImageURL, userID: user.uid, postID: post.id, content: text, likedUserIDs: [], timeStamp: Date(), isDeletedComment: false, belongingCommentID: replyingCommentID)
+            
+            Task {
+                do {
+                    try FirebasePostManager().addNewComment(with: newComment, postID: post.id) { result in
+                        switch result {
+                        case .success:
+                            withAnimation {
+                                text = ""
+                                replyingCommentID = nil
+                                replyingNickname = nil
+                                comments.append(newComment)
+                                newlyAddedComment = newComment
+                            }
+                        case .failure(let error):
+                            print(error)    //🚨todo: 에러표시
+                        }
+                    }
+                }
+                catch {
+                    print("업데이트실패") //🚨todo: 에러표시
+                }
+            }
+        } catch {
+            print("인증 정보 오류")   //🚨todo: 에러표시
+        }
+    }
 }
 
 struct PostDetailLowerView_Previews: PreviewProvider {
