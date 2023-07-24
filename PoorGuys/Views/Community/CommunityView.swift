@@ -65,6 +65,8 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                     }
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .fullScreenCover(isPresented: $isModalPresented) {

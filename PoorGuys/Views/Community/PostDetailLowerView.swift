@@ -90,7 +90,6 @@ struct PostDetailLowerView: View {
     private func addNewComment() {
         do {
             let user = User.currentUser!    //🚨todo: user바꾸기
-//                                guard let user = User.currentUser else { throw FirebaseError.userNotFound }
             
             let newComment = Comment(id: UUID().uuidString, nickName: user.nickName, profileImageURL: user.profileImageURL, userID: user.uid, postID: post.id, content: text, likedUserIDs: [], timeStamp: Date(), isDeletedComment: false, belongingCommentID: replyingCommentID)
             
