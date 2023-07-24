@@ -48,11 +48,11 @@ struct TextEditorView: View {
         }
         .onPreferenceChange(ViewHeightKey.self) { textEditorHeight = $0 }
         .onReceive(NotificationCenter.default.publisher(for: .replyTapped)) { _ in
-                    isTextFieldFocused = true
-                }
+            isTextFieldFocused = true
+        }
         .onChange(of: isTextFieldFocused) { focused in
-                    backgroundNeedsHighlight = focused
-                }
+            backgroundNeedsHighlight = focused
+        }
     }
 }
 

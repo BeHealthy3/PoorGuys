@@ -31,7 +31,6 @@ enum TabBarItem: Hashable {
 struct CustomTabBarView: View {
     let tabs: [TabBarItem]
     @Binding var selection: TabBarItem
-    @Namespace private var namespace
     @State var localSelection: TabBarItem
     
     var body: some View {

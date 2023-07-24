@@ -50,7 +50,9 @@ struct PostView: View {
                                     .foregroundColor(.appColor(.neutral800))
                             }
                             
-                            if let strImageURL = post.imageURL?.first, strImageURL != "", let imageURL = URL(string: strImageURL) {
+                            Spacer()
+                            
+                            if let strImageURL = post.imageURL.first, strImageURL != "", let imageURL = URL(string: strImageURL) {
                                 
                                 AsyncImage(url: imageURL) { image in
                                     image
@@ -58,8 +60,9 @@ struct PostView: View {
                                         .frame(width: 60, height: 60, alignment: .trailing)
                                         .cornerRadius(12)
                                 } placeholder: {
-                                    ProgressView()
+                                    Color.appColor(.neutral100)
                                         .frame(width: 60, height: 60)
+                                        .cornerRadius(12)
                                 }
                             }
                         }
@@ -74,13 +77,14 @@ struct PostView: View {
                             HStack(spacing: 8) {
                                 HStack(spacing: 2) {
                                     Image("comments")
-                                    Text(String(post.commentCount))
+                                    
+                                    Text(String(post.comments.filter { $0.isDeletedComment == false }.count) ?? "N/A")
                                         .foregroundColor(.appColor(.secondary))
                                 }
                                 
                                 HStack(spacing: 2) {
                                     Image("thumbsUp")
-                                    Text(String(post.likeCount))
+                                    Text(String(post.likedUserIDs.count))
                                         .foregroundColor(.appColor(.primary300))
                                 }
                             }

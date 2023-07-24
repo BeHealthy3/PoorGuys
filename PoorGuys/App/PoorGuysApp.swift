@@ -35,8 +35,9 @@ struct PoorGuysApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainView()
-                .environmentObject(loginViewModel)
+//            MainView()
+//                .environmentObject(loginViewModel)
+            CommunityView(viewModel: CommunityViewModel())
         }
     }
 }
