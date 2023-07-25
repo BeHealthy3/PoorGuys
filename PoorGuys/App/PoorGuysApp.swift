@@ -37,7 +37,6 @@ struct PoorGuysApp: App {
         WindowGroup {
             MainView()
                 .environmentObject(loginViewModel)
-//            CommunityView(viewModel: CommunityViewModel())
         }
     }
 }

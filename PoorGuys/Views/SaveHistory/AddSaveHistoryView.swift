@@ -20,7 +20,7 @@ struct AddSaveHistoryView: View {
     
     var body: some View {
         ZStack {
-            Color("primary050")
+            Color.appColor(.primary050)
                 .ignoresSafeArea()
             VStack(spacing: 0){
                 segmentedControl()
@@ -125,12 +125,22 @@ struct AddSaveHistoryView: View {
                     .foregroundColor(Color("neutral_900"))
             }
             
-            LazyVGrid(columns: columns, alignment: .leading) {
-                ForEach((0...11), id: \.self) { index in
-                    Button {
-                        self.selectedIcon = index
-                    } label: {
-                        CategoryIcon(saveHistory: viewModel.saveHistoryCategories[index], saveState: $saveState, isSelected: Binding(get: {selectedIcon == index}, set: {_ in } ))
+            let rows = 3
+            let columns = 4
+            
+            VStack(alignment: .leading,spacing: 8) {
+                ForEach(0..<rows, id: \.self) { rowIndex in
+                    HStack(spacing: 8) {
+                        ForEach(0..<columns, id: \.self) { columnIndex in
+                            let index = rowIndex * columns + columnIndex
+                            Button(action: {
+                                print("Button tapped: \(index)")
+                            }, label: {
+                                CategoryIcon(saveHistory: viewModel.saveHistoryCategories[index], saveState: $saveState, isSelected: Binding(get: {selectedIcon == index}, set: {_ in } ))
+                            })
+                            
+                            Spacer()
+                        }
                     }
                 }
             }

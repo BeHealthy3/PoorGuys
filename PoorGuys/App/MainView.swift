@@ -55,7 +55,7 @@ struct MainView: View {
                             CommunityView(viewModel: CommunityViewModel())
                                 .tabBarItem(tab: .community, selection: $tabSelection)
                             
-                            SaveHistoryView(viewModel: saveHistoryViewModel, isPresenting: $isPresentingAddSaveHistoryView)
+                            SaveHistoryView(viewModel: saveHistoryViewModel, isPresentingBottomSheet: $isPresentingAddSaveHistoryView)
                                 .tabBarItem(tab: .saveHistory, selection: $tabSelection)
                             
                             Text("알림 탭")
@@ -63,9 +63,19 @@ struct MainView: View {
                         }
                         .edgesIgnoringSafeArea(.bottom)
                         
-                        if isPresentingAddSaveHistoryView {
-                            CustomBottomSheet(isPresenting: $isPresentingAddSaveHistoryView, content: AddSaveHistoryView(viewModel: saveHistoryViewModel))
-                        }
+                        Color.black
+                            .onlyIf(isPresentingAddSaveHistoryView)
+                            .opacity(0.5)
+                            .ignoresSafeArea()
+                            .onTapGesture {
+                                withAnimation(.easeInOut(duration: 0.5)) {
+                                    isPresentingAddSaveHistoryView = false
+                                }
+                            }
+                        
+                        CustomBottomSheet(content: AddSaveHistoryView(viewModel: saveHistoryViewModel))
+                            .onlyIf(isPresentingAddSaveHistoryView)
+                            .transition(.bottomToTop)
                     }
                 }
             }

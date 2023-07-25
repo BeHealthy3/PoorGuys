@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SaveHistoryView: View {
     @ObservedObject var viewModel: SaveHistoryViewModel
-    @Binding var isPresenting: Bool
-    
+    @Binding var isPresentingBottomSheet: Bool
+
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -19,13 +19,10 @@ struct SaveHistoryView: View {
                 savedHistoryList()
                 Spacer()
             }
-            
-            
         }
         .onAppear {
             UITableView.appearance().showsVerticalScrollIndicator = false
         }
-        
     }
     
     @ViewBuilder
@@ -33,7 +30,7 @@ struct SaveHistoryView: View {
         VStack(spacing: 0) {
             Text("코코야 폼 미쳤다!")
                 .font(.system(size: 22, weight: .bold))
-                .foregroundColor(Color("neutral_900"))
+                .foregroundColor(Color.appColor(.neutral900))
             Image("imageExample")
                 .resizable()
                 .scaledToFit()
@@ -50,18 +47,21 @@ struct SaveHistoryView: View {
         }
         .padding(.horizontal, 32)
     }
-    
+
     @ViewBuilder
     func savedHistoryList() -> some View {
         VStack(spacing: 0) {
             HStack {
                 Text("06월 10일 (토)")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color("neutral_900"))
+                    .foregroundColor(Color.appColor(.neutral900))
                     .padding(.vertical, 24)
                 Spacer()
                 Button {
-                    self.isPresenting = true
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        self.isPresentingBottomSheet = true
+                    }
+
                 } label: {
                     Text("추가")
                         .font(.system(size: 14, weight: .bold))
@@ -74,6 +74,7 @@ struct SaveHistoryView: View {
                 }
             }
             .padding(.horizontal, 32)
+            
             if #available(iOS 16.0, *) {
                 List(viewModel.saveHistories) { saveHistory in
                     SaveHistoryRow(saveHistory: saveHistory)
@@ -98,6 +99,6 @@ struct SaveHistoryView: View {
 
 struct SaveHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        SaveHistoryView(viewModel: SaveHistoryViewModel(), isPresenting: .constant(false))
+        SaveHistoryView(viewModel: SaveHistoryViewModel(), isPresentingBottomSheet: .constant(false))
     }
 }

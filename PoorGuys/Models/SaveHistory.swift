@@ -64,7 +64,7 @@ enum SaveCategory: String {
         case .drink:
             return "술"
         case .secondHandDealings:
-            return "중고거래"
+            return "중고"
         }
     }
 }
