@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SaveHistoryRow: View {
     @State var saveHistory: SaveHistory
-    @State var iconColor = Color("primary_500")
+    @State var iconColor = Color.appColor(.primary500)
     @State var textColor = Color("red")
     
     var body: some View {
@@ -23,7 +23,7 @@ struct SaveHistoryRow: View {
                         .foregroundColor(textColor)
                     Text("원")
                         .font(.system(size: 14))
-                        .foregroundColor(Color("neutral_900"))
+                        .foregroundColor(Color.appColor(.neutral900))
                 }
             }
             .padding(.vertical, 16)
@@ -32,7 +32,7 @@ struct SaveHistoryRow: View {
         }
         .onAppear {
             if saveHistory.state == .saved {
-                textColor = Color("primary_500")
+                textColor = Color.appColor(.primary500)
             } else {
                 textColor = Color("red")
             }

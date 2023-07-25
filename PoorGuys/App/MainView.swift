@@ -63,19 +63,19 @@ struct MainView: View {
                         }
                         .edgesIgnoringSafeArea(.bottom)
                         
-                        Color.black
-                            .onlyIf(isPresentingAddSaveHistoryView)
-                            .opacity(0.5)
-                            .ignoresSafeArea()
-                            .onTapGesture {
-                                withAnimation(.easeInOut(duration: 0.5)) {
-                                    isPresentingAddSaveHistoryView = false
+                        if isPresentingAddSaveHistoryView {
+                            Color.black
+                                .opacity(0.5)
+                                .ignoresSafeArea()
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.5)) {
+                                        isPresentingAddSaveHistoryView = false
+                                    }
                                 }
-                            }
-                        
-                        CustomBottomSheet(content: AddSaveHistoryView(viewModel: saveHistoryViewModel))
-                            .onlyIf(isPresentingAddSaveHistoryView)
-                            .transition(.bottomToTop)
+                            
+                            CustomBottomSheet(content: AddSaveHistoryView(viewModel: saveHistoryViewModel))
+                                .transition(.bottomToTop)
+                        }
                     }
                 }
             }

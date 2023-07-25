@@ -11,7 +11,7 @@ struct AddSaveHistoryView: View {
     private enum FocusedField {
         case price
     }
-    var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 4)
+    
     @ObservedObject var viewModel: SaveHistoryViewModel
     @State private var selectedIcon: Int = 0
     @State private var saveState: SaveHistoryState = .saved
@@ -47,7 +47,7 @@ struct AddSaveHistoryView: View {
                 for i in viewModel.saveHistoryCategories.indices {
                     viewModel.saveHistoryCategories[i].state = .saved
                 }
-                viewModel.objectWillChange.send()
+//                viewModel.objectWillChange.send()
             } label: {
                 HStack(spacing: 0) {
                     Spacer()
@@ -59,7 +59,7 @@ struct AddSaveHistoryView: View {
                     } else {
                         Text("아낌 내역")
                             .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(Color("neutral_300"))
+                            .foregroundColor(Color.appColor(.neutral300))
                             .padding(.vertical, 6)
                     }
                     Spacer()
@@ -67,7 +67,7 @@ struct AddSaveHistoryView: View {
             }
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .foregroundColor(self.saveState == .saved ? Color("primary_500") : Color("white"))
+                    .foregroundColor(self.saveState == .saved ? Color.appColor(.primary500) : Color("white"))
             }
             .padding(.leading, 4)
             .padding(.vertical, 4)
@@ -77,14 +77,14 @@ struct AddSaveHistoryView: View {
                 for i in viewModel.saveHistoryCategories.indices {
                     viewModel.saveHistoryCategories[i].state = .wasted
                 }
-                viewModel.objectWillChange.send()
+//                viewModel.objectWillChange.send()
             } label: {
                 HStack(spacing: 0) {
                     Spacer()
                     if self.saveState == .saved {
                         Text("낭비 내역")
                             .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(Color("neutral_500"))
+                            .foregroundColor(Color.appColor(.neutral500))
                             .padding(.vertical, 6)
                     } else {
                         Text("낭비 내역")
@@ -97,18 +97,17 @@ struct AddSaveHistoryView: View {
             }
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .foregroundColor(self.saveState == .saved ? Color("neutral_100") : Color("red"))
+                    .foregroundColor(self.saveState == .saved ? Color.appColor(.neutral100) : Color("red"))
             }
             .padding(.trailing, 4)
             .padding(.vertical, 4)
         }
         .background {
             RoundedRectangle(cornerRadius: 12)
-                .foregroundColor(self.saveState == .saved ? Color("neutral_100") : Color("white"))
+                .foregroundColor(self.saveState == .saved ? Color.appColor(.neutral100) : Color("white"))
                 .shadow(color: .black.opacity(0.05), radius: 5)
         }
         .padding(.horizontal, 16)
-        
     }
     
     @ViewBuilder
@@ -135,9 +134,9 @@ struct AddSaveHistoryView: View {
                         ForEach(0..<columns, id: \.self) { columnIndex in
                             let index = rowIndex * columns + columnIndex
                             Button(action: {
-                                print("Button tapped: \(index)")
+                                selectedIcon = index
                             }, label: {
-                                CategoryIcon(saveHistory: viewModel.saveHistoryCategories[index], saveState: $saveState, isSelected: Binding(get: {selectedIcon == index}, set: {_ in } ))
+                                CategoryIcon(saveHistory: viewModel.saveHistoryCategories[index], saveState: $saveState, isSelected: Binding(get: {selectedIcon == index}, set: { _ in } ))
                             })
                             
                             Spacer()
@@ -156,12 +155,12 @@ struct AddSaveHistoryView: View {
             if saveState == .saved {
                 Text("얼마를 아꼈는지 입력해 주세요")
                     .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_900"))
+                    .foregroundColor(Color.appColor(.neutral900))
                 // 낭비 내역
             } else if saveState == .wasted {
                 Text("얼마를 낭비했는지 입력해 주세요")
                     .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_900"))
+                    .foregroundColor(Color.appColor(.neutral900))
             }
             
             CurrencyTextField(title: "금액을 입력해 주세요", price: $price)

@@ -30,7 +30,7 @@ struct SaveHistoryViewFullScroll: View {
         VStack(spacing: 0) {
             Text("코코야 폼 미쳤다!")
                 .font(.system(size: 22, weight: .bold))
-                .foregroundColor(Color("neutral_900"))
+                .foregroundColor(Color.appColor(.neutral900))
             Image("imageExample")
                 .resizable()
                 .scaledToFit()

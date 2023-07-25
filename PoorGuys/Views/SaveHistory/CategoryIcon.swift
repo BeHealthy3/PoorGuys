@@ -10,7 +10,7 @@ import SwiftUI
 struct CategoryIcon: View {
     @State var saveHistory: SaveHistory
     @Binding var saveState: SaveHistoryState
-    @State var iconColor = Color("primary_500")
+    @State var iconColor = Color.appColor(.primary500)
     @Binding var isSelected: Bool
     
     var body: some View {
@@ -28,7 +28,7 @@ struct CategoryIcon: View {
         .background {
             if isSelected {
                 RoundedRectangle(cornerRadius: 12)
-                    .foregroundColor(saveState == .saved ? Color("primary_500") : Color("neutral_600"))
+                    .foregroundColor(saveState == .saved ? Color.appColor(.primary500) : Color.appColor(.neutral600))
             } else {
                 ZStack {
                     RoundedRectangle(cornerRadius: 12)
@@ -41,25 +41,25 @@ struct CategoryIcon: View {
         .onAppear {
             switch saveState {
             case .saved:
-                iconColor = isSelected ? Color("white") : Color("primary_500")
+                iconColor = isSelected ? Color("white") : Color.appColor(.primary500)
             case .wasted:
-                iconColor = isSelected ? Color("white") : Color("neutral_600")
+                iconColor = isSelected ? Color("white") : Color.appColor(.neutral600)
             }
         }
         .onChange(of: isSelected) { newValue in
             switch saveState {
             case .saved:
-                iconColor = isSelected ? Color("white") : Color("primary_500")
+                iconColor = isSelected ? Color("white") : Color.appColor(.primary500)
             case .wasted:
-                iconColor = isSelected ? Color("white") : Color("neutral_600")
+                iconColor = isSelected ? Color("white") : Color.appColor(.neutral600)
             }
         }
         .onChange(of: saveState) { newValue in
             switch saveState {
             case .saved:
-                iconColor = isSelected ? Color("white") : Color("primary_500")
+                iconColor = isSelected ? Color("white") : Color.appColor(.primary500)
             case .wasted:
-                iconColor = isSelected ? Color("white") : Color("neutral_600")
+                iconColor = isSelected ? Color("white") : Color.appColor(.neutral600)
             }
         }
     }

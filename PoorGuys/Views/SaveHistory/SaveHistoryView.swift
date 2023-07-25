@@ -84,6 +84,12 @@ struct SaveHistoryView: View {
                 .listStyle(.plain)
                 .scrollIndicators(.hidden)
                 .padding(.horizontal, 32)
+                .if(UIDevice.current.hasNotch) { view in
+                    view.padding(.bottom, 104)
+                }
+                .if(!UIDevice.current.hasNotch) { view in
+                    view.padding(.bottom, 84)
+                }
             } else {
                 List(viewModel.saveHistories) { saveHistory in
                     SaveHistoryRow(saveHistory: saveHistory)
@@ -92,6 +98,12 @@ struct SaveHistoryView: View {
                 }
                 .listStyle(.plain)
                 .padding(.horizontal, 32)
+                .if(UIDevice.current.hasNotch) { view in
+                    view.padding(.bottom, 104)
+                }
+                .if(!UIDevice.current.hasNotch) { view in
+                    view.padding(.bottom, 84)
+                }
             }
         }
     }

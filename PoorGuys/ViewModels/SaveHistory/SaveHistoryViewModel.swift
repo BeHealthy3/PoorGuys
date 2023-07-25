@@ -8,13 +8,16 @@
 import Foundation
 
 class SaveHistoryViewModel: ObservableObject {
+    @Published var date = Date()
+    @Published var total = 0
+    
     @Published var saveHistories: [SaveHistory] = [
         SaveHistory(category: .impulseBuy, state: .wasted, price: -8000),
         SaveHistory(category: .drink, state: .saved, price: +8000),
         SaveHistory(category: .impulseBuy, state: .wasted, price: 8000),
         SaveHistory(category: .impulseBuy, state: .wasted, price: 8000),
         SaveHistory(category: .impulseBuy, state: .wasted, price: 8000),
-        SaveHistory(category: .impulseBuy, state: .wasted, price: 8000),
+        SaveHistory(category: .impulseBuy, state: .wasted, price: 8000)
     ]
     
     @Published var saveHistoryCategories: [SaveHistory] = [
@@ -31,5 +34,4 @@ class SaveHistoryViewModel: ObservableObject {
         SaveHistory(category: .drink, state: .saved, price: 0),
         SaveHistory(category: .secondHandDealings, state: .saved, price: 0)
     ]
-
 }
