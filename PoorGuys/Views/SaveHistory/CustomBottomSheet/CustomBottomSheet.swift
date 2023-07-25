@@ -16,7 +16,6 @@ struct CustomBottomSheet<Content: View>: View {
         VStack(spacing: 0) {
             AddSaveHistoryView(viewModel: SaveHistoryViewModel())
                 .frame(height: 500)
-//                .transition(.move(edge: .bottom))
                 .cornerRadius(12)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)

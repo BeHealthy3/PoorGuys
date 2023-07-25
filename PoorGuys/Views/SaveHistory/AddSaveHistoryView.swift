@@ -29,8 +29,9 @@ struct AddSaveHistoryView: View {
                     .padding(.top, 48)
                 typePrice()
                     .padding(.top, 48)
+                    .padding(.bottom, 40)
                 completedButton()
-                    .padding(.top, 40)
+                    .background(Color.appColor(.primary900))
             }
         }
         .onTapGesture {
