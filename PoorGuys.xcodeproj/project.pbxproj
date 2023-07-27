@@ -59,6 +59,8 @@
 		D32770222A50369A002C34C6 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32770212A50369A002C34C6 /* Typealias.swift */; };
 		D3552E0D2A6F077000F565AA /* AnyTransition+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3552E0C2A6F077000F565AA /* AnyTransition+Extensions.swift */; };
 		D3552E102A704D0700F565AA /* CommunityPostManagable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3552E0F2A704D0700F565AA /* CommunityPostManagable.swift */; };
+		D3552E122A70CB4200F565AA /* SaveHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3552E112A70CB4200F565AA /* SaveHistoryManager.swift */; };
+		D3552E142A726A1C00F565AA /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3552E132A726A1C00F565AA /* Int+Extensions.swift */; };
 		D35939BD2A41F41F007263E8 /* ImageDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BC2A41F41F007263E8 /* ImageDownloadManager.swift */; };
 		D35939BF2A41F42B007263E8 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BE2A41F42B007263E8 /* DateFormatter.swift */; };
 		D35939C12A41F436007263E8 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939C02A41F436007263E8 /* Notification.swift */; };
@@ -150,6 +152,8 @@
 		D32770212A50369A002C34C6 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D3552E0C2A6F077000F565AA /* AnyTransition+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyTransition+Extensions.swift"; sourceTree = "<group>"; };
 		D3552E0F2A704D0700F565AA /* CommunityPostManagable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityPostManagable.swift; sourceTree = "<group>"; };
+		D3552E112A70CB4200F565AA /* SaveHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveHistoryManager.swift; sourceTree = "<group>"; };
+		D3552E132A726A1C00F565AA /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
 		D35939BC2A41F41F007263E8 /* ImageDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadManager.swift; sourceTree = "<group>"; };
 		D35939BE2A41F42B007263E8 /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		D35939C02A41F436007263E8 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
@@ -275,6 +279,7 @@
 				D35939C92A41F44C007263E8 /* Debounce+View+Extension.swift */,
 				D35939C82A41F44C007263E8 /* Shape+Extensions.swift */,
 				D35939D22A41F49A007263E8 /* String+Extensions.swift */,
+				D3552E132A726A1C00F565AA /* Int+Extensions.swift */,
 				D35939CB2A41F44C007263E8 /* UIDevice+Extensions.swift */,
 				D35939CA2A41F44C007263E8 /* View+Extensions.swift */,
 				D38714B72A6284C0002DFA84 /* UINavigationController+Extensions.swift */,
@@ -462,6 +467,7 @@
 				D35939C22A41F441007263E8 /* FirebaseError.swift */,
 				D35939C42A41F441007263E8 /* PostManagable.swift */,
 				D35939C32A41F441007263E8 /* PostManager.swift */,
+				D3552E112A70CB4200F565AA /* SaveHistoryManager.swift */,
 			);
 			path = FirebaseControls;
 			sourceTree = "<group>";
@@ -734,6 +740,7 @@
 				D35939E12A41F62B007263E8 /* Post.swift in Sources */,
 				6001EFD92A13669300A9A2EF /* SetProfileImageView.swift in Sources */,
 				60A8E09D2A39DA5E0026DA04 /* CustomTabBarContainerView.swift in Sources */,
+				D3552E122A70CB4200F565AA /* SaveHistoryManager.swift in Sources */,
 				D35939C52A41F442007263E8 /* FirebaseError.swift in Sources */,
 				6001EFD72A13668B00A9A2EF /* SetNickNameView.swift in Sources */,
 				60558D062A14BA2C007581AD /* MyPageView.swift in Sources */,
@@ -748,6 +755,7 @@
 				D35939BD2A41F41F007263E8 /* ImageDownloadManager.swift in Sources */,
 				6001EFDB2A1366BE00A9A2EF /* SignUpCompletedView.swift in Sources */,
 				6093F7472A381904004F9D53 /* GIFView.swift in Sources */,
+				D3552E142A726A1C00F565AA /* Int+Extensions.swift in Sources */,
 				6001EFE82A13910B00A9A2EF /* LoginViewModel.swift in Sources */,
 				D35939F32A42056D007263E8 /* PostFillingView.swift in Sources */,
 				D35939D02A41F44C007263E8 /* UIDevice+Extensions.swift in Sources */,

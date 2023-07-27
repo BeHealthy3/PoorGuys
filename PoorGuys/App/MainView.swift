@@ -8,14 +8,18 @@
 import SwiftUI
 import FirebaseAuth
 
-struct MainView: View {
+struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
     @EnvironmentObject var logInViewModel: LoginViewModel
-    @StateObject var saveHistoryViewModel = SaveHistoryViewModel()
+    @StateObject var saveHistoryViewModel: SaveHistoryViewModel
     
     @State private var isShowingLaunchScreen = true
     @State private var selection: String = "community"
     @State private var tabSelection: TabBarItem = .community
     @State var isPresentingAddSaveHistoryView = false
+    
+    init(saveHistoryViewModel: SaveHistoryViewModel) {
+        _saveHistoryViewModel = StateObject(wrappedValue: saveHistoryViewModel)
+    }
     
     var body: some View {
         Group {
@@ -55,7 +59,8 @@ struct MainView: View {
                             CommunityView(viewModel: CommunityViewModel())
                                 .tabBarItem(tab: .community, selection: $tabSelection)
                             
-                            SaveHistoryView(viewModel: saveHistoryViewModel, isPresentingBottomSheet: $isPresentingAddSaveHistoryView)
+                            SaveHistoryView<SaveHistoryViewModel>(isPresentingBottomSheet: $isPresentingAddSaveHistoryView)
+                                .environmentObject(saveHistoryViewModel)
                                 .tabBarItem(tab: .saveHistory, selection: $tabSelection)
                             
                             Text("알림 탭")
@@ -73,7 +78,7 @@ struct MainView: View {
                                     }
                                 }
                             
-                            CustomBottomSheet(content: AddSaveHistoryView(viewModel: saveHistoryViewModel))
+                            CustomBottomSheet(content: AddSaveHistoryView<SaveHistoryViewModel>().environmentObject(saveHistoryViewModel))
                                 .transition(.bottomToTop)
                         }
                     }
@@ -86,7 +91,7 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        MainView(saveHistoryViewModel: MockSaveHistoryViewModel())
             .environmentObject(LoginViewModel())
     }
 }

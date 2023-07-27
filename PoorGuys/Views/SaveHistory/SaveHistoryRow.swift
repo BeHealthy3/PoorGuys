@@ -8,17 +8,19 @@
 import SwiftUI
 
 struct SaveHistoryRow: View {
-    @State var saveHistory: SaveHistory
+    let consumptionCategory: ConsumptionCategory
+    let price: Int
+    
     @State var iconColor = Color.appColor(.primary500)
-    @State var textColor = Color("red")
+    @State var textColor = Color.appColor(.red)
     
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
-                CategoryIcon(saveHistory: saveHistory, saveState: $saveHistory.state, isSelected: .constant(false))
+                CategoryIcon(consumptionCategory: consumptionCategory, saveHistoryViewMode: .constant(price >= 0 ? .saved : .wasted), isSelected: .constant(false))
                 Spacer()
                 HStack(alignment: .bottom, spacing: 4) {
-                    Text("\(saveHistory.price)")
+                    Text("\(price.formatToCurrency())")
                         .font(.system(size: 22, weight: .bold))
                         .foregroundColor(textColor)
                     Text("원")
@@ -31,17 +33,11 @@ struct SaveHistoryRow: View {
             Divider()
         }
         .onAppear {
-            if saveHistory.state == .saved {
+            if price >= 0 {
                 textColor = Color.appColor(.primary500)
             } else {
-                textColor = Color("red")
+                textColor = Color.appColor(.red)
             }
         }
-    }
-}
-
-struct SaveHistoryRow_Previews: PreviewProvider {
-    static var previews: some View {
-        SaveHistoryRow(saveHistory: SaveHistory(category: .impulseBuy, state: .saved, price: -7000))
     }
 }

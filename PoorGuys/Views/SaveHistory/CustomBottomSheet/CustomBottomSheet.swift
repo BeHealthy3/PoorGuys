@@ -8,13 +8,14 @@
 
 import SwiftUI
 
-struct CustomBottomSheet<Content: View>: View {
+protocol ViewModelable {}
 
+struct CustomBottomSheet<Content: View>: View {
     var content: Content
 
     var body: some View {
         VStack(spacing: 0) {
-            AddSaveHistoryView(viewModel: SaveHistoryViewModel())
+            content
                 .frame(height: 500)
                 .cornerRadius(12)
         }
@@ -26,7 +27,7 @@ struct CustomBottomSheet<Content: View>: View {
 
 struct CustomBottomSheet_Previews: PreviewProvider {
     static var previews: some View {
-        CustomBottomSheet(content: AddSaveHistoryView(viewModel: SaveHistoryViewModel()))
+        CustomBottomSheet(content: AddSaveHistoryView<MockSaveHistoryViewModel>())
     }
 }
 

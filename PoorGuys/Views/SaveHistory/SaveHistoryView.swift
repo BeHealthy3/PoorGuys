@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct SaveHistoryView: View {
-    @ObservedObject var viewModel: SaveHistoryViewModel
+struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
+    @EnvironmentObject var viewModel: ViewModel
     @Binding var isPresentingBottomSheet: Bool
 
     var body: some View {
@@ -21,6 +21,10 @@ struct SaveHistoryView: View {
             }
         }
         .onAppear {
+            Task {
+                try await viewModel.fetchAllHistories(on: Date())
+            }
+            
             UITableView.appearance().showsVerticalScrollIndicator = false
         }
     }
@@ -77,7 +81,7 @@ struct SaveHistoryView: View {
             
             if #available(iOS 16.0, *) {
                 List(viewModel.saveHistories) { saveHistory in
-                    SaveHistoryRow(saveHistory: saveHistory)
+                    SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
@@ -92,7 +96,7 @@ struct SaveHistoryView: View {
                 }
             } else {
                 List(viewModel.saveHistories) { saveHistory in
-                    SaveHistoryRow(saveHistory: saveHistory)
+                    SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
@@ -111,6 +115,7 @@ struct SaveHistoryView: View {
 
 struct SaveHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        SaveHistoryView(viewModel: SaveHistoryViewModel(), isPresentingBottomSheet: .constant(false))
+//        SaveHistoryView(viewModel: MockSaveHistoryViewModel(), isPresentingBottomSheet: .constant(false))
+        SaveHistoryView<MockSaveHistoryViewModel>(isPresentingBottomSheet: .constant(false))
     }
 }

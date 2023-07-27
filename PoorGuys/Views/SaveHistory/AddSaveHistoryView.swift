@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct AddSaveHistoryView: View {
+struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     private enum FocusedField {
         case price
     }
     
-    @ObservedObject var viewModel: SaveHistoryViewModel
+    @EnvironmentObject var viewModel: ViewModel
     @State private var selectedIcon: Int = 0
-    @State private var saveState: SaveHistoryState = .saved
+    @State private var saveHistoryViewMode = SaveHistoryViewMode.saved
     @State private var price: String = ""
     @FocusState private var focusedField: FocusedField?
     
@@ -43,68 +43,46 @@ struct AddSaveHistoryView: View {
     func segmentedControl() -> some View {
         HStack {
             Button {
-                self.saveState = .saved
-                for i in viewModel.saveHistoryCategories.indices {
-                    viewModel.saveHistoryCategories[i].state = .saved
-                }
-//                viewModel.objectWillChange.send()
+                self.saveHistoryViewMode = .saved
             } label: {
                 HStack(spacing: 0) {
                     Spacer()
-                    if saveState == .saved {
-                        Text("아낌 내역")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(Color("white"))
-                            .padding(.vertical, 6)
-                    } else {
-                        Text("아낌 내역")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(Color.appColor(.neutral300))
-                            .padding(.vertical, 6)
-                    }
+                    Text("아낌 내역")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(saveHistoryViewMode == .saved ? .appColor(.white) : .appColor(.neutral300))
+                        .padding(.vertical, 6)
                     Spacer()
                 }
             }
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .foregroundColor(self.saveState == .saved ? Color.appColor(.primary500) : Color("white"))
+                    .foregroundColor(self.saveHistoryViewMode == .saved ? Color.appColor(.primary500) : Color.appColor(.white))
             }
             .padding(.leading, 4)
             .padding(.vertical, 4)
             
             Button {
-                self.saveState = .wasted
-                for i in viewModel.saveHistoryCategories.indices {
-                    viewModel.saveHistoryCategories[i].state = .wasted
-                }
-//                viewModel.objectWillChange.send()
+                self.saveHistoryViewMode = .wasted
             } label: {
                 HStack(spacing: 0) {
                     Spacer()
-                    if self.saveState == .saved {
-                        Text("낭비 내역")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(Color.appColor(.neutral500))
-                            .padding(.vertical, 6)
-                    } else {
-                        Text("낭비 내역")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(Color("white"))
-                            .padding(.vertical, 6)
-                    }
+                    Text("낭비 내역")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(saveHistoryViewMode == .saved ? .appColor(.neutral500) : .appColor(.white))
+                        .padding(.vertical, 6)
                     Spacer()
                 }
             }
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .foregroundColor(self.saveState == .saved ? Color.appColor(.neutral100) : Color("red"))
+                    .foregroundColor(self.saveHistoryViewMode == .saved ? Color.appColor(.neutral100) : Color.appColor(.red))
             }
             .padding(.trailing, 4)
             .padding(.vertical, 4)
         }
         .background {
             RoundedRectangle(cornerRadius: 12)
-                .foregroundColor(self.saveState == .saved ? Color.appColor(.neutral100) : Color("white"))
+                .foregroundColor(self.saveHistoryViewMode == .saved ? Color.appColor(.neutral100) : Color.appColor(.white))
                 .shadow(color: .black.opacity(0.05), radius: 5)
         }
         .padding(.horizontal, 16)
@@ -114,16 +92,9 @@ struct AddSaveHistoryView: View {
     func selectCategory() -> some View {
         VStack(alignment: .leading, spacing: 16) {
             // 아낌 내역
-            if saveState == .saved {
-                Text("어떤 지출을 아꼈는지 선택해 주세요")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_900"))
-                // 낭비 내역
-            } else if saveState == .wasted {
-                Text("어떤 지출을 했는지 선택해 주세요")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_900"))
-            }
+            Text("어떤 지출을 \(saveHistoryViewMode == .saved ? "아꼈는지" : "했는지") 선택해 주세요")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundColor(Color.appColor(.neutral900))
             
             let rows = 3
             let columns = 4
@@ -136,7 +107,9 @@ struct AddSaveHistoryView: View {
                             Button(action: {
                                 selectedIcon = index
                             }, label: {
-                                CategoryIcon(saveHistory: viewModel.saveHistoryCategories[index], saveState: $saveState, isSelected: Binding(get: {selectedIcon == index}, set: { _ in } ))
+                                if let saveCategory = ConsumptionCategory(rawValue: index) {
+                                    CategoryIcon(consumptionCategory: saveCategory, saveHistoryViewMode: $saveHistoryViewMode, isSelected: Binding(get: {selectedIcon == index}, set: { _ in } ))
+                                }
                             })
                             
                             Spacer()
@@ -152,16 +125,9 @@ struct AddSaveHistoryView: View {
     func typePrice() -> some View {
         VStack(alignment: .leading) {
             // 아낌 내역
-            if saveState == .saved {
-                Text("얼마를 아꼈는지 입력해 주세요")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color.appColor(.neutral900))
-                // 낭비 내역
-            } else if saveState == .wasted {
-                Text("얼마를 낭비했는지 입력해 주세요")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color.appColor(.neutral900))
-            }
+            Text("얼마를 \(saveHistoryViewMode == .saved ? "아꼈는지" : "낭비했는지") 입력해 주세요")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundColor(Color.appColor(.neutral900))
             
             CurrencyTextField(title: "금액을 입력해 주세요", price: $price)
         }
@@ -185,7 +151,7 @@ struct AddSaveHistoryView: View {
         }
         .background {
             Rectangle()
-                .foregroundColor(self.saveState == .saved ? Color("primary_500") : Color("red"))
+                .foregroundColor(self.saveHistoryViewMode == .saved ? Color.appColor(.primary500) : Color.appColor(.red))
         }
         .edgesIgnoringSafeArea(.bottom)
     }
@@ -193,6 +159,6 @@ struct AddSaveHistoryView: View {
 
 struct AddSaveHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        AddSaveHistoryView(viewModel: SaveHistoryViewModel())
+        AddSaveHistoryView<MockSaveHistoryViewModel>()
     }
 }

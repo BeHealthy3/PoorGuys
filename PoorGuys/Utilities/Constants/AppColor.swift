@@ -10,7 +10,7 @@ import SwiftUI
 enum AssetColor: String {
     case primary050, primary100, primary200, primary300, primary400, primary500, primary600, primary700, primary800, primary900
     case neutral050, neutral100, neutral200, neutral300, neutral400, neutral500, neutral600, neutral700, neutral800, neutral900
-    case secondary
+    case secondary, white, red
 }
 
 extension Color {
@@ -59,6 +59,10 @@ extension Color {
             return Color("neutral900")
         case .secondary:
             return Color("secondary")
+        case .white:
+            return Color("white")
+        case .red:
+            return Color("red")
         }
     }
 }
