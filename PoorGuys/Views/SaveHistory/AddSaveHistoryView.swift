@@ -100,8 +100,9 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
             let columns = 4
             
             VStack(alignment: .leading,spacing: 8) {
+//                lazy grid로 만들면 뷰가 늦게 생성되어 애니메이션에 영향을 주어 변경
                 ForEach(0..<rows, id: \.self) { rowIndex in
-                    HStack(spacing: 8) {
+                    HStack(spacing: 10) {
                         ForEach(0..<columns, id: \.self) { columnIndex in
                             let index = rowIndex * columns + columnIndex
                             Button(action: {
@@ -111,9 +112,8 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                                     CategoryIcon(consumptionCategory: saveCategory, saveHistoryViewMode: $saveHistoryViewMode, isSelected: Binding(get: {selectedIcon == index}, set: { _ in } ))
                                 }
                             })
-                            
-                            Spacer()
                         }
+                        Spacer()
                     }
                 }
             }

@@ -27,13 +27,14 @@ struct CategoryIcon: View {
         .padding(.horizontal, 12)
         .background {
             if isSelected {
-                RoundedRectangle(cornerRadius: 12)
+                Capsule()
                     .foregroundColor(saveHistoryViewMode == .saved ? Color.appColor(.primary500) : Color.appColor(.neutral600))
             } else {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 12)
+                    
+                    Capsule()
                         .foregroundColor(Color.appColor(.white))
-                    RoundedRectangle(cornerRadius: 12)
+                    Capsule()
                         .stroke(iconColor, lineWidth: 1)
                 }
             }

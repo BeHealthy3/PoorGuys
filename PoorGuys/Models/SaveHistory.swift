@@ -8,7 +8,7 @@
 import Foundation
 
 enum ConsumptionCategory: Int {
-    case transport, food, shopping, impulseBuy, dessert, hobby, subscribtion, mobileGame, coffee, present, drink, secondHandDealings
+    case transport, food, shopping, flex, dessert, subscription, hobby, mobileGame, secondHandDealings, coffee, present, drink 
     
     var iconName: String {
         switch self {
@@ -18,14 +18,14 @@ enum ConsumptionCategory: Int {
             return "food"
         case .shopping:
             return "shopping"
-        case .impulseBuy:
-            return "impulseBuy"
+        case .flex:
+            return "flex"
         case .dessert:
             return "dessert"
         case .hobby:
             return "hobby"
-        case .subscribtion:
-            return "subscribtion"
+        case .subscription:
+            return "subscription"
         case .mobileGame:
             return "mobileGame"
         case .coffee:
@@ -47,14 +47,14 @@ enum ConsumptionCategory: Int {
             return "음식"
         case .shopping:
             return "쇼핑"
-        case .impulseBuy:
-            return "뽐뿌"
+        case .flex:
+            return "플렉스"
         case .dessert:
             return "간식"
         case .hobby:
             return "취미"
-        case .subscribtion:
-            return "구독"
+        case .subscription:
+            return "정기구독"
         case .mobileGame:
             return "현질"
         case .coffee:
@@ -62,9 +62,9 @@ enum ConsumptionCategory: Int {
         case .present:
             return "선물"
         case .drink:
-            return "음주"
+            return "술"
         case .secondHandDealings:
-            return "중고"
+            return "중고거래"
         }
     }
 }
