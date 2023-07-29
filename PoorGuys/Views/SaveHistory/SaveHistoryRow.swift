@@ -20,7 +20,7 @@ struct SaveHistoryRow: View {
                 CategoryIcon(consumptionCategory: consumptionCategory, saveHistoryViewMode: .constant(price >= 0 ? .saved : .wasted), isSelected: .constant(false))
                 Spacer()
                 HStack(alignment: .bottom, spacing: 4) {
-                    Text("\(price.formatToCurrency())")
+                    Text(price > 0 ? "+" + price.formatToCurrency() : price.formatToCurrency())
                         .font(.system(size: 22, weight: .bold))
                         .foregroundColor(textColor)
                     Text("원")

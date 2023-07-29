@@ -57,8 +57,20 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                 }
             }
             
-            Text(viewModel.total.toString())
+            Text(viewModel.total > 0 ? "+" + viewModel.total.formatToCurrency() : viewModel.total.formatToCurrency())
                 .font(.system(size: 36, weight: .black))
+                .if(viewModel.total == 0) { view in
+                    view
+                        .foregroundColor(.appColor(.neutral700))
+                }
+                .if(viewModel.total > 0) { view in
+                    view
+                        .foregroundColor(.appColor(.primary500))
+                }
+                .if(viewModel.total < 0) { view in
+                    view
+                        .foregroundColor(.appColor(.red))
+                }
         }
         .padding(.vertical, 24)
         .padding(.horizontal, 32)
