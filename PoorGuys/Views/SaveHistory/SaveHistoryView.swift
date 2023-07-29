@@ -23,7 +23,10 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
         .onAppear {
             Task {
                 try await viewModel.fetchAllHistories(on: Date())
+                viewModel.calculateMyConsumptionScore()
+                
                 try await viewModel.fetchAllEncouragementWordsAndImages()
+                viewModel.chooseRandomWordsAndImage()
             }
             
             UITableView.appearance().showsVerticalScrollIndicator = false
@@ -33,34 +36,37 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     @ViewBuilder
     func saveHistoryCard() -> some View {
         VStack(spacing: 0) {
-            Text(viewModel.encouragingWordsAndImages.first?.words.first ?? "")
+            Text(viewModel.encouragingWords)
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(Color.appColor(.neutral900))
             
-            AsyncImage(url: URL(string: viewModel.encouragingWordsAndImages.first?.images.first ?? "")) { image in
-                image.resizable()
-                    .scaledToFit()
-                    .padding(.vertical, 24)
-                    .padding(.horizontal, 48)
-            } placeholder: {
-                Color.appColor(.white)
+            AsyncImage(url: URL(string: viewModel.encouragingImageURL)) { phase in
+                
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.vertical, 24)
+                        .padding(.horizontal, 48)
+                @unknown default:
+                    Color.appColor(.white)
+                        .scaledToFit()
+                        .padding(.vertical, 24)
+                        .padding(.horizontal, 48)
+                }
             }
-//            Image("제목_없는_아트워크 1148 1")
-//                .resizable()
-//                    .scaledToFit()
-//                    .padding(.vertical, 24)
-//                    .padding(.horizontal, 48)
             
-            Text("-5,000")
+            Text(viewModel.total.toString())
                 .font(.system(size: 36, weight: .black))
         }
         .padding(.vertical, 24)
+        .padding(.horizontal, 32)
         .background {
             RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color("white"))
+                .foregroundColor(Color.appColor(.white))
                 .shadow(color: Color(uiColor: UIColor(red: 0, green: 0.51, blue: 1, alpha: 0.2)) , radius: 10)
         }
-        .padding(.horizontal, 32)
     }
 
     @ViewBuilder
