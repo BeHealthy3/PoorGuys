@@ -23,6 +23,7 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
         .onAppear {
             Task {
                 try await viewModel.fetchAllHistories(on: Date())
+                try await viewModel.fetchAllEncouragementWordsAndImages()
             }
             
             UITableView.appearance().showsVerticalScrollIndicator = false
@@ -32,15 +33,25 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     @ViewBuilder
     func saveHistoryCard() -> some View {
         VStack(spacing: 0) {
-            Text("코코야 폼 미쳤다!")
+            Text(viewModel.encouragingWordsAndImages.first?.words.first ?? "")
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(Color.appColor(.neutral900))
-            Image("imageExample")
-                .resizable()
-                .scaledToFit()
-                .padding(.vertical, 24)
-                .padding(.horizontal, 48)
-            Text("+50,000")
+            
+            AsyncImage(url: URL(string: viewModel.encouragingWordsAndImages.first?.images.first ?? "")) { image in
+                image.resizable()
+                    .scaledToFit()
+                    .padding(.vertical, 24)
+                    .padding(.horizontal, 48)
+            } placeholder: {
+                Color.appColor(.white)
+            }
+//            Image("제목_없는_아트워크 1148 1")
+//                .resizable()
+//                    .scaledToFit()
+//                    .padding(.vertical, 24)
+//                    .padding(.horizontal, 48)
+            
+            Text("-5,000")
                 .font(.system(size: 36, weight: .black))
         }
         .padding(.vertical, 24)
@@ -115,7 +126,6 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
 
 struct SaveHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-//        SaveHistoryView(viewModel: MockSaveHistoryViewModel(), isPresentingBottomSheet: .constant(false))
         SaveHistoryView<MockSaveHistoryViewModel>(isPresentingBottomSheet: .constant(false))
     }
 }

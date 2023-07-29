@@ -83,3 +83,23 @@ struct SaveHistory: Identifiable {
         SaveHistory(category: ConsumptionCategory(rawValue: Int.random(in: (0...11)))!, price: Int.random(in: (-1000000...1000000)))
     }
 }
+
+struct EncouragingWordsAndImages {
+    var score: ConsumptionScore
+    var words: [String]
+    var images: [String]
+}
+
+enum ConsumptionScore: String {
+    case spendOver100
+    case spendOver50
+    case spendOver20
+    case spendOver5
+    case spendSome
+    case zero
+    case saveSome
+    case saveOver5
+    case saveOver20
+    case saveOver50
+    case saveOver100
+}

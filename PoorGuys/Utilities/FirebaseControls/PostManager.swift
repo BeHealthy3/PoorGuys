@@ -24,21 +24,22 @@ struct FirebasePostManager: PostManagable {
     }
     
     func uploadImage(_ image: UIImage) async throws -> URL {
-        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+        guard let imageData = image.pngData() else {
             throw FirebaseError.imageNotConvertable
         }
         
         let fileName = UUID().uuidString
-        let imageRef = storageReference.child("post_images/\(fileName).jpg")
+        let imageRef = storageReference.child("encouraging_Images/\(fileName).png")
         
         let metadata = StorageMetadata()
-        metadata.contentType = "image/jpeg"
+        metadata.contentType = "image/png"
         
         let _ = try await imageRef.putDataAsync(imageData, metadata: metadata)
         let url = try await imageRef.downloadURL()
         
         return url
     }
+
     
     func removeImage(imageID: String) async throws {
         try await storageReference.child("post_images/\(imageID).jpg").delete()

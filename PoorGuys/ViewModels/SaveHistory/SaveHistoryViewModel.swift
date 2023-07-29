@@ -11,18 +11,27 @@ protocol SaveHistoryViewModelProtocol: ObservableObject, ViewModelable {
     var date: Date { get set }
     var total: Int { get set }
     var saveHistories: [SaveHistory] { get set }
+    var encouragingWordsAndImages: [EncouragingWordsAndImages] { get }
     
     func addHistory(_ history: SaveHistory, on date: Date) async throws
     
     func fetchAllHistories(on date: Date) async throws
     
     func removeHistory(id: ID) async throws
+    
+    func fetchAllEncouragementWordsAndImages() async throws
 }
 
 class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
     @Published var date: Date = Date()
     @Published var total: Int = 0
     @Published var saveHistories: [SaveHistory] = []
+    @Published var encouragingWordsAndImages: [EncouragingWordsAndImages] = []
+    
+    func fetchAllEncouragementWordsAndImages() async throws {
+        sleep(1)
+        encouragingWordsAndImages = [EncouragingWordsAndImages(score: .saveOver100, words: ["누구야 뒤질래?"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0A65F00C-88F7-4530-BCE6-A470D1743E7D.jpg?alt=media&token=a469e806-594d-4804-86f6-45f103d1f156"])]
+    }
     
     func addHistory(_ history: SaveHistory, on date: Date) async throws {
 //        네트워킹
@@ -104,5 +113,3 @@ class SaveHistoryViewModel: ObservableObject {
         
     }
 }
-
-
