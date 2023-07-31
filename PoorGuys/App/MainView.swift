@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
+//    @State private var keyboardHeight: CGFloat = 0
     @EnvironmentObject var logInViewModel: LoginViewModel
     @StateObject var saveHistoryViewModel: SaveHistoryViewModel
     
@@ -80,12 +81,24 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
                             
                             CustomBottomSheet(content: AddSaveHistoryView<SaveHistoryViewModel>(isPresenting: $isPresentingAddSaveHistoryView).environmentObject(saveHistoryViewModel))
                                 .transition(.bottomToTop)
+//                                .offset(y: -keyboardHeight)
                         }
                     }
                 }
             }
         }
         .preferredColorScheme(.light)   // 기기 다크모드여도 앱은 라이트모드 적용
+//        .onAppear {
+//            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
+//                if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+//                    keyboardHeight = keyboardFrame.height
+//                }
+//            }
+//
+//            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+//                keyboardHeight = 0
+//            }
+//        }
     }
 }
 

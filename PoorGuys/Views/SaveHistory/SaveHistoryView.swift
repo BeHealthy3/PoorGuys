@@ -113,6 +113,13 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                print("삭제")
+                            } label: {
+                                Image(systemName: "trash")
+                            }
+                        }
                 }
                 .listStyle(.plain)
                 .scrollIndicators(.hidden)
@@ -128,6 +135,17 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                Task {
+                                    try await viewModel.removeHistory(id: saveHistory.id)
+                                    viewModel.calculateMyConsumptionScore()
+                                    viewModel.chooseRandomWordsAndImage()
+                                }
+                            } label: {
+                                Image(systemName: "trash")
+                            }
+                        }
                 }
                 .listStyle(.plain)
                 .padding(.horizontal, 32)
