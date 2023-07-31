@@ -16,7 +16,12 @@ struct CustomBottomSheet<Content: View>: View {
     var body: some View {
         VStack(spacing: 0) {
             content
-                .frame(height: 500)
+                .if(UIDevice.current.hasNotch, transform: { view in
+                        view.frame(height: 500)
+                })
+                .if(!UIDevice.current.hasNotch, transform: { view in
+                        view.frame(height: 490)
+                })
                 .cornerRadius(12)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)

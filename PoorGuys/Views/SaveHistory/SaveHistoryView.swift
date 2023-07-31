@@ -10,12 +10,20 @@ import SwiftUI
 struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     @EnvironmentObject var viewModel: ViewModel
     @Binding var isPresentingBottomSheet: Bool
-
+    
     var body: some View {
         ZStack {
-            VStack(spacing: 0) {
+            VStack(spacing: 8) {
                 saveHistoryCard()
                     .padding(.top, 33)
+                    .padding(.horizontal, 16)
+                    .if(!UIDevice.current.hasNotch, transform: { view in
+                        view.frame(height: Constants.screenHeight * 0.53)
+                    })
+                    .if(UIDevice.current.hasNotch) { view in
+                        view.frame(height: Constants.screenHeight * 0.47)
+                    }
+                
                 savedHistoryList()
                 Spacer()
             }
@@ -35,10 +43,18 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     
     @ViewBuilder
     func saveHistoryCard() -> some View {
-        VStack(spacing: 0) {
-            Text(viewModel.encouragingWords)
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(Color.appColor(.neutral900))
+        VStack(spacing: 20) {
+            Spacer()
+            
+            HStack {
+                Spacer(minLength: 10)
+                Text(viewModel.encouragingWords)
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundColor(Color.appColor(.neutral900))
+                    .lineLimit(2)
+                Spacer(minLength: 10)
+            }
+            
             
             AsyncImage(url: URL(string: viewModel.encouragingImageURL)) { phase in
                 
@@ -47,13 +63,10 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     image
                         .resizable()
                         .scaledToFit()
-                        .padding(.vertical, 24)
-                        .padding(.horizontal, 48)
+                    
                 @unknown default:
                     Color.appColor(.white)
                         .scaledToFit()
-                        .padding(.vertical, 24)
-                        .padding(.horizontal, 48)
                 }
             }
             
@@ -71,9 +84,8 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     view
                         .foregroundColor(.appColor(.red))
                 }
+                .padding(.bottom, 25)
         }
-        .padding(.vertical, 24)
-        .padding(.horizontal, 32)
         .background {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color.appColor(.white))
