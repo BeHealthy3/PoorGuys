@@ -17,6 +17,7 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     @State private var saveHistoryViewMode = SaveHistoryViewMode.saved
     @State private var price: String = ""
     @FocusState private var focusedField: FocusedField?
+    @Binding var isPresenting: Bool
     
     var body: some View {
         ZStack {
@@ -137,7 +138,22 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     @ViewBuilder
     func completedButton() -> some View {
         Button {
-            
+            Task {
+                do {
+                    guard let category = ConsumptionCategory(rawValue: selectedIcon), let price = price.removeCommasAndConvertToInt() else { return }
+                    
+                    try await viewModel.addHistory(SaveHistory(category: category, price: saveHistoryViewMode == .saved ? price : -price), on: Date())
+                    viewModel.calculateMyConsumptionScore()
+                    viewModel.chooseRandomWordsAndImage()
+                    
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        isPresenting = false
+                    }
+                    
+                } catch {
+                    print("업로드 실패") //todo: 에러처리
+                }
+            }
         } label: {
             HStack {
                 Spacer()
@@ -157,8 +173,3 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     }
 }
 
-struct AddSaveHistoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddSaveHistoryView<MockSaveHistoryViewModel>()
-    }
-}

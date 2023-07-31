@@ -40,6 +40,7 @@ extension SaveHistoryViewModelProtocol {
     }
     
     func calculateMyConsumptionScore() {
+        total = 0
         saveHistories.forEach { history in
             total += history.price
         }
@@ -161,12 +162,14 @@ extension SaveHistoryViewModelProtocol {
 }
 
 class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
+    
     @Published var date: Date = Date()
     @Published var total: Int = 0
     @Published var saveHistories: [SaveHistory] = []
-    @Published var encouragingWordsAndImagesCollection: [EncouragingWordsAndImages] = []
     @Published var encouragingWords: String = ""
     @Published var encouragingImageURL: String = ""
+    
+    var encouragingWordsAndImagesCollection: [EncouragingWordsAndImages] = []
     var myScore: ConsumptionScore = .zero
     
     func fetchAllEncouragementWordsAndImages() async throws {

@@ -78,7 +78,7 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
                                     }
                                 }
                             
-                            CustomBottomSheet(content: AddSaveHistoryView<SaveHistoryViewModel>().environmentObject(saveHistoryViewModel))
+                            CustomBottomSheet(content: AddSaveHistoryView<SaveHistoryViewModel>(isPresenting: $isPresentingAddSaveHistoryView).environmentObject(saveHistoryViewModel))
                                 .transition(.bottomToTop)
                         }
                     }

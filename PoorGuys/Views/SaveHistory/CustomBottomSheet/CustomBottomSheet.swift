@@ -24,10 +24,3 @@ struct CustomBottomSheet<Content: View>: View {
         .zIndex(10)
     }
 }
-
-struct CustomBottomSheet_Previews: PreviewProvider {
-    static var previews: some View {
-        CustomBottomSheet(content: AddSaveHistoryView<MockSaveHistoryViewModel>())
-    }
-}
-
