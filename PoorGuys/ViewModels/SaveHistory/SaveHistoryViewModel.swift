@@ -31,8 +31,12 @@ extension SaveHistoryViewModelProtocol {
             encouragingWordsAndImages.score == myScore
         }
         
-        encouragingWords = encouragingWordsAndImages?.words.randomElement() ?? ""
-        encouragingImageURL = encouragingWordsAndImages?.images.randomElement() ?? ""
+        do {
+            encouragingImageURL = encouragingWordsAndImages?.images.randomElement() ?? ""
+            encouragingWords = try reorganizeEncouragingWordsIfNeeded(encouragingWordsAndImages?.words.randomElement() ?? "")
+        } catch {
+            print("로그인 에러") //todo: 에러처리
+        }
     }
     
     func calculateMyConsumptionScore() {
@@ -42,7 +46,9 @@ extension SaveHistoryViewModelProtocol {
         
         myScore = seperateConsumptionScore(from: total)
     }
-    
+}
+
+extension SaveHistoryViewModelProtocol {
     private func seperateConsumptionScore(from amount: Int) -> ConsumptionScore {
         switch amount {
         case ...(-100000):
@@ -69,6 +75,89 @@ extension SaveHistoryViewModelProtocol {
             return .saveOver100
         }
     }
+    
+    private func reorganizeEncouragingWordsIfNeeded(_ fetchedEncouragingWords: String) throws -> String {
+        guard let nickName = User.currentUser?.nickName else { throw LoginError.noCurrentUser }
+        
+        var EncouragingWords = fetchedEncouragingWords.replacingOccurrences(of: "UserNickName", with: nickName)
+
+        if EncouragingWords.contains("{") && EncouragingWords.contains("}") {
+            guard let strChoicesWithSlash = extractStringBetweenBrackets(EncouragingWords) else { return EncouragingWords }
+            
+            let strChoicesArrayWithoutSlash = strChoicesWithSlash.components(separatedBy: "/")
+
+            guard strChoicesArrayWithoutSlash.count == 2 else { return EncouragingWords }
+
+            var choice = ""
+
+            if isLastCharacterKorean(nickName) {
+                if let isLastWordOfNickNameJongseong = hasJongseong(nickName) {
+                    choice = isLastWordOfNickNameJongseong ? strChoicesArrayWithoutSlash[1] : strChoicesArrayWithoutSlash[0]
+                }
+
+            } else {
+                choice = "\(strChoicesArrayWithoutSlash[1])(\(strChoicesArrayWithoutSlash[0]))"
+            }
+            
+            if let strChoicesWithSlashRange = EncouragingWords.range(of: "{\(strChoicesWithSlash)}") {
+                EncouragingWords = EncouragingWords.replacingCharacters(in: strChoicesWithSlashRange, with: choice)
+            }
+        }
+
+        return EncouragingWords
+    }
+
+    private func isLastCharacterKorean(_ nickName: String) -> Bool {
+        var lastWordOfNickName: Character = nickName.last!
+        
+        let koreanCharacterSet = CharacterSet(charactersIn: "가"..."힣")
+        let unicodeScalars = lastWordOfNickName.unicodeScalars
+        
+        return koreanCharacterSet.contains(UnicodeScalar(unicodeScalars[unicodeScalars.startIndex].value)!)
+    }
+
+
+    private func hasJongseong(_ KoreanString: String) -> Bool? {
+        var charLastKoreanWord: Character
+        
+        if let lastWord = KoreanString.last {
+            charLastKoreanWord = lastWord
+            
+            let unicodeScalar = charLastKoreanWord.unicodeScalars.first!
+            let unicodeValue = Int(unicodeScalar.value)
+
+            if unicodeValue >= 0xAC00 {
+                let remainder = (unicodeValue - 0xAC00) % 28
+                return remainder != 0
+            }
+
+            return false
+        }
+        
+        return nil
+    }
+
+    private func extractStringBetweenBrackets(_ str: String) -> String? {
+        guard let openingBracketIndex = str.firstIndex(of: "{"),
+              let closingBracketIndex = str.firstIndex(of: "}") else {
+            return nil
+        }
+        
+        let startIndex = str.index(after: openingBracketIndex)
+        let endIndex = str.index(before: closingBracketIndex)
+        let extractedString = str[startIndex...endIndex]
+        
+        return String(extractedString)
+    }
+
+    private func extractStringBasedOnJongseong(_ str: String, hasJongSeong: Bool) -> String? {
+        let components = str.components(separatedBy: "/")
+        guard components.count == 2 else {
+            return nil
+        }
+        
+        return hasJongSeong ? components[1] : components[0]
+    }
 }
 
 class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
@@ -82,7 +171,7 @@ class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
     
     func fetchAllEncouragementWordsAndImages() async throws {
         sleep(1)
-        encouragingWordsAndImagesCollection = [EncouragingWordsAndImages(score: .spendOver100, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .spendOver50, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .spendOver20, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .spendOver5, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .zero, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .spendSome, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]) ,EncouragingWordsAndImages(score: .saveSome, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .saveOver5, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .saveOver20, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .saveOver50, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .saveOver100, words: ["너 돈 너무 많이 썼다;", "와 벼락거지 탄생!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"])]
+        encouragingWordsAndImagesCollection = [EncouragingWordsAndImages(score: .spendOver100, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .spendOver50, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .spendOver20, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .spendOver5, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .zero, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .spendSome, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]) ,EncouragingWordsAndImages(score: .saveSome, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .saveOver5, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .saveOver20, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .saveOver50, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"]), EncouragingWordsAndImages(score: .saveOver100, words: ["UserNickName{는/이는} 내일부터 거지하려나보다!", "와 UserNickName거지 탄생축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F0B902165-81F8-49C8-820B-3B5CA1F3E7BD.png?alt=media&token=f249b7d1-00fd-4caf-9202-5593f970b624", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F3E32922D-D5EE-44F1-9B02-B4AF280B7F46.png?alt=media&token=b1d6cf53-4e83-46a3-85ca-0f6e164501c3"])]
     }
     
     func addHistory(_ history: SaveHistory, on date: Date) async throws {
@@ -104,16 +193,6 @@ class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
         saveHistories.removeAll { $0.id == id }
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 class SaveHistoryViewModel: ObservableObject {
