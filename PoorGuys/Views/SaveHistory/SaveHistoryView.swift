@@ -30,10 +30,28 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
         }
         .onAppear {
             Task {
-                try await viewModel.fetchAllHistories(on: Date())
-                viewModel.calculateMyConsumptionScore()
+                // 두 개의 비동기 작업을 병렬로 실행
+                let fetchAllHistoriesTask = Task.detached {
+                    do {
+                        try await viewModel.fetchAllHistories(on: Date())
+                    } catch {
+                        //todo: 에러처리
+                    }
+                }
                 
-                try await viewModel.fetchAllEncouragementWordsAndImages()
+                let fetchAllEncouragementWordsTask = Task.detached {
+                    do {
+                        try await viewModel.fetchAllEncouragementWordsAndImages()
+                    } catch {
+                        //todo: 에러처리
+                    }
+                }
+                
+                // 작업들이 완료될 때까지 기다립니다.
+                await fetchAllHistoriesTask.value
+                await fetchAllEncouragementWordsTask.value
+                
+                viewModel.calculateMyConsumptionScore()
                 viewModel.chooseRandomWordsAndImage()
             }
             
