@@ -7,6 +7,17 @@
 
 import Foundation
 
+struct SaveHistory: Identifiable {
+    let id = UUID().uuidString
+    var category: ConsumptionCategory
+//    var state: SaveHistoryState
+    var price: Int
+    
+    static func dummy() -> Self {
+        SaveHistory(category: ConsumptionCategory(rawValue: Int.random(in: (0...11)))!, price: Int.random(in: (-1000000...1000000)))
+    }
+}
+
 enum ConsumptionCategory: Int {
     case transport, food, shopping, flex, dessert, subscription, hobby, mobileGame, secondHandDealings, coffee, present, drink 
     
@@ -71,17 +82,6 @@ enum ConsumptionCategory: Int {
 
 enum SaveHistoryViewMode {
     case saved, wasted
-}
-
-struct SaveHistory: Identifiable {
-    let id = UUID().uuidString
-    var category: ConsumptionCategory
-//    var state: SaveHistoryState
-    var price: Int
-    
-    static func dummy() -> Self {
-        SaveHistory(category: ConsumptionCategory(rawValue: Int.random(in: (0...11)))!, price: Int.random(in: (-1000000...1000000)))
-    }
 }
 
 struct EncouragingWordsAndImages {

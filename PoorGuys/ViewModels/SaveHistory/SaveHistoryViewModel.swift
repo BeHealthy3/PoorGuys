@@ -16,7 +16,7 @@ protocol SaveHistoryViewModelProtocol: ObservableObject, ViewModelable {
     var encouragingImageURL: String { get set }
     var myScore: ConsumptionScore { get set }
     
-    func addHistory(_ history: SaveHistory, on date: Date) async throws
+    func addHistory(_ history: SaveHistory) async throws
     
     func fetchAllHistories(on date: Date) async throws
     
@@ -163,6 +163,8 @@ extension SaveHistoryViewModelProtocol {
 
 class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
     
+    private let saveHistoryManager: SaveHistoryManagable = MockSaveHistoryManager()
+    
     @Published var date: Date = Date()
     @Published var total: Int = 0
     @Published var saveHistories: [SaveHistory] = []
@@ -175,92 +177,32 @@ class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
     func fetchAllEncouragementWordsAndImages() async throws {
         
         sleep(1)
-        DispatchQueue.main.async {
-            self.encouragingWordsAndImagesCollection = [EncouragingWordsAndImages(score: .spendOver100, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .spendOver50, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .spendOver20, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .spendOver5, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .zero, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .saveSome, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]) ,EncouragingWordsAndImages(score: .saveSome, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .saveOver5, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .saveOver20, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .saveOver50, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .saveOver100, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"])]
-        }
+        encouragingWordsAndImagesCollection = try await saveHistoryManager.fetchEncouragingWordsAndImages()
     }
     
-    func addHistory(_ history: SaveHistory, on date: Date) async throws {
+    func addHistory(_ history: SaveHistory) async throws {
 //        네트워킹
         sleep(1)
+        try await saveHistoryManager.createNewHistory(history, on: date)
+
         saveHistories.append(history)
     }
     
     func fetchAllHistories(on date: Date) async throws {
-        print(#function)
+        
         sleep(1)
+        let saveHistories = try await saveHistoryManager.fetchAllHistories(on: date)
+        
         DispatchQueue.main.async {
-            for _ in 0...Int.random(in: 0...2) {
-                self.saveHistories.append(SaveHistory.dummy())
-            }
+            self.saveHistories = saveHistories
+            self.date = date
         }
     }
     
     func removeHistory(id: ID) async throws {
 //        네트워킹
         sleep(1)
+        try await saveHistoryManager.removeHistory(id, on: date)
         saveHistories.removeAll { $0.id == id }
-    }
-}
-
-
-class SaveHistoryViewModel: ObservableObject {
-    @Published var date = Date()
-    @Published var total = 0
-    
-    @Published var saveHistories: [SaveHistory] = [
-//        SaveHistory(category: .impulseBuy, state: .wasted, price: -8000),
-//        SaveHistory(category: .drink, state: .saved, price: +8000),
-//        SaveHistory(category: .impulseBuy, state: .wasted, price: 8000),
-//        SaveHistory(category: .impulseBuy, state: .wasted, price: 8000),
-//        SaveHistory(category: .impulseBuy, state: .wasted, price: 8000),
-//        SaveHistory(category: .impulseBuy, state: .wasted, price: 8000)
-        
-        
-//        SaveHistory(category: .impulseBuy, price: -8000),
-//        SaveHistory(category: .drink, price: 8000),
-//        SaveHistory(category: .impulseBuy, price: 8000),
-//        SaveHistory(category: .impulseBuy, price: 8000),
-//        SaveHistory(category: .impulseBuy, price: 8000),
-//        SaveHistory(category: .impulseBuy, price: 8000)
-    ]
-    
-//    @Published var saveHistoryCategories: [SaveHistory] = [
-////        SaveHistory(category: .transport, state: .saved, price: 0),
-////        SaveHistory(category: .food, state: .saved, price: 0),
-////        SaveHistory(category: .shopping, state: .saved, price: 0),
-////        SaveHistory(category: .impulseBuy, state: .saved, price: 0),
-////        SaveHistory(category: .dessert, state: .saved, price: 0),
-////        SaveHistory(category: .hobby, state: .saved, price: 0),
-////        SaveHistory(category: .subscribtion, state: .saved, price: 0),
-////        SaveHistory(category: .mobileGame, state: .saved, price: 0),
-////        SaveHistory(category: .coffee, state: .saved, price: 0),
-////        SaveHistory(category: .present, state: .saved, price: 0),
-////        SaveHistory(category: .drink, state: .saved, price: 0),
-////        SaveHistory(category: .secondHandDealings, state: .saved, price: 0)
-//        SaveHistory(category: .transport, price: 0),
-//        SaveHistory(category: .food, price: 0),
-//        SaveHistory(category: .shopping, price: 0),
-//        SaveHistory(category: .impulseBuy, price: 0),
-//        SaveHistory(category: .dessert, price: 0),
-//        SaveHistory(category: .hobby, price: 0),
-//        SaveHistory(category: .subscribtion, price: 0),
-//        SaveHistory(category: .mobileGame, price: 0),
-//        SaveHistory(category: .coffee, price: 0),
-//        SaveHistory(category: .present, price: 0),
-//        SaveHistory(category: .drink, price: 0),
-//        SaveHistory(category: .secondHandDealings, price: 0)
-//    ]
-    
-    func addHistory(_ history: SaveHistory) async throws {
-        
-    }
-    
-    func fetchAllHistories(on date: Date) {
-        
-    }
-    
-    func removeHistory(id: ID) {
-        
     }
 }

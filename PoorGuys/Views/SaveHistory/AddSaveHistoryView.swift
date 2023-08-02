@@ -142,7 +142,7 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                 do {
                     guard let category = ConsumptionCategory(rawValue: selectedIcon), let price = price.removeCommasAndConvertToInt() else { return }
                     
-                    try await viewModel.addHistory(SaveHistory(category: category, price: saveHistoryViewMode == .saved ? price : -price), on: Date())
+                    try await viewModel.addHistory(SaveHistory(category: category, price: saveHistoryViewMode == .saved ? price : -price))
                     viewModel.calculateMyConsumptionScore()
                     viewModel.chooseRandomWordsAndImage()
                     
