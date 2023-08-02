@@ -11,7 +11,7 @@ import FirebaseFirestoreSwift
 import FirebaseStorage
 
 struct FirebasePostManager: PostManagable {
-    private let postCollection = Firestore.firestore().collection("posts")
+    private let postsCollection = Firestore.firestore().collection("posts")
     private let storageReference = Storage.storage().reference()
     internal var lastDocument: DocumentSnapshot?
     
@@ -54,13 +54,13 @@ struct FirebasePostManager: PostManagable {
                 post.imageURL = [imageURL.absoluteString]
             }
             
-            let ref = try postCollection.addDocument(from: post)
-            let refId = ref.documentID
+            let ref = try postsCollection.addDocument(from: post)
+            let refId = ref.documentID  //todo: 걍 uuid만들어 넣어주자. 괜히 통신 두번하지맑
             let data: [String : Any] = [
                 Post.codingKeys.id.rawValue : refId
             ]
             
-            try await postCollection.document(refId).updateData(data)
+            try await postsCollection.document(refId).updateData(data)
             
         } catch {
             throw error
@@ -79,7 +79,7 @@ struct FirebasePostManager: PostManagable {
             }
         }
         
-        try await postCollection.document(updatedPost.id).updateData(
+        try await postsCollection.document(updatedPost.id).updateData(
             [
                 "isAboutMoney" : updatedPost.isAboutMoney,
                 "title" : updatedPost.title,
@@ -90,7 +90,7 @@ struct FirebasePostManager: PostManagable {
     }
     
     func removePost(postID: String) async throws {
-        try await postCollection.document(postID).delete()
+        try await postsCollection.document(postID).delete()
     }
     
     mutating func removeLocalPosts() {
@@ -98,7 +98,7 @@ struct FirebasePostManager: PostManagable {
     }
     
     mutating func fetch10Posts() async throws -> [Post] {
-        var query = postCollection
+        var query = postsCollection
             .order(by: "timeStamp", descending: true)
             .limit(to: 10)
         
@@ -124,7 +124,7 @@ struct FirebasePostManager: PostManagable {
     
     func fetchPost(postID: String) async throws -> Post {
         
-        let documentSnapShot = try await postCollection.document(postID).getDocument()
+        let documentSnapShot = try await postsCollection.document(postID).getDocument()
         guard let post = try? documentSnapShot.data(as: Post.self), documentSnapShot.exists else { throw FirebaseError.documentNotFound }
         
         return post
@@ -132,7 +132,7 @@ struct FirebasePostManager: PostManagable {
     
     func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void ) throws {
         
-        let postRef = postCollection.document(postID)
+        let postRef = postsCollection.document(postID)
         let likedUserIDField = "likedUserIDs"
         guard let user = user else { throw LoginError.noCurrentUser }
         
@@ -179,7 +179,7 @@ struct FirebasePostManager: PostManagable {
     }
     
     func addNewComment(with newComment: Comment, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {
-        let postRef = postCollection.document(postID)
+        let postRef = postsCollection.document(postID)
         let commentsField = "comments"
         
         Firestore.firestore().runTransaction { (transaction, errorPointer) -> Any? in
@@ -218,7 +218,7 @@ struct FirebasePostManager: PostManagable {
     }
     
     func removeComment(id: ID, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {
-        let postRef = postCollection.document(postID)
+        let postRef = postsCollection.document(postID)
         let commentsField = "comments"
         
         Firestore.firestore().runTransaction { (transaction, errorPointer) -> Any? in
@@ -262,7 +262,7 @@ struct FirebasePostManager: PostManagable {
     }
     
     func toggleCommentLike(commentID: ID, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws {
-        let postRef = postCollection.document(postID)
+        let postRef = postsCollection.document(postID)
         let commentsField = "comments"
         let likedUserIDsField = "likedUserIDs"
         

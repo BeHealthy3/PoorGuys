@@ -7,18 +7,32 @@
 
 import Foundation
 
-struct SaveHistory: Identifiable {
-    let id = UUID().uuidString
+struct SaveHistory: Identifiable, Codable {
+    let id: String
     var category: ConsumptionCategory
 //    var state: SaveHistoryState
     var price: Int
     
     static func dummy() -> Self {
-        SaveHistory(category: ConsumptionCategory(rawValue: Int.random(in: (0...11)))!, price: Int.random(in: (-1000000...1000000)))
+        SaveHistory(id: UUID().uuidString, category: ConsumptionCategory(rawValue: Int.random(in: (0...11)))!, price: Int.random(in: (-1000000...1000000)))
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id, category, price
     }
 }
 
-enum ConsumptionCategory: Int {
+extension SaveHistory {
+    func asDictionary() -> [String: Any] {
+        return [
+            "id": id,
+            "category": category.rawValue,
+            "price": price,
+        ]
+    }
+}
+
+enum ConsumptionCategory: Int, Codable {
     case transport, food, shopping, flex, dessert, subscription, hobby, mobileGame, secondHandDealings, coffee, present, drink 
     
     var iconName: String {
