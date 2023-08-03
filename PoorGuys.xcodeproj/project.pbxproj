@@ -93,6 +93,7 @@
 		D39A57AC2A41A67C0033DAD5 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39A57AA2A41A67C0033DAD5 /* MainView.swift */; };
 		D39A57AE2A41A6920033DAD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39A57AD2A41A6920033DAD5 /* Assets.xcassets */; };
 		D3AA15122A21F3570091DC61 /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = D3AA15112A21F3570091DC61 /* LoremSwiftum */; };
+		D3C98FDF2A7B66C800461DBF /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C98FDE2A7B66C800461DBF /* Date+Extensions.swift */; };
 		D3F3DF9C2A1395E9006FB45E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -185,6 +186,7 @@
 		D39A57A92A41A67C0033DAD5 /* PoorGuysApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PoorGuysApp.swift; sourceTree = "<group>"; };
 		D39A57AA2A41A67C0033DAD5 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D39A57AD2A41A6920033DAD5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D3C98FDE2A7B66C800461DBF /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		D3F3DF9B2A1395E9006FB45E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -277,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				D35939C92A41F44C007263E8 /* Debounce+View+Extension.swift */,
+				D3C98FDE2A7B66C800461DBF /* Date+Extensions.swift */,
 				D35939C82A41F44C007263E8 /* Shape+Extensions.swift */,
 				D35939D22A41F49A007263E8 /* String+Extensions.swift */,
 				D3552E132A726A1C00F565AA /* Int+Extensions.swift */,
@@ -710,6 +713,7 @@
 				D39A57AB2A41A67C0033DAD5 /* PoorGuysApp.swift in Sources */,
 				D32770222A50369A002C34C6 /* Typealias.swift in Sources */,
 				D35939CE2A41F44C007263E8 /* Debounce+View+Extension.swift in Sources */,
+				D3C98FDF2A7B66C800461DBF /* Date+Extensions.swift in Sources */,
 				D35939F12A42056D007263E8 /* CommentView.swift in Sources */,
 				D35939E52A420561007263E8 /* ImagePickerView.swift in Sources */,
 				D35939F02A42056D007263E8 /* PostFillingCenterView.swift in Sources */,

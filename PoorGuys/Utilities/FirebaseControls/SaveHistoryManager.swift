@@ -26,9 +26,7 @@ struct SaveHistoryManager: SaveHistoryManagable {
     private lazy var dateCollection = Firestore.firestore().collection("histories").document(uid).collection("date")
     
     mutating func createNewHistory(_ history: SaveHistory, on date: Date) async throws {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
-        let date = dateFormatter.string(from: Date())
+        let date = date.dotted()
         let dateDocumentRef = dateCollection.document(date)
         let documentSnapshot = try await dateDocumentRef.getDocument()
         
@@ -48,8 +46,27 @@ struct SaveHistoryManager: SaveHistoryManagable {
         }
     }
     
-    func fetchAllHistories(on date: Date) async throws -> [SaveHistory] {
-        []
+    mutating func fetchAllHistories(on date: Date) async throws -> [SaveHistory] {
+        let date = date.dotted()
+        let dateDocumentRef = dateCollection.document(date)
+        let documentSnapshot = try await dateDocumentRef.getDocument()
+        
+        if documentSnapshot.exists {
+            guard var data = documentSnapshot.data() else { throw FirebaseError.documentNotFound }
+            
+            if let histories = data["histories"] as? [SaveHistory] {
+                
+                return histories
+            } else {
+                let newDocumentData: [String : Any] = ["histories" : []]
+                try await dateDocumentRef.setData(newDocumentData)
+                
+                return []
+            }
+            
+        } else {
+            return []
+        }
     }
     
     func removeHistory(_ id: ID, on date: Date) async throws {
