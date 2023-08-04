@@ -55,7 +55,7 @@ struct FirebasePostManager: PostManagable {
             }
             
             let ref = try postsCollection.addDocument(from: post)
-            let refId = ref.documentID  //todo: 걍 uuid만들어 넣어주자. 괜히 통신 두번하지맑
+            let refId = ref.documentID  //todo: 걍 uuid만들어 넣어주자. 괜히 통신 두번하지말고
             let data: [String : Any] = [
                 Post.codingKeys.id.rawValue : refId
             ]

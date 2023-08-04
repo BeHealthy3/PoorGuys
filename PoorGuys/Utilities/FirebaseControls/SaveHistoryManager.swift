@@ -12,13 +12,14 @@ import FirebaseFirestoreSwift
 protocol SaveHistoryManagable {
     func createNewHistory(_ history: SaveHistory, on date: Date) async throws
     func fetchAllHistories(on date: Date) async throws -> [SaveHistory]
-    func removeHistory(_ id: ID, on date: Date) async throws
+    func updateHistories(with histories: [SaveHistory], on date: Date) async throws
 }
 
 struct SaveHistoryManager: SaveHistoryManagable {
     
     let uid: String
     let strHistories = "histories"
+    let strDate = "date"
     
     init(uid: String) {
         self.uid = uid
@@ -28,7 +29,7 @@ struct SaveHistoryManager: SaveHistoryManagable {
     
     func createNewHistory(_ history: SaveHistory, on date: Date) async throws {
         let date = date.dotted()
-        let dateDocumentRef = historiesCollection.document(uid).collection("date").document(date)
+        let dateDocumentRef = historiesCollection.document(uid).collection(strDate).document(date)
         let documentSnapshot = try await dateDocumentRef.getDocument()
         
         if documentSnapshot.exists {
@@ -49,7 +50,7 @@ struct SaveHistoryManager: SaveHistoryManagable {
     
     func fetchAllHistories(on date: Date) async throws -> [SaveHistory] {
         let date = date.dotted()
-        let dateDocumentRef = historiesCollection.document(uid).collection("date").document(date)
+        let dateDocumentRef = historiesCollection.document(uid).collection(strDate).document(date)
         let documentSnapshot = try await dateDocumentRef.getDocument()
         
         if documentSnapshot.exists {
@@ -79,8 +80,19 @@ struct SaveHistoryManager: SaveHistoryManagable {
         }
     }
     
-    func removeHistory(_ id: ID, on date: Date) async throws {
+    func updateHistories(with histories: [SaveHistory], on date: Date) async throws {
         
+        let date = date.dotted()
+        let dateDocumentRef = historiesCollection.document(uid).collection(strDate).document(date)
+        let historiesData: [[String: Any]] = histories.map { history in
+                return [
+                    "category": history.category.rawValue,
+                    "id": history.id,
+                    "price": history.price
+                ]
+            }
+        
+        try await dateDocumentRef.updateData([strHistories : historiesData])
     }
 }
 
@@ -100,7 +112,7 @@ struct MockSaveHistoryManager: SaveHistoryManagable {
         return histories
     }
     
-    func removeHistory(_ id: ID, on date: Date) async throws {
+    func updateHistories(with histories: [SaveHistory], on date: Date) async throws {
         
     }
 }

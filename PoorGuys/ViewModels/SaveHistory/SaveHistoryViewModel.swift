@@ -161,6 +161,54 @@ extension SaveHistoryViewModelProtocol {
     }
 }
 
+class SaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
+    
+    private lazy var saveHistoryManager = SaveHistoryManager(uid: User.currentUser!.uid)
+    
+    @Published var date: Date = Date()
+    @Published var total: Int = 0
+    @Published var saveHistories: [SaveHistory] = []
+    @Published var encouragingWords: String = ""
+    @Published var encouragingImageURL: String = ""
+    
+    var encouragingWordsAndImagesCollection: [EncouragingWordsAndImages] = []
+    var myScore: ConsumptionScore = .zero
+    
+    
+    func fetchAllEncouragementWordsAndImages() async throws {
+        
+        encouragingWordsAndImagesCollection = [EncouragingWordsAndImages(score: .spendOver100, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .spendOver50, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .spendOver20, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .spendOver5, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .zero, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .saveSome, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]) ,EncouragingWordsAndImages(score: .saveSome, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .saveOver5, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .saveOver20, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .saveOver50, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"]), EncouragingWordsAndImages(score: .saveOver100, words: ["UserNickName{는/이는} 내일부터 거지하려나보다ㅋㅋㅋㅋ!", "와 UserNickName거지 탄생축하축하축하축하축하!"], images: ["https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F360A6C62-C0FD-4955-A94D-9365D2B3FD6D.png?alt=media&token=59e40fdd-9219-46ee-98ce-afc1358114fc", "https://firebasestorage.googleapis.com/v0/b/poorguys-ad187.appspot.com/o/encouraging_Images%2F42BD61DF-34CA-4CA5-B40A-451D03474F1C.png?alt=media&token=fb073485-2885-474f-bc1d-61a0a878a36d"])]
+    }
+    
+    func addHistory(_ history: SaveHistory) async throws {
+        try await saveHistoryManager.createNewHistory(history, on: date)
+
+        DispatchQueue.main.async {
+            self.saveHistories.append(history)
+        }
+    }
+    
+    func fetchAllHistories(on date: Date) async throws {
+        
+        let saveHistories = try await saveHistoryManager.fetchAllHistories(on: date)
+        
+        DispatchQueue.main.async {
+            self.saveHistories = saveHistories
+            self.date = date
+        }
+    }
+    
+    func removeHistory(id: ID) async throws {
+        
+        var histories = saveHistories
+        histories.removeAll { $0.id == id }
+        
+        try await saveHistoryManager.updateHistories(with: histories, on: date)
+        
+        saveHistories = histories
+    }
+}
+
 class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
     
     private lazy var saveHistoryManager = SaveHistoryManager(uid: User.currentUser!.uid)
@@ -205,7 +253,7 @@ class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
     func removeHistory(id: ID) async throws {
 //        네트워킹
         sleep(1)
-        try await saveHistoryManager.removeHistory(id, on: date)
+//        try await saveHistoryManager.removeHistory(id, on: date)
         saveHistories.removeAll { $0.id == id }
     }
 }
