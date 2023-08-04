@@ -10,55 +10,65 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 protocol SaveHistoryManagable {
-    mutating func createNewHistory(_ history: SaveHistory, on date: Date) async throws
-    mutating func fetchAllHistories(on date: Date) async throws -> [SaveHistory]
-    mutating func removeHistory(_ id: ID, on date: Date) async throws
+    func createNewHistory(_ history: SaveHistory, on date: Date) async throws
+    func fetchAllHistories(on date: Date) async throws -> [SaveHistory]
+    func removeHistory(_ id: ID, on date: Date) async throws
 }
 
 struct SaveHistoryManager: SaveHistoryManagable {
     
     let uid: String
+    let strHistories = "histories"
     
     init(uid: String) {
         self.uid = uid
     }
     
-    private lazy var dateCollection = Firestore.firestore().collection("histories").document(uid).collection("date")
+    private let historiesCollection = Firestore.firestore().collection("histories")
     
-    mutating func createNewHistory(_ history: SaveHistory, on date: Date) async throws {
+    func createNewHistory(_ history: SaveHistory, on date: Date) async throws {
         let date = date.dotted()
-        let dateDocumentRef = dateCollection.document(date)
+        let dateDocumentRef = historiesCollection.document(uid).collection("date").document(date)
         let documentSnapshot = try await dateDocumentRef.getDocument()
         
         if documentSnapshot.exists {
             guard var data = documentSnapshot.data() else { throw FirebaseError.documentNotFound }
             
-            if var histories = data["histories"] as? [[String: Any]] {
+            if var histories = data[strHistories] as? [[String: Any]] {
                 
                 histories.append(history.asDictionary())
-                data["histories"] = histories
+                data[strHistories] = histories
                 
                 try await dateDocumentRef.setData(data)
             }
         } else {
-            let newDocumentData: [String : Any] = ["histories" : [history.asDictionary()]]
+            let newDocumentData: [String : Any] = [strHistories : [history.asDictionary()]]
             try await dateDocumentRef.setData(newDocumentData)
         }
     }
     
-    mutating func fetchAllHistories(on date: Date) async throws -> [SaveHistory] {
+    func fetchAllHistories(on date: Date) async throws -> [SaveHistory] {
         let date = date.dotted()
-        let dateDocumentRef = dateCollection.document(date)
+        let dateDocumentRef = historiesCollection.document(uid).collection("date").document(date)
         let documentSnapshot = try await dateDocumentRef.getDocument()
         
         if documentSnapshot.exists {
             guard var data = documentSnapshot.data() else { throw FirebaseError.documentNotFound }
             
-            if let histories = data["histories"] as? [SaveHistory] {
-                
+            if let historiesArray = data[strHistories] as? [[String: Any]] {
+                let histories = historiesArray.compactMap { dict -> SaveHistory? in
+                    guard let categoryNumber = dict["category"] as? Int,
+                          let id = dict["id"] as? String,
+                          let price = dict["price"] as? Int,
+                          let category = ConsumptionCategory(rawValue: categoryNumber) else {
+                        return nil
+                    }
+                    return SaveHistory(id: id, category: category, price: price)
+                }
                 return histories
             } else {
-                let newDocumentData: [String : Any] = ["histories" : []]
+                let newDocumentData: [String: Any] = [strHistories: []]
+                
                 try await dateDocumentRef.setData(newDocumentData)
                 
                 return []
@@ -76,11 +86,11 @@ struct SaveHistoryManager: SaveHistoryManagable {
 
 struct MockSaveHistoryManager: SaveHistoryManagable {
     
-    mutating func createNewHistory(_ history: SaveHistory, on date: Date) async throws {
+    func createNewHistory(_ history: SaveHistory, on date: Date) async throws {
         
     }
     
-    mutating func fetchAllHistories(on date: Date) async throws -> [SaveHistory] {
+    func fetchAllHistories(on date: Date) async throws -> [SaveHistory] {
         var histories: [SaveHistory] = []
         if Int.random(in: 1...2).isMultiple(of: 2) {
             for _ in (0...Int.random(in: 0...5)) {
@@ -90,7 +100,7 @@ struct MockSaveHistoryManager: SaveHistoryManagable {
         return histories
     }
     
-    mutating func removeHistory(_ id: ID, on date: Date) async throws {
+    func removeHistory(_ id: ID, on date: Date) async throws {
         
     }
 }

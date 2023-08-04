@@ -163,7 +163,7 @@ extension SaveHistoryViewModelProtocol {
 
 class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
     
-    private let saveHistoryManager: SaveHistoryManagable = MockSaveHistoryManager()
+    private lazy var saveHistoryManager = SaveHistoryManager(uid: User.currentUser!.uid)
     
     @Published var date: Date = Date()
     @Published var total: Int = 0
@@ -173,6 +173,7 @@ class MockSaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
     
     var encouragingWordsAndImagesCollection: [EncouragingWordsAndImages] = []
     var myScore: ConsumptionScore = .zero
+    
     
     func fetchAllEncouragementWordsAndImages() async throws {
         
