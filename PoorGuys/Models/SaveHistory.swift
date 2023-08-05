@@ -98,10 +98,20 @@ enum SaveHistoryViewMode {
     case saved, wasted
 }
 
-struct EncouragingWordsAndImages {
+struct EncouragingWordsAndImage {
     var score: ConsumptionScore
     var words: [String]
-    var images: [String]
+    var image: String
+}
+
+extension EncouragingWordsAndImage {
+    func asDictionary() -> [String : Any] {
+        return [
+            "score" : score.rawValue,
+            "words" : words,
+            "image" : image
+        ]
+    }
 }
 
 enum ConsumptionScore: String {

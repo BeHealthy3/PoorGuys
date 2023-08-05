@@ -84,13 +84,7 @@ struct SaveHistoryManager: SaveHistoryManagable {
         
         let date = date.dotted()
         let dateDocumentRef = historiesCollection.document(uid).collection(strDate).document(date)
-        let historiesData: [[String: Any]] = histories.map { history in
-                return [
-                    "category": history.category.rawValue,
-                    "id": history.id,
-                    "price": history.price
-                ]
-            }
+        let historiesData: [[String: Any]] = histories.map { $0.asDictionary() }
         
         try await dateDocumentRef.updateData([strHistories : historiesData])
     }
