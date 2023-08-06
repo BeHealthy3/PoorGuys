@@ -98,10 +98,14 @@ enum SaveHistoryViewMode {
     case saved, wasted
 }
 
-struct EncouragingWordsAndImage {
+struct EncouragingWordsAndImage: Codable {
     var score: ConsumptionScore
     var words: [String]
     var image: String
+    
+    enum CodingKeys: String, CodingKey {
+        case score, words, image
+    }
 }
 
 extension EncouragingWordsAndImage {
@@ -114,7 +118,7 @@ extension EncouragingWordsAndImage {
     }
 }
 
-enum ConsumptionScore: String {
+enum ConsumptionScore: String, Codable {
     case spendOver100
     case spendOver50
     case spendOver20
@@ -126,4 +130,5 @@ enum ConsumptionScore: String {
     case saveOver20
     case saveOver50
     case saveOver100
+    case unknownData
 }

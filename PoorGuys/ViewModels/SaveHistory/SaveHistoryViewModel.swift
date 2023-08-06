@@ -27,12 +27,13 @@ protocol SaveHistoryViewModelProtocol: ObservableObject, ViewModelable {
 
 extension SaveHistoryViewModelProtocol {
     func chooseRandomWordsAndImage() {
-        let encouragingWordsAndImage = encouragingWordsAndImageCollection.first { encouragingWordsAndImages in
-            encouragingWordsAndImages.score == myScore
-        }
+        let encouragingWordsAndImage = encouragingWordsAndImageCollection.filter { encouragingThings in
+            encouragingThings.score == myScore
+        }.randomElement()
         
         do {
             encouragingImageURL = encouragingWordsAndImage?.image ?? ""
+            
             encouragingWords = try reorganizeEncouragingWordsIfNeeded(encouragingWordsAndImage?.words.randomElement() ?? "네트워크 에러")
         } catch {
             print("로그인 에러") //todo: 에러처리
@@ -175,7 +176,8 @@ class SaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
     
     
     func fetchAllEncouragementWordsAndImages() async throws {
-//        encouragingWords~~collection에 넣어주기
+        encouragingWordsAndImageCollection = try await EncouragingThingsManager().fetchAllEncouragingThings()
+        print(encouragingWordsAndImageCollection,"😇")
     }
     
     func addHistory(_ history: SaveHistory) async throws {

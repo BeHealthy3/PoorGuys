@@ -55,7 +55,26 @@ struct EncouragingThingsManager {
         try await encouragingThingsRef.setData([strEncouraging : newEncouragingThingsData])
     }
     
-    func fetchAllEncouragingThings() {
+    func fetchAllEncouragingThings() async throws -> [EncouragingWordsAndImage] {
+        let encouragingThingsRef = encouragingThingsCollection.document(strEncouraging)
+        let documentSnapshot = try await encouragingThingsRef.getDocument()
         
+        guard var data = documentSnapshot.data(), documentSnapshot.exists else { throw FirebaseError.documentNotFound }
+        
+        if let encouragingThingsArray = data[strEncouraging] as? [[String: Any]] {
+            let encouragings = encouragingThingsArray.compactMap { dict -> EncouragingWordsAndImage? in
+                guard let strScore = dict["score"] as? String,
+                      let words = dict["words"] as? [String],
+                      let image = dict["image"] as? String else {
+                          return nil
+                      }
+                
+                return EncouragingWordsAndImage(score: ConsumptionScore(rawValue: strScore) ?? ConsumptionScore.unknownData, words: words, image: image)
+            }
+            
+            return encouragings
+        } else {
+            return []
+        }
     }
 }
