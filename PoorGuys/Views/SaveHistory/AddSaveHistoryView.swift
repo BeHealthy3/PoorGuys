@@ -13,6 +13,8 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     }
     
     @EnvironmentObject var viewModel: ViewModel
+    @StateObject var keyboardHandler: KeyboardHandler = KeyboardHandler()
+    
     @State private var selectedIcon: Int = 0
     @State private var saveHistoryViewMode = SaveHistoryViewMode.saved
     @State private var price: String = ""
@@ -20,23 +22,36 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     @Binding var isPresenting: Bool
     
     var body: some View {
-        ZStack {
-            Color.appColor(.primary050)
-                .ignoresSafeArea()
-            VStack(spacing: 0){
-                segmentedControl()
-                    .padding(.top, 32)
-                selectCategory()
-                    .padding(.top, 48)
-                typePrice()
-                    .padding(.top, 48)
-                    .padding(.bottom, 40)
-                completedButton()
-                    .background(Color.appColor(.primary900))
+        ScrollView(showsIndicators: false) {
+            ScrollViewReader { proxy in
+                ZStack() {
+                    Color.appColor(.primary050)
+                        .ignoresSafeArea()
+                    VStack(spacing: 0){
+                        segmentedControl()
+                            .padding(.top, 32)
+                        selectCategory()
+                            .padding(.top, 48)
+                        typePrice()
+                            .padding(.top, 48)
+                            .padding(.bottom, 40)
+                        completedButton()
+                            .background(Color.appColor(.primary900))
+                            .padding(.bottom, keyboardHandler.keyboardHeight)
+                            .id("bottomButton")
+                    }
+                }
+                .onTapGesture {
+                    focusedField = nil
+                }
+                .onChange(of: keyboardHandler.keyboardHeight) { bottomPadding in
+                    if bottomPadding != 0 {
+                        withAnimation {
+                            proxy.scrollTo("bottomButton")
+                        }
+                    }
+                }
             }
-        }
-        .onTapGesture {
-            focusedField = nil
         }
     }
     

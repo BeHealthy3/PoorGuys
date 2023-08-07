@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
-//    @State private var keyboardHeight: CGFloat = 0
+
     @EnvironmentObject var logInViewModel: LoginViewModel
     @StateObject var saveHistoryViewModel: SaveHistoryViewModel
     
@@ -81,7 +81,6 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
                             
                             CustomBottomSheet(content: AddSaveHistoryView<SaveHistoryViewModel>(isPresenting: $isPresentingAddSaveHistoryView).environmentObject(saveHistoryViewModel))
                                 .transition(.bottomToTop)
-//                                .offset(y: -keyboardHeight)
                         }
                     }
                 }
@@ -106,5 +105,29 @@ struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView(saveHistoryViewModel: MockSaveHistoryViewModel())
             .environmentObject(LoginViewModel())
+    }
+}
+
+
+import Combine
+
+class KeyboardHandler: ObservableObject {
+    @Published var keyboardHeight: CGFloat = 0
+
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc private func keyboardWillShow(notification: Notification) {
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            keyboardHeight = keyboardFrame.height
+            print(keyboardHeight, "😊")
+        }
+    }
+
+    @objc private func keyboardWillHide(notification: Notification) {
+        keyboardHeight = 0
+        print(keyboardHeight, "🥩")
     }
 }
