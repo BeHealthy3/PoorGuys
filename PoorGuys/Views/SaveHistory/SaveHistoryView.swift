@@ -60,7 +60,7 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     }
     
     @ViewBuilder
-    func saveHistoryCard() -> some View {
+    private func saveHistoryCard() -> some View {
         VStack(spacing: 20) {
             Spacer()
             
@@ -112,7 +112,7 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     }
 
     @ViewBuilder
-    func savedHistoryList() -> some View {
+    private func savedHistoryList() -> some View {
         VStack(spacing: 0) {
             HStack {
                 Text("06월 10일 (토)")
@@ -138,53 +138,62 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
             }
             .padding(.horizontal, 32)
             
-            if #available(iOS 16.0, *) {
-                List(viewModel.saveHistories) { saveHistory in
-                    SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                        .swipeActions {
-                            Button(role: .destructive) {
-                                print("삭제")
-                            } label: {
-                                Image(systemName: "trash")
-                            }
+            DivergeView(
+                if: viewModel.saveHistories.isEmpty,
+                true: Text("아낌/낭비 리스트를 추가해 주세요!").foregroundColor(.appColor(.neutral400)).font(.system(size: 16, weight: .bold)).padding(.top, 15),
+                false: SaveList()
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private func SaveList() -> some View {
+        if #available(iOS 16.0, *) {
+            List(viewModel.saveHistories) { saveHistory in
+                SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            print("삭제")
+                        } label: {
+                            Image(systemName: "trash")
                         }
-                }
-                .listStyle(.plain)
-                .scrollIndicators(.hidden)
-                .padding(.horizontal, 32)
-                .if(UIDevice.current.hasNotch) { view in
-                    view.padding(.bottom, 104)
-                }
-                .if(!UIDevice.current.hasNotch) { view in
-                    view.padding(.bottom, 84)
-                }
-            } else {
-                List(viewModel.saveHistories) { saveHistory in
-                    SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                        .swipeActions {
-                            Button(role: .destructive) {
-                                Task {
-                                    try await viewModel.removeHistory(id: saveHistory.id)
-                                    viewModel.calculateMyConsumptionScore()
-                                    viewModel.chooseRandomWordsAndImage()
-                                }
-                            } label: {
-                                Image(systemName: "trash")
+                    }
+            }
+            .listStyle(.plain)
+            .scrollIndicators(.hidden)
+            .padding(.horizontal, 32)
+            .if(UIDevice.current.hasNotch) { view in
+                view.padding(.bottom, 104)
+            }
+            .if(!UIDevice.current.hasNotch) { view in
+                view.padding(.bottom, 84)
+            }
+        } else {
+            List(viewModel.saveHistories) { saveHistory in
+                SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            Task {
+                                try await viewModel.removeHistory(id: saveHistory.id)
+                                viewModel.calculateMyConsumptionScore()
+                                viewModel.chooseRandomWordsAndImage()
                             }
+                        } label: {
+                            Image(systemName: "trash")
                         }
-                }
-                .listStyle(.plain)
-                .padding(.horizontal, 32)
-                .if(UIDevice.current.hasNotch) { view in
-                    view.padding(.bottom, 104)
-                }
-                .if(!UIDevice.current.hasNotch) { view in
-                    view.padding(.bottom, 84)
-                }
+                    }
+            }
+            .listStyle(.plain)
+            .padding(.horizontal, 32)
+            .if(UIDevice.current.hasNotch) { view in
+                view.padding(.bottom, 104)
+            }
+            .if(!UIDevice.current.hasNotch) { view in
+                view.padding(.bottom, 84)
             }
         }
     }
