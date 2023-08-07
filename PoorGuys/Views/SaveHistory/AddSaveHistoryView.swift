@@ -42,7 +42,10 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     }
                 }
                 .onTapGesture {
-                    focusedField = nil
+                    withAnimation {
+                        focusedField = nil
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
                 }
                 .onChange(of: keyboardHandler.keyboardHeight) { bottomPadding in
                     if bottomPadding != 0 {
