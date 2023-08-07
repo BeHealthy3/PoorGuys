@@ -182,9 +182,15 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
         }
         .background {
             Rectangle()
-                .foregroundColor(self.saveHistoryViewMode == .saved ? Color.appColor(.primary500) : Color.appColor(.red))
+                .if(saveHistoryViewMode == .saved) { view in
+                    view.foregroundColor(price == "" ? .appColor(.primary100) : .appColor(.primary500))
+                }
+                .if(saveHistoryViewMode == .wasted) { view in
+                    view.foregroundColor(price == "" ? .appColor(.lightRed) : .appColor(.red))
+                }
         }
         .edgesIgnoringSafeArea(.bottom)
+        .disabled(price == "")
     }
 }
 
