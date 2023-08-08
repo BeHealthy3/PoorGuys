@@ -87,13 +87,11 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                     .foregroundColor(.accentColor)
             }
             
-            Button(action: {
-                
-            }, label: {
+            NavigationLink(destination: MyPageView()) {
                 Image("profile")
                     .imageScale(.large)
                     .foregroundColor(.accentColor)
-            })
+            }
             .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 16))
         }
     }
