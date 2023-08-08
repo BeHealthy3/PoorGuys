@@ -62,7 +62,7 @@
 		D3552E122A70CB4200F565AA /* SaveHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3552E112A70CB4200F565AA /* SaveHistoryManager.swift */; };
 		D3552E142A726A1C00F565AA /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3552E132A726A1C00F565AA /* Int+Extensions.swift */; };
 		D35939BD2A41F41F007263E8 /* ImageDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BC2A41F41F007263E8 /* ImageDownloadManager.swift */; };
-		D35939BF2A41F42B007263E8 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BE2A41F42B007263E8 /* DateFormatter.swift */; };
+		D35939BF2A41F42B007263E8 /* DateFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939BE2A41F42B007263E8 /* DateFormatter+Extension.swift */; };
 		D35939C12A41F436007263E8 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939C02A41F436007263E8 /* Notification.swift */; };
 		D35939C52A41F442007263E8 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939C22A41F441007263E8 /* FirebaseError.swift */; };
 		D35939C62A41F442007263E8 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939C32A41F441007263E8 /* PostManager.swift */; };
@@ -157,7 +157,7 @@
 		D3552E112A70CB4200F565AA /* SaveHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveHistoryManager.swift; sourceTree = "<group>"; };
 		D3552E132A726A1C00F565AA /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
 		D35939BC2A41F41F007263E8 /* ImageDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadManager.swift; sourceTree = "<group>"; };
-		D35939BE2A41F42B007263E8 /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		D35939BE2A41F42B007263E8 /* DateFormatter+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extension.swift"; sourceTree = "<group>"; };
 		D35939C02A41F436007263E8 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		D35939C22A41F441007263E8 /* FirebaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
 		D35939C32A41F441007263E8 /* PostManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
@@ -280,6 +280,7 @@
 		601A6D512A1F70EF0066D5CD /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D35939BE2A41F42B007263E8 /* DateFormatter+Extension.swift */,
 				D35939C92A41F44C007263E8 /* Debounce+View+Extension.swift */,
 				D3C98FDE2A7B66C800461DBF /* Date+Extensions.swift */,
 				D35939C82A41F44C007263E8 /* Shape+Extensions.swift */,
@@ -356,7 +357,6 @@
 			isa = PBXGroup;
 			children = (
 				D35939BB2A41AD7C007263E8 /* Kingfisher */,
-				D35939BA2A41AD2A007263E8 /* Formatters */,
 				D35939B72A41AC84007263E8 /* Notification */,
 				D35939B62A41AC2F007263E8 /* FirebaseControls */,
 				601A6D512A1F70EF0066D5CD /* Extensions */,
@@ -510,14 +510,6 @@
 				D3013C212A6D6EF0005E4A8A /* DivergeView.swift */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		D35939BA2A41AD2A007263E8 /* Formatters */ = {
-			isa = PBXGroup;
-			children = (
-				D35939BE2A41F42B007263E8 /* DateFormatter.swift */,
-			);
-			path = Formatters;
 			sourceTree = "<group>";
 		};
 		D35939BB2A41AD7C007263E8 /* Kingfisher */ = {
@@ -707,7 +699,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D35939BF2A41F42B007263E8 /* DateFormatter.swift in Sources */,
+				D35939BF2A41F42B007263E8 /* DateFormatter+Extension.swift in Sources */,
 				D3552E0D2A6F077000F565AA /* AnyTransition+Extensions.swift in Sources */,
 				D3013C222A6D6EF0005E4A8A /* DivergeView.swift in Sources */,
 				D35939F42A42056D007263E8 /* PostDetailLowerView.swift in Sources */,

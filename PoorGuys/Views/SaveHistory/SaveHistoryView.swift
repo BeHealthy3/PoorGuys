@@ -47,7 +47,7 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     }
                 }
                 
-                // 작업들이 완료될 때까지 기다립니다.
+                // 작업들이 완료될 때까지 기다림
                 await fetchAllHistoriesTask.value
                 await fetchAllEncouragementWordsTask.value
                 
@@ -115,7 +115,7 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     private func savedHistoryList() -> some View {
         VStack(spacing: 0) {
             HStack {
-                Text("06월 10일 (토)")
+                Text(DateFormatter().toKorean(from: viewModel.date))
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(Color.appColor(.neutral900))
                     .padding(.vertical, 24)

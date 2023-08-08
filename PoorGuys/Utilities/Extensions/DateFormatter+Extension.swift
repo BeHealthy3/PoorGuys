@@ -13,4 +13,11 @@ extension DateFormatter {
         
         return self.string(from: date)
     }
+    
+    func toKorean(from date: Date) -> String {
+        locale = Locale(identifier: "ko_KR")
+        dateFormat = "MM월 dd일 (E)"
+        
+        return self.string(from: date)
+    }
 }
