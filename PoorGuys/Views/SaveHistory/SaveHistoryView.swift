@@ -155,7 +155,11 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                     .swipeActions {
                         Button(role: .destructive) {
-                            print("삭제")
+                            Task {
+                                try await viewModel.removeHistory(id: saveHistory.id)
+                                viewModel.calculateMyConsumptionScore()
+                                viewModel.chooseRandomWordsAndImage()
+                            }
                         } label: {
                             Image(systemName: "trash")
                         }
