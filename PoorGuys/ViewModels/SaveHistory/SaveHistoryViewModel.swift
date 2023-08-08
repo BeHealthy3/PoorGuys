@@ -55,23 +55,23 @@ extension SaveHistoryViewModelProtocol {
         switch amount {
         case ...(-100000):
             return .spendOver100
-        case -99999 ... -50000:
+        case -100000 ... -50001:
             return .spendOver50
-        case -49999 ... -20000:
+        case -50000 ... -20001:
             return .spendOver20
-        case -19999 ... -5000:
+        case -20000 ... -5001:
             return .spendOver5
-        case -4999 ... -1000:
+        case -5000 ... -1:
             return .spendSome
         case 0:
             return .zero
-        case 1000 ... 4999:
+        case 1 ... 5000:
             return .saveSome
-        case 5000 ... 19999:
+        case 5001 ... 20000:
             return .saveOver5
-        case 20000 ... 49999:
+        case 20001 ... 50000:
             return .saveOver20
-        case 50000 ... 99999:
+        case 50001 ... 100000:
             return .saveOver50
         default:
             return .saveOver100
@@ -202,7 +202,7 @@ class SaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
         
         var histories = saveHistories
         histories.removeAll { $0.id == id }
-        
+        print(#function, "📱")
         try await saveHistoryManager.updateHistories(with: histories, on: date)
         
         saveHistories = histories
