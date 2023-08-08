@@ -75,6 +75,7 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
                                 .ignoresSafeArea()
                                 .onTapGesture {
                                     withAnimation(.easeInOut(duration: 0.5)) {
+                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                         isPresentingAddSaveHistoryView = false
                                     }
                                 }
