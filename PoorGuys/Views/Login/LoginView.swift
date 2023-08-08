@@ -36,8 +36,10 @@ struct LoginView: View {
     func googleLoginButton() -> some View {
         Button {
             loginViewModel.signInWithGoogle() { isSignedIn, error in
-                if !loginViewModel.didSetNickName {
-                    self.isPresentingSetNickNameView = true
+                if isSignedIn {
+                    if !loginViewModel.didSetNickName {
+                        self.isPresentingSetNickNameView = true
+                    }
                 }
             }
         } label: {
