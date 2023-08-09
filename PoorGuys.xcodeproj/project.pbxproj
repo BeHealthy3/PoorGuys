@@ -89,6 +89,7 @@
 		D35939FB2A420C66007263E8 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35939FA2A420C66007263E8 /* CommunityViewModel.swift */; };
 		D37956C02A41A16C00E7724F /* SecretConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37956BF2A41A16C00E7724F /* SecretConstants.swift */; };
 		D38714B82A6284C0002DFA84 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38714B72A6284C0002DFA84 /* UINavigationController+Extensions.swift */; };
+		D38E90EB2A83D9740077CCAE /* SaveHistoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E90EA2A83D9740077CCAE /* SaveHistoryCardView.swift */; };
 		D39A57AB2A41A67C0033DAD5 /* PoorGuysApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39A57A92A41A67C0033DAD5 /* PoorGuysApp.swift */; };
 		D39A57AC2A41A67C0033DAD5 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39A57AA2A41A67C0033DAD5 /* MainView.swift */; };
 		D39A57AE2A41A6920033DAD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39A57AD2A41A6920033DAD5 /* Assets.xcassets */; };
@@ -184,6 +185,7 @@
 		D35939FA2A420C66007263E8 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
 		D37956BF2A41A16C00E7724F /* SecretConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretConstants.swift; sourceTree = "<group>"; };
 		D38714B72A6284C0002DFA84 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
+		D38E90EA2A83D9740077CCAE /* SaveHistoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveHistoryCardView.swift; sourceTree = "<group>"; };
 		D39A57A92A41A67C0033DAD5 /* PoorGuysApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PoorGuysApp.swift; sourceTree = "<group>"; };
 		D39A57AA2A41A67C0033DAD5 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D39A57AD2A41A6920033DAD5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				604F578C2A4BF13E00B9003D /* AddSaveHistoryView.swift */,
 				60279EC12A492FAF000D9226 /* SaveHistoryView.swift */,
 				604F578E2A4BF3B700B9003D /* CategoryIcon.swift */,
+				D38E90EA2A83D9740077CCAE /* SaveHistoryCardView.swift */,
 				60C5B1D02A4D2C1C0034E961 /* CurrencyTextField.swift */,
 			);
 			path = SaveHistory;
@@ -709,6 +712,7 @@
 				D32770222A50369A002C34C6 /* Typealias.swift in Sources */,
 				D35939CE2A41F44C007263E8 /* Debounce+View+Extension.swift in Sources */,
 				D3C98FDF2A7B66C800461DBF /* Date+Extensions.swift in Sources */,
+				D38E90EB2A83D9740077CCAE /* SaveHistoryCardView.swift in Sources */,
 				D35939F12A42056D007263E8 /* CommentView.swift in Sources */,
 				D35939E52A420561007263E8 /* ImagePickerView.swift in Sources */,
 				D35939F02A42056D007263E8 /* PostFillingCenterView.swift in Sources */,
