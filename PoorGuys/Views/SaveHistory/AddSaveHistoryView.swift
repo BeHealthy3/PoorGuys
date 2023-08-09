@@ -14,7 +14,7 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     
     @EnvironmentObject var viewModel: ViewModel
     @StateObject var keyboardHandler: KeyboardHandler = KeyboardHandler()
-    
+    @State private var scrollTimer: Timer? = nil
     @State private var selectedIcon: Int = 0
     @State private var saveHistoryViewMode = SaveHistoryViewMode.saved
     @State private var price: String = ""
@@ -39,6 +39,7 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                             .background(Color.appColor(.primary900))
                             .padding(.bottom, keyboardHandler.keyboardHeight)
                             .id("bottomButton")
+                            
                     }
                 }
                 .onTapGesture {
@@ -48,7 +49,23 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     }
                 }
                 .onChange(of: keyboardHandler.keyboardHeight) { bottomPadding in
-                    if bottomPadding != 0 {
+                    print("bottompadding:",bottomPadding)
+//                    iOS16에서 키보드가 올라올 때 keyboard will show notification이 굉장히 빠르게 두번 호출되어 onChange에서 두번째 호출을 감지하지 못하는 버그가 발생.
+//                    onchange블록이 실행되는 도중에 값이 바뀌는 것으로 킹피셜 생각중.
+//                    따라서 사용자가 느끼지 못할만큼 찰나의 키보드 높이 값 안정화 시간을 부여하여 나중에 전달된 키보드 높이를 사용하여 키보드와 뷰 사이의 패딩을 조절 및 스크롤.
+                    if #available(iOS 16.0, *) {
+                        // 이전의 타이머 취소
+                        self.scrollTimer?.invalidate()
+                        
+                        // 약간 딜레이를 주고 스크롤 시킴
+                        self.scrollTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
+                            withAnimation {
+                                proxy.scrollTo("bottomButton")
+                            }
+                            
+                            scrollTimer = nil
+                        }
+                    } else {
                         withAnimation {
                             proxy.scrollTo("bottomButton")
                         }
