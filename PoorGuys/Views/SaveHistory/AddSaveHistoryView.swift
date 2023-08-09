@@ -165,6 +165,7 @@ struct AddSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     viewModel.chooseRandomWordsAndImage()
                     
                     withAnimation(.easeInOut(duration: 0.5)) {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         isPresenting = false
                     }
                     

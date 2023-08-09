@@ -123,12 +123,10 @@ class KeyboardHandler: ObservableObject {
     @objc private func keyboardWillShow(notification: Notification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             keyboardHeight = keyboardFrame.height
-            print(keyboardHeight, "😊")
         }
     }
 
     @objc private func keyboardWillHide(notification: Notification) {
         keyboardHeight = 0
-        print(keyboardHeight, "🥩")
     }
 }
