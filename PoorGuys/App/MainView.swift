@@ -16,7 +16,7 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
     @State private var isShowingLaunchScreen = true
     @State private var selection: String = "community"
     @State private var tabSelection: TabBarItem = .community
-    @State var isPresentingAddSaveHistoryView = false
+    @State private var isPresentingAddSaveHistoryView = false
     
     init(saveHistoryViewModel: SaveHistoryViewModel) {
         _saveHistoryViewModel = StateObject(wrappedValue: saveHistoryViewModel)

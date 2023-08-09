@@ -14,16 +14,33 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     var body: some View {
         ZStack {
             VStack(spacing: 8) {
-                SaveHistoryCardView<SaveHistoryViewModel>()
-                    .environmentObject(viewModel)
-                    .padding(.top, 33)
-                    .padding(.horizontal, 16)
-                    .if(!UIDevice.current.hasNotch, transform: { view in
-                        view.frame(height: Constants.screenHeight * 0.53)
-                    })
-                    .if(UIDevice.current.hasNotch) { view in
-                        view.frame(height: Constants.screenHeight * 0.47)
+                ZStack(alignment: .topTrailing) {
+                    SaveHistoryCardView<SaveHistoryViewModel>()
+                        .environmentObject(viewModel)
+                        .padding(.top, 33)
+                        .padding(.horizontal, 16)
+                        .if(!UIDevice.current.hasNotch, transform: { view in
+                            view.frame(height: Constants.screenHeight * 0.53)
+                        })
+                        .if(UIDevice.current.hasNotch) { view in
+                            view.frame(height: Constants.screenHeight * 0.47)
+                        }
+                    
+                    Button {
+                        print("export button tapped")
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .foregroundColor(.appColor(.white))
+                                .shadow(color: .black.opacity(0.1), radius: 7.5, x: 0, y: 0)
+                                .frame(width: 40, height: 40)
+                            Image("exportButton")
+                                .frame(width: 24, height: 24)
+                        }
                     }
+                    .padding(.top, 57)
+                    .padding(.trailing, 32)
+                }
                 
                 savedHistoryList()
                 Spacer()
@@ -149,11 +166,5 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                 view.padding(.bottom, 84)
             }
         }
-    }
-}
-
-struct SaveHistoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        SaveHistoryView<MockSaveHistoryViewModel>(isPresentingBottomSheet: .constant(false))
     }
 }

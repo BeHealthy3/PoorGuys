@@ -15,12 +15,13 @@ struct SaveHistoryCardView<ViewModel: SaveHistoryViewModelProtocol>: View {
             Spacer()
             
             HStack {
-                Spacer(minLength: 10)
+                Spacer(minLength: 60)
                 Text(viewModel.encouragingWords)
                     .font(.system(size: 22, weight: .bold))
                     .foregroundColor(Color.appColor(.neutral900))
                     .lineLimit(2)
-                Spacer(minLength: 10)
+                    .multilineTextAlignment(.center)
+                Spacer(minLength: 60)
             }
             
             

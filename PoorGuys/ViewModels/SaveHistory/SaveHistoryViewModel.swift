@@ -98,7 +98,7 @@ extension SaveHistoryViewModelProtocol {
                 }
 
             } else {
-                choice = "\(strChoicesArrayWithoutSlash[1])(\(strChoicesArrayWithoutSlash[0]))"
+                choice = "(\(strChoicesArrayWithoutSlash[1])/\(strChoicesArrayWithoutSlash[0]))"
             }
             
             if let strChoicesWithSlashRange = EncouragingWords.range(of: "{\(strChoicesWithSlash)}") {
