@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseAuth
 import FirebaseFirestoreSwift
 import FirebaseStorage
 
@@ -60,7 +61,7 @@ struct FirebasePostManager: PostManagable {
             ]
             
             try await postCollection.document(refId).updateData(data)
-            
+            try await addPostToUserPosts(postID: refId)
         } catch {
             throw error
         }
@@ -84,6 +85,16 @@ struct FirebasePostManager: PostManagable {
                 "title" : updatedPost.title,
                 "body" : updatedPost.body,
                 "imageURL" : updatedPost.imageURL
+            ]
+        )
+    }
+    
+    func addPostToUserPosts(postID: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else { throw FirebaseError.userNotFound }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        try await userRef.updateData( [
+            "posts": FieldValue.arrayUnion([postID])
             ]
         )
     }
@@ -128,6 +139,10 @@ struct FirebasePostManager: PostManagable {
         
         return post
     }
+    
+//    func fetchUserPosts(userID: String) async throws -> [Post] {
+//        // TODO: Firestore user로부터 posts 가져오기
+//    }
     
     func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void ) throws {
         
