@@ -15,8 +15,12 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
         ZStack {
             VStack(spacing: 8) {
                 ZStack(alignment: .topTrailing) {
-                    SaveHistoryCardView<SaveHistoryViewModel>()
-                        .environmentObject(viewModel)
+                    SaveHistoryCardView(viewModel: _viewModel)
+                        .background {
+                            RoundedRectangle(cornerRadius: 12)
+                                .foregroundColor(Color.appColor(.white))
+                                .shadow(color: .black.opacity(0.1) , radius: 12)
+                        }
                         .padding(.top, 33)
                         .padding(.horizontal, 16)
                         .if(!UIDevice.current.hasNotch, transform: { view in
@@ -29,14 +33,10 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     Button {
                         print("export button tapped")
                     } label: {
-                        ZStack {
-                            Circle()
-                                .foregroundColor(.appColor(.white))
-                                .shadow(color: .black.opacity(0.1), radius: 7.5, x: 0, y: 0)
-                                .frame(width: 40, height: 40)
-                            Image("exportButton")
-                                .frame(width: 24, height: 24)
-                        }
+                        Image("exportButton")
+                            .resizable()
+                            .renderingMode(.original)
+                            .frame(width: 24, height: 24)
                     }
                     .padding(.top, 57)
                     .padding(.trailing, 32)

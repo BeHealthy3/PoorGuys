@@ -39,7 +39,7 @@ struct SaveHistoryCardView<ViewModel: SaveHistoryViewModelProtocol>: View {
                 }
             }
             
-            Text(viewModel.total > 0 ? "+" + viewModel.total.formatToCurrency() : viewModel.total.formatToCurrency())
+            Text(viewModel.total >= 0 ? "+" + viewModel.total.formatToCurrency() : viewModel.total.formatToCurrency())
                 .font(.system(size: 36, weight: .black))
                 .if(viewModel.total == 0) { view in
                     view
@@ -54,11 +54,6 @@ struct SaveHistoryCardView<ViewModel: SaveHistoryViewModelProtocol>: View {
                         .foregroundColor(.appColor(.red))
                 }
                 .padding(.bottom, 25)
-        }
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color.appColor(.white))
-                .shadow(color: Color(uiColor: UIColor(red: 0, green: 0.51, blue: 1, alpha: 0.2)) , radius: 10)
         }
     }
 }

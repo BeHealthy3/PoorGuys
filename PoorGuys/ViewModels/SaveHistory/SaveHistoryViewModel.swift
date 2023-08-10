@@ -177,7 +177,6 @@ class SaveHistoryViewModel: SaveHistoryViewModelProtocol, ObservableObject {
     
     func fetchAllEncouragementWordsAndImages() async throws {
         encouragingWordsAndImageCollection = try await EncouragingThingsManager().fetchAllEncouragingThings()
-        print(encouragingWordsAndImageCollection,"😇")
     }
     
     func addHistory(_ history: SaveHistory) async throws {
