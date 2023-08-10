@@ -90,13 +90,31 @@ struct FirebasePostManager: PostManagable {
     }
     
     func addPostToUserPosts(postID: String) async throws {
-        guard let uid = Auth.auth().currentUser?.uid else { throw FirebaseError.userNotFound }
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
         let db = Firestore.firestore()
         let userRef = db.collection("users").document(uid)
         try await userRef.updateData( [
             "posts": FieldValue.arrayUnion([postID])
-            ]
+        ]
         )
+    }
+    
+    // TODO: 함수가 잘 동작하는지 확인
+    func addCommentToUserComments(postID: String) throws {
+        guard let uid = Auth.auth().currentUser?.uid else { throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        userRef.updateData( [
+            "commentedPosts": FieldValue.arrayUnion([postID])
+        ]
+        ) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func removePost(postID: String) async throws {
@@ -140,9 +158,9 @@ struct FirebasePostManager: PostManagable {
         return post
     }
     
-//    func fetchUserPosts(userID: String) async throws -> [Post] {
-//        // TODO: Firestore user로부터 posts 가져오기
-//    }
+    //    func fetchUserPosts(userID: String) async throws -> [Post] {
+    //        // TODO: Firestore user로부터 posts 가져오기
+    //    }
     
     func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void ) throws {
         
@@ -226,6 +244,12 @@ struct FirebasePostManager: PostManagable {
             if let error = error {
                 handler(.failure(error))
             } else {
+                do {
+                    try addCommentToUserComments(postID: postID)
+                }
+                catch {
+                    print(error.localizedDescription)
+                }
                 handler(.success(true))
             }
         }
@@ -341,7 +365,7 @@ struct FirebasePostManager: PostManagable {
         let db = Firestore.firestore()
         let reportedPostRef = db.collection("reportedPosts").document(id)
         let reportedUserIDsField = "reportedUserIDs"
-
+        
         db.runTransaction({ (transaction, errorPointer) -> Any? in
             var reportedPostDocument: DocumentSnapshot
             
@@ -363,7 +387,7 @@ struct FirebasePostManager: PostManagable {
                     transaction.updateData([reportedUserIDsField: reportedUsers], forDocument: reportedPostRef)
                     return true
                 }
-
+                
             } else {
                 let data: [String: Any] = [
                     "postID": id,
