@@ -12,15 +12,17 @@ protocol ViewModelable {}
 
 struct CustomBottomSheet<Content: View>: View {
     var content: Content
+    var withNotchHeight: CGFloat
+    var withoutNotchheight: CGFloat
 
     var body: some View {
         VStack(spacing: 0) {
             content
                 .if(UIDevice.current.hasNotch, transform: { view in
-                        view.frame(height: 500)
+                    view.frame(height: withNotchHeight)
                 })
                 .if(!UIDevice.current.hasNotch, transform: { view in
-                        view.frame(height: 490)
+                    view.frame(height: withoutNotchheight)
                 })
                 .cornerRadius(12)
         }

@@ -74,14 +74,16 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
                                 .opacity(0.5)
                                 .ignoresSafeArea()
                                 .onTapGesture {
-                                    withAnimation(.easeInOut(duration: 0.5)) {
+                                    withAnimation(.easeInOut(duration: 0.3)) {
                                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                         isPresentingAddSaveHistoryView = false
                                     }
                                 }
-                            
-                            CustomBottomSheet(content: AddSaveHistoryView<SaveHistoryViewModel>(isPresenting: $isPresentingAddSaveHistoryView).environmentObject(saveHistoryViewModel))
-                                .transition(.bottomToTop)
+                            CustomBottomSheet(
+                                content: AddSaveHistoryView<SaveHistoryViewModel>(
+                                    isPresenting: $isPresentingAddSaveHistoryView
+                            )
+                                .environmentObject(saveHistoryViewModel), withNotchHeight: 500, withoutNotchheight: 490)
                         }
                     }
                 }
