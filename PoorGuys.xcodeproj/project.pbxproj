@@ -58,6 +58,7 @@
 		D31775D92A84F9AC00FCDBCB /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31775D82A84F9AC00FCDBCB /* RoundButton.swift */; };
 		D32363BD2A2C73D200857135 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D32363BC2A2C73D200857135 /* Kingfisher */; };
 		D32770222A50369A002C34C6 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32770212A50369A002C34C6 /* Typealias.swift */; };
+		D34D528B2A86003C00BDC52F /* KeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34D528A2A86003C00BDC52F /* KeyboardHandler.swift */; };
 		D3552E0D2A6F077000F565AA /* AnyTransition+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3552E0C2A6F077000F565AA /* AnyTransition+Extensions.swift */; };
 		D3552E102A704D0700F565AA /* CommunityPostManagable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3552E0F2A704D0700F565AA /* CommunityPostManagable.swift */; };
 		D3552E122A70CB4200F565AA /* SaveHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3552E112A70CB4200F565AA /* SaveHistoryManager.swift */; };
@@ -156,6 +157,7 @@
 		D3013C252A6D9A8C005E4A8A /* Publishers+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publishers+Extensions.swift"; sourceTree = "<group>"; };
 		D31775D82A84F9AC00FCDBCB /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
 		D32770212A50369A002C34C6 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
+		D34D528A2A86003C00BDC52F /* KeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHandler.swift; sourceTree = "<group>"; };
 		D3552E0C2A6F077000F565AA /* AnyTransition+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyTransition+Extensions.swift"; sourceTree = "<group>"; };
 		D3552E0F2A704D0700F565AA /* CommunityPostManagable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityPostManagable.swift; sourceTree = "<group>"; };
 		D3552E112A70CB4200F565AA /* SaveHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveHistoryManager.swift; sourceTree = "<group>"; };
@@ -414,6 +416,7 @@
 				606782E82A14C52100BF1E12 /* App */,
 				601A6D582A1F95FC0066D5CD /* Resources */,
 				606782EE2A14D34B00BF1E12 /* Utilities */,
+				D34D528A2A86003C00BDC52F /* KeyboardHandler.swift */,
 				606782F42A14D4FA00BF1E12 /* Models */,
 				6001EFE52A1390DD00A9A2EF /* ViewModels */,
 				6001EFCE2A135FF200A9A2EF /* Views */,
@@ -729,6 +732,7 @@
 				D35939FB2A420C66007263E8 /* CommunityViewModel.swift in Sources */,
 				D35939C62A41F442007263E8 /* PostManager.swift in Sources */,
 				D39A57AC2A41A67C0033DAD5 /* MainView.swift in Sources */,
+				D34D528B2A86003C00BDC52F /* KeyboardHandler.swift in Sources */,
 				D35939D32A41F49A007263E8 /* String+Extensions.swift in Sources */,
 				D35939E02A41F62B007263E8 /* Comment.swift in Sources */,
 				60279EC42A492FAF000D9226 /* SaveHistoryView.swift in Sources */,

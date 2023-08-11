@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ExportingSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     @EnvironmentObject var viewModel: ViewModel
+    @Binding var isPresenting: Bool
     
     var body: some View {
         VStack(spacing: 28) {
@@ -82,6 +83,16 @@ struct ExportingSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                     .font(.system(size: 18, weight: .bold))
                 Spacer()
             }
+            .overlay(
+                Rectangle()
+                    .fill(Color.clear)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            self.isPresenting = false
+                        }
+                    }
+            )
             .frame(height: 56)
             .background(
                 RoundedRectangle(cornerRadius: 12)
@@ -100,7 +111,7 @@ struct ExportingSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
 
 struct ExportingSaveHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        ExportingSaveHistoryView<SaveHistoryViewModel>()
+        ExportingSaveHistoryView<SaveHistoryViewModel>(isPresenting: .constant(false))
             .environmentObject(SaveHistoryViewModel())
     }
 }

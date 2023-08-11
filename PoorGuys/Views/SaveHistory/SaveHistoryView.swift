@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     @EnvironmentObject var viewModel: ViewModel
-    @Binding var isPresentingBottomSheet: Bool
+    @Binding var isPresentingAddSaveHistoryView: Bool
+    @Binding var isPresentingExportingHistoryView: Bool
     
     var body: some View {
         ZStack {
@@ -31,14 +32,16 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                         }
                     
                     Button {
-                        print("export button tapped")
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            self.isPresentingExportingHistoryView = true
+                        }
                     } label: {
                         Image("exportButton")
                             .resizable()
                             .renderingMode(.original)
                             .frame(width: 24, height: 24)
                     }
-                    .padding(.top, 57)
+                    .padding(.top, 47)
                     .padding(.trailing, 32)
                 }
                 
@@ -88,7 +91,7 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                 Spacer()
                 Button {
                     withAnimation(.easeInOut(duration: 0.5)) {
-                        self.isPresentingBottomSheet = true
+                        self.isPresentingAddSaveHistoryView = true
                     }
 
                 } label: {
