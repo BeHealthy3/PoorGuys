@@ -13,6 +13,8 @@ protocol PostManagable {
     mutating func fetch10Posts() async throws -> [Post]
     func fetchPost(postID: String) async throws -> Post
     func removePost(postID: String) async throws
+    func fetchUserPosts() async throws -> [Post]
+    func fetchUserCommentedPosts() async throws -> [Post]
     mutating func removeLocalPosts()
     func addNewComment(with newComment: Comment, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws
     func removeComment(id: ID, postID: ID, handler: @escaping (Result<Bool, Error>) -> Void) throws

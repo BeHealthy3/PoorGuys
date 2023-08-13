@@ -150,6 +150,49 @@ struct FirebasePostManager: PostManagable {
         return posts
     }
     
+    // currentUser가 작성한 post들 가져오기
+    func fetchUserPosts() async throws -> [Post] {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        let userDocumentSnapshot = try await userRef.getDocument()
+        guard let postIDs = userDocumentSnapshot.get("posts") as? [String] else {
+            throw FirebaseError.fieldNotFound
+        }
+        var posts = [Post]()
+        
+        for postID in postIDs {
+            let post = try await self.fetchPost(postID: postID)
+            posts.append(post)
+        }
+        
+        return posts
+    }
+    
+    func fetchUserCommentedPosts() async throws -> [Post] {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        let userDocumentSnapshot = try await userRef.getDocument()
+        guard let postIDs = userDocumentSnapshot.get("commentedPosts") as? [String] else {
+            throw FirebaseError.fieldNotFound
+        }
+        var posts = [Post]()
+        
+        for postID in postIDs {
+            let post = try await self.fetchPost(postID: postID)
+            posts.append(post)
+        }
+        
+        return posts
+    }
+    
     func fetchPost(postID: String) async throws -> Post {
         
         let documentSnapShot = try await postCollection.document(postID).getDocument()
@@ -501,7 +544,6 @@ struct FirebasePostManager: PostManagable {
 }
 
 struct MockPostManager: PostManagable {
-    
     func updateComments(with updatedPost: Post) async throws {
         
     }
@@ -524,6 +566,22 @@ struct MockPostManager: PostManagable {
     func removePost(postID: String) async throws {}
     mutating func removeLocalPosts() {}
     func fetch10Posts() async throws -> [Post] {
+        return await withUnsafeContinuation { continuation in
+            DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
+                let posts = (0..<10).map { _ in Post.dummy() }
+                continuation.resume(returning: posts)
+            }
+        }
+    }
+    func fetchUserPosts() async throws -> [Post] {
+        return await withUnsafeContinuation { continuation in
+            DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
+                let posts = (0..<10).map { _ in Post.dummy() }
+                continuation.resume(returning: posts)
+            }
+        }
+    }
+    func fetchUserCommentedPosts() async throws -> [Post] {
         return await withUnsafeContinuation { continuation in
             DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
                 let posts = (0..<10).map { _ in Post.dummy() }
