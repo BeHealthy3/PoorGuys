@@ -24,6 +24,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                      options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
       return GIDSignIn.sharedInstance.handle(url)
     }
+    
+    func takeScreenshotAndSave() {
+           let renderer = UIGraphicsImageRenderer(size: UIScreen.main.bounds.size)
+           let screenshot = renderer.image { _ in
+               UIApplication.shared.windows.first?.rootViewController?.view.drawHierarchy(in: UIScreen.main.bounds, afterScreenUpdates: true)
+           }
+
+           UIImageWriteToSavedPhotosAlbum(screenshot, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+       }
+
+       @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+           if let error = error {
+               print("Error saving image: \(error.localizedDescription)")
+           } else {
+               print("Image saved successfully.")
+           }
+       }
 }
 
 @main

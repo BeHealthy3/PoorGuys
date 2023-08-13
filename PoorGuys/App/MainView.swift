@@ -84,7 +84,8 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
                                 content: AddSaveHistoryView<SaveHistoryViewModel>(
                                     isPresenting: $isPresentingAddSaveHistoryView
                                 )
-                                .environmentObject(saveHistoryViewModel), withNotchHeight: 500, withoutNotchheight: 490)
+                            .environmentObject(saveHistoryViewModel), withNotchHeight: 500, withoutNotchheight: 490)
+                            .transition(.bottomToTop)
                         }
                         
                         if isPresentingExportingHisotoryView {
@@ -100,9 +101,9 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
                             
                             CustomBottomSheet(content: ExportingSaveHistoryView<SaveHistoryViewModel>(
                                 isPresenting: $isPresentingExportingHisotoryView
-                            ), withNotchHeight: 653, withoutNotchheight: 630)
-                                .environmentObject(saveHistoryViewModel)
-                                .transition(.bottomToTop)
+                            ), withNotchHeight: 653, withoutNotchheight: 619)
+                            .environmentObject(saveHistoryViewModel)
+                            .transition(.bottomToTop)
                         }
                     }
                 }
