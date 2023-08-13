@@ -77,7 +77,7 @@ struct ExportingSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                 }
                 .padding(.trailing, 43)
             }
-                
+            
             HStack {
                 Spacer()
                 Text("취소")
@@ -102,12 +102,12 @@ struct ExportingSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
             )
             
             Spacer()
+                .onlyIf(UIDevice().hasNotch)
         }
-        .padding(.top, 16)
+        .padding(UIDevice().hasNotch ? .top : .vertical, 16)
         .padding(.horizontal, 16)
         .background(Color.appColor(.white))
-//        .cornerRadius(12)
-        .ignoresSafeArea()
+        .cornerRadius(12)
     }
     
     private func generateImage(from view: UIView) -> UIImage? {
@@ -138,44 +138,31 @@ struct ExportingSaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
     
     func cropImage(_ image: UIImage?) -> UIImage? {
         
+//        스크린샷 잘 안찍히는게 scale factor 때문인듯. 이걸로 보정해주니까 일단 되긴 함.
+        let scaleFactor = UIScreen.main.nativeScale
         let cropRect = CGRect(
-            x: 16 * 3,
-            y: (Constants.screenHeight - 653 + 16) * 3,
-            width: (Constants.screenWidth - 32) * 3,
-            height: 395 * 3
+            x: 16 * scaleFactor,
+            y: (Constants.screenHeight - (UIDevice().hasNotch ? 653 : 629.5) + 16) * scaleFactor,
+            width: (Constants.screenWidth - 32) * scaleFactor,
+            height: 395 * scaleFactor
         ).integral
 
-        guard let image = image, let img = image.cgImage else { return nil }
-        let croppedCGImage = img.cropping(
-            to: cropRect
-        )!
-//        scale, orientation 없어도 될것 같은데...?
+        guard let img = image?.cgImage, let croppedCGImage = img.cropping(to: cropRect) else { return nil }
         
-        return UIImage(cgImage: croppedCGImage, scale: image.imageRendererFormat.scale, orientation: image.imageOrientation)
+        return UIImage(cgImage: croppedCGImage)
     }
     
     func cropImage(_ inputImage: UIImage, toRect cropRect: CGRect, viewWidth: CGFloat, viewHeight: CGFloat) -> UIImage? {
         let imageViewScale = max(inputImage.size.width / viewWidth,
                                  inputImage.size.height / viewHeight)
-        
-        
-        // Scale cropRect to handle images larger than shown-on-screen size
         let cropZone = CGRect(x:cropRect.origin.x * imageViewScale,
                               y:cropRect.origin.y * imageViewScale,
                               width:cropRect.size.width * imageViewScale,
                               height:cropRect.size.height * imageViewScale)
         
+        guard let cutImageRef: CGImage = inputImage.cgImage?.cropping(to:cropZone) else { return nil }
         
-        // Perform cropping in Core Graphics
-        guard let cutImageRef: CGImage = inputImage.cgImage?.cropping(to:cropZone)
-        else {
-            return nil
-        }
-        
-        
-        // Return image to UIImage
-        let croppedImage: UIImage = UIImage(cgImage: cutImageRef)
-        return croppedImage
+        return UIImage(cgImage: cutImageRef)
     }
 }
 

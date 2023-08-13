@@ -101,7 +101,7 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
                             
                             CustomBottomSheet(content: ExportingSaveHistoryView<SaveHistoryViewModel>(
                                 isPresenting: $isPresentingExportingHisotoryView
-                            ), withNotchHeight: 653, withoutNotchheight: 619)
+                            ), withNotchHeight: 653, withoutNotchheight: 628)
                             .environmentObject(saveHistoryViewModel)
                             .transition(.bottomToTop)
                         }
