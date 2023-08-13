@@ -21,7 +21,9 @@ class UserPostsViewModel: CommunityPostsManagable {
         isEndOfList = newPosts.count < 10 ? true : false
         
         // 이부분 community 뷰모델에서는 왜 DispatchQueue 썼나요?
-        self.posts = newPosts
+        DispatchQueue.main.sync {
+            self.posts = newPosts
+        }
         
         isBusy = false
     }
