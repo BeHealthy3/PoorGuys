@@ -12,4 +12,17 @@ extension String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<length).map { _ in letters.randomElement()! })
     }
+    
+    func toInt() -> Int? {
+        return Int(self)
+    }
+    
+    func removeCommasAndConvertToInt() -> Int? {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        if let number = numberFormatter.number(from: self) {
+            return number.intValue
+        }
+        return nil
+    }
 }

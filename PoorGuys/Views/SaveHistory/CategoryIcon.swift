@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct CategoryIcon: View {
-    @State var saveHistory: SaveHistory
-    @Binding var saveState: SaveHistoryState
-    @State var iconColor = Color("primary_500")
+    @State var consumptionCategory: ConsumptionCategory
+    @Binding var saveHistoryViewMode: SaveHistoryViewMode
+    @State var iconColor = Color.appColor(.primary500)
     @Binding var isSelected: Bool
     
     var body: some View {
         HStack(spacing: 2) {
-            Image(saveHistory.category.iconName)
+            Image(consumptionCategory.iconName)
                 .renderingMode(.template)
                 .foregroundColor(iconColor)
                 .frame(width: 16, height: 16)
-            Text(saveHistory.category.categoryName)
+            Text(consumptionCategory.categoryName)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundColor(iconColor)
         }
@@ -27,40 +27,35 @@ struct CategoryIcon: View {
         .padding(.horizontal, 12)
         .background {
             if isSelected {
-                RoundedRectangle(cornerRadius: 12)
-                    .foregroundColor(saveState == .saved ? Color("primary_500") : Color("neutral_600"))
+                Capsule()
+                    .foregroundColor(saveHistoryViewMode == .saved ? Color.appColor(.primary500) : Color.appColor(.neutral600))
             } else {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 12)
-                        .foregroundColor(Color("white"))
-                    RoundedRectangle(cornerRadius: 12)
+                    
+                    Capsule()
+                        .foregroundColor(Color.appColor(.white))
+                    Capsule()
                         .stroke(iconColor, lineWidth: 1)
                 }
             }
         }
         .onAppear {
-            switch saveState {
-            case .saved:
-                iconColor = isSelected ? Color("white") : Color("primary_500")
-            case .wasted:
-                iconColor = isSelected ? Color("white") : Color("neutral_600")
-            }
+            giveButtonState()
         }
-        .onChange(of: isSelected) { newValue in
-            switch saveState {
-            case .saved:
-                iconColor = isSelected ? Color("white") : Color("primary_500")
-            case .wasted:
-                iconColor = isSelected ? Color("white") : Color("neutral_600")
-            }
+        .onChange(of: isSelected) { _ in
+            giveButtonState()
         }
-        .onChange(of: saveState) { newValue in
-            switch saveState {
-            case .saved:
-                iconColor = isSelected ? Color("white") : Color("primary_500")
-            case .wasted:
-                iconColor = isSelected ? Color("white") : Color("neutral_600")
-            }
+        .onChange(of: saveHistoryViewMode) { newValue in
+            giveButtonState()
+        }
+    }
+    
+    private func giveButtonState() {
+        switch saveHistoryViewMode {
+        case .saved:
+            iconColor = isSelected ? Color.appColor(.white) : Color.appColor(.primary500)
+        case .wasted:
+            iconColor = isSelected ? Color.appColor(.white) : Color.appColor(.neutral600)
         }
     }
 }

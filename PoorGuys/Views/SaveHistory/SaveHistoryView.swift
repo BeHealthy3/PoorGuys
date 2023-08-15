@@ -7,61 +7,93 @@
 
 import SwiftUI
 
-struct SaveHistoryView: View {
-    @ObservedObject var viewModel: SaveHistoryViewModel
-    @Binding var isPresenting: Bool
+struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
+    @EnvironmentObject var viewModel: ViewModel
+    @Binding var isPresentingAddSaveHistoryView: Bool
+    @Binding var isPresentingExportingHistoryView: Bool
     
     var body: some View {
         ZStack {
-            VStack(spacing: 0) {
-                saveHistoryCard()
-                    .padding(.top, 33)
+            VStack(spacing: 8) {
+                ZStack(alignment: .topTrailing) {
+                    SaveHistoryCardView(viewModel: _viewModel)
+                        .background {
+                            RoundedRectangle(cornerRadius: 12)
+                                .foregroundColor(Color.appColor(.white))
+                                .shadow(color: .black.opacity(0.1) , radius: 12)
+                        }
+                        .padding(.top, 33)
+                        .padding(.horizontal, 16)
+                        .if(!UIDevice.current.hasNotch, transform: { view in
+                            view.frame(height: Constants.screenHeight * 0.53)
+                        })
+                        .if(UIDevice.current.hasNotch) { view in
+                            view.frame(height: Constants.screenHeight * 0.47)
+                        }
+                    
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            self.isPresentingExportingHistoryView = true
+                        }
+                    } label: {
+                        Image("exportButton")
+                            .resizable()
+                            .renderingMode(.original)
+                            .frame(width: 24, height: 24)
+                    }
+                    .padding(.top, 47)
+                    .padding(.trailing, 32)
+                }
+                
                 savedHistoryList()
                 Spacer()
             }
-            
-            
         }
         .onAppear {
+            Task {
+                // 두 개의 비동기 작업을 병렬로 실행
+                let fetchAllHistoriesTask = Task.detached {
+                    do {
+                        try await viewModel.fetchAllHistories(on: Date())
+                    } catch {
+                        //todo: 에러처리
+                    }
+                }
+                
+                let fetchAllEncouragementWordsTask = Task.detached {
+                    do {
+                        try await viewModel.fetchAllEncouragementWordsAndImages()
+                    } catch {
+                        //todo: 에러처리
+                    }
+                }
+                
+                // 작업들이 완료될 때까지 기다림
+                await fetchAllHistoriesTask.value
+                await fetchAllEncouragementWordsTask.value
+                
+                viewModel.calculateMyConsumptionScore()
+                viewModel.chooseRandomWordsAndImage()
+            }
+            
             UITableView.appearance().showsVerticalScrollIndicator = false
         }
-        
     }
-    
+
     @ViewBuilder
-    func saveHistoryCard() -> some View {
-        VStack(spacing: 0) {
-            Text("코코야 폼 미쳤다!")
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(Color("neutral_900"))
-            Image("imageExample")
-                .resizable()
-                .scaledToFit()
-                .padding(.vertical, 24)
-                .padding(.horizontal, 48)
-            Text("+50,000")
-                .font(.system(size: 36, weight: .black))
-        }
-        .padding(.vertical, 24)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color("white"))
-                .shadow(color: Color(uiColor: UIColor(red: 0, green: 0.51, blue: 1, alpha: 0.2)) , radius: 10)
-        }
-        .padding(.horizontal, 32)
-    }
-    
-    @ViewBuilder
-    func savedHistoryList() -> some View {
+    private func savedHistoryList() -> some View {
         VStack(spacing: 0) {
             HStack {
-                Text("06월 10일 (토)")
+                Text(DateFormatter().toKorean(from: viewModel.date))
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color("neutral_900"))
+                    .foregroundColor(Color.appColor(.neutral900))
                     .padding(.vertical, 24)
                 Spacer()
                 Button {
-                    self.isPresenting = true
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        self.isPresentingAddSaveHistoryView = true
+                    }
+
                 } label: {
                     Text("추가")
                         .font(.system(size: 14, weight: .bold))
@@ -74,30 +106,68 @@ struct SaveHistoryView: View {
                 }
             }
             .padding(.horizontal, 32)
-            if #available(iOS 16.0, *) {
-                List(viewModel.saveHistories) { saveHistory in
-                    SaveHistoryRow(saveHistory: saveHistory)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                }
-                .listStyle(.plain)
-                .scrollIndicators(.hidden)
-                .padding(.horizontal, 32)
-            } else {
-                List(viewModel.saveHistories) { saveHistory in
-                    SaveHistoryRow(saveHistory: saveHistory)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                }
-                .listStyle(.plain)
-                .padding(.horizontal, 32)
-            }
+            
+            DivergeView(
+                if: viewModel.saveHistories.isEmpty,
+                true: Text("아낌/낭비 리스트를 추가해 주세요!").foregroundColor(.appColor(.neutral400)).font(.system(size: 16, weight: .bold)).padding(.top, 15),
+                false: SaveList()
+            )
         }
     }
-}
-
-struct SaveHistoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        SaveHistoryView(viewModel: SaveHistoryViewModel(), isPresenting: .constant(false))
+    
+    @ViewBuilder
+    private func SaveList() -> some View {
+        if #available(iOS 16.0, *) {
+            List(viewModel.saveHistories) { saveHistory in
+                SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            Task {
+                                try await viewModel.removeHistory(id: saveHistory.id)
+                                viewModel.calculateMyConsumptionScore()
+                                viewModel.chooseRandomWordsAndImage()
+                            }
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                    }
+            }
+            .listStyle(.plain)
+            .scrollIndicators(.hidden)
+            .padding(.horizontal, 32)
+            .if(UIDevice.current.hasNotch) { view in
+                view.padding(.bottom, 104)
+            }
+            .if(!UIDevice.current.hasNotch) { view in
+                view.padding(.bottom, 84)
+            }
+        } else {
+            List(viewModel.saveHistories) { saveHistory in
+                SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            Task {
+                                try await viewModel.removeHistory(id: saveHistory.id)
+                                viewModel.calculateMyConsumptionScore()
+                                viewModel.chooseRandomWordsAndImage()
+                            }
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                    }
+            }
+            .listStyle(.plain)
+            .padding(.horizontal, 32)
+            .if(UIDevice.current.hasNotch) { view in
+                view.padding(.bottom, 104)
+            }
+            .if(!UIDevice.current.hasNotch) { view in
+                view.padding(.bottom, 84)
+            }
+        }
     }
 }

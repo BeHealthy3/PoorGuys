@@ -73,7 +73,7 @@ extension CustomTabBarView {
                     }
             }
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, minHeight: 64)
         .if(UIDevice.current.hasNotch) { view in
             view
                 .padding(.bottom, 40)
