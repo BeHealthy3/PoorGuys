@@ -1,13 +1,13 @@
 //
-//  UserPosts.swift
+//  LikedPostsView.swift
 //  PoorGuys
 //
-//  Created by 권승용 on 2023/08/09.
+//  Created by 권승용 on 2023/08/15.
 //
 
 import SwiftUI
 
-struct UserPostsView: View {
+struct LikedPostsView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isViewLoaded = false
     @State private var isModalPresented = false
@@ -15,7 +15,7 @@ struct UserPostsView: View {
     @State private var needsRefresh = false
     @State private var detailViewNeedsRefresh = false
     @State private var nowLookingPostID = ""
-    @StateObject var viewModel = UserPostsViewModel()
+    @StateObject var viewModel = LikedPostsViewModel()
     
     var body: some View {
         VStack {
@@ -72,7 +72,7 @@ struct UserPostsView: View {
                 .padding(.vertical, 12)
                 Spacer()
             }
-            Text("내가 쓴 게시글")
+            Text("적선한 게시글")
                 .font(.system(size: 18, weight: .bold))
                 .foregroundColor(Color("neutral_900"))
                 .padding(.vertical, 12)
@@ -114,8 +114,8 @@ struct UserPostsView: View {
     }
 }
 
-struct UserPostsView_Previews: PreviewProvider {
+struct LikedPostsView_Previews: PreviewProvider {
     static var previews: some View {
-        UserPostsView()
+        LikedPostsView()
     }
 }
