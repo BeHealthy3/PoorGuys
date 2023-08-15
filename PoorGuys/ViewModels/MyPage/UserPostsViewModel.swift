@@ -20,7 +20,6 @@ class UserPostsViewModel: CommunityPostsManagable {
         
         isEndOfList = newPosts.count < 10 ? true : false
         
-        // 이부분 community 뷰모델에서는 왜 DispatchQueue 썼나요?
         DispatchQueue.main.sync {
             self.posts = newPosts
         }
@@ -28,7 +27,6 @@ class UserPostsViewModel: CommunityPostsManagable {
         isBusy = false
     }
     
-    // 이건 어디쓰는건지?
     func thisIsTheThirdLast(_ post: Post) -> Bool {
         guard !isEndOfList, !isBusy else { return false }
         
@@ -40,6 +38,4 @@ class UserPostsViewModel: CommunityPostsManagable {
         postManager.removeLocalPosts()
         posts = []
     }
-    
-    
 }
