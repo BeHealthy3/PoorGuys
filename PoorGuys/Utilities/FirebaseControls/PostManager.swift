@@ -97,8 +97,18 @@ struct FirebasePostManager: PostManagable {
         let userRef = db.collection("users").document(uid)
         try await userRef.updateData( [
             "posts": FieldValue.arrayUnion([postID])
-        ]
-        )
+        ])
+    }
+    
+    func removePostFromUserPosts(postID: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        try await userRef.updateData([
+            "posts": FieldValue.arrayRemove([postID])
+        ])
     }
     
     // TODO: 함수가 잘 동작하는지 확인
@@ -118,6 +128,17 @@ struct FirebasePostManager: PostManagable {
         }
     }
     
+    func removePostFromCommentedPosts(postID: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        try await userRef.updateData([
+            "commentedPosts": FieldValue.arrayRemove([postID])
+        ])
+    }
+    
     func addLikeToUserLikes(postID: String) throws {
         guard let uid = Auth.auth().currentUser?.uid else {
             throw FirebaseError.userNotFound
@@ -133,10 +154,22 @@ struct FirebasePostManager: PostManagable {
         }
     }
     
-    // TODO: firestore user 에서 포스트, 코멘트, 적선하기 포스트 제거 기능 추가
+    func removePostFromLikedPosts(postID: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        try await userRef.updateData([
+            "likedPosts": FieldValue.arrayRemove([postID])
+        ])
+    }
     
     func removePost(postID: String) async throws {
         try await postCollection.document(postID).delete()
+        try await removePostFromUserPosts(postID: postID)
+        try await removePostFromLikedPosts(postID: postID)
+        try await removePostFromCommentedPosts(postID: postID)
     }
     
     mutating func removeLocalPosts() {
@@ -275,7 +308,9 @@ struct FirebasePostManager: PostManagable {
             
             if likedUserIDs.contains(user.uid) {
                 likedUserIDs = likedUserIDs.filter { $0 != user.uid }
-                // TODO: liked list에서 제외하기
+                Task {
+                    try await removePostFromLikedPosts(postID: postID)
+                }
             } else {
                 likedUserIDs.append(user.uid)
                 do {
@@ -364,7 +399,7 @@ struct FirebasePostManager: PostManagable {
                 return nil
             }
             
-            var commentsData = postData[commentsField] as? [[String : Any]]
+            let commentsData = postData[commentsField] as? [[String : Any]]
             let commentRemovedCommentsData = commentsData?.map({ commentData -> [String : Any] in
                 var modifiedCommentData = commentData
                 if commentData["id"] as? ID == id {

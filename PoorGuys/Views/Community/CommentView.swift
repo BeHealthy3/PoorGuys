@@ -118,12 +118,14 @@ struct CommentView: View {
                     try FirebasePostManager().removeComment(id: comment.id, postID: post.id, handler: { result in
                         switch result {
                         case .success(let isDeleted):
-                            if isDeleted {
-                                withAnimation {
-                                    comment.isDeletedComment = true
+                            Task {
+                                try await FirebasePostManager().removePostFromCommentedPosts(postID: post.id)
+                                if isDeleted {
+                                    withAnimation {
+                                        comment.isDeletedComment = true
+                                    }
                                 }
                             }
-                            
                         case .failure(let error):
                             print(error)    //🚨todo: 에러 보여주기
                         }

@@ -187,6 +187,7 @@ struct PostDetailUpperView: View {
         Task.detached {
             do {
                 try await FirebasePostManager().removePost(postID: post.id)
+                try await FirebasePostManager().removePostFromUserPosts(postID: post.id)
             } catch {
                 print("삭제 실패")  //todo: 얼럿 띄우기
             }

@@ -42,6 +42,8 @@ struct LikedPostsView: View {
                 if !isViewLoaded {
                     await fetch10Posts()
                     isViewLoaded = true
+                } else {
+                    await refresh()
                 }
             }
         }
