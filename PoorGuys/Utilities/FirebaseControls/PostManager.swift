@@ -103,7 +103,8 @@ struct FirebasePostManager: PostManagable {
     
     // TODO: 함수가 잘 동작하는지 확인
     func addCommentToUserComments(postID: String) throws {
-        guard let uid = Auth.auth().currentUser?.uid else { throw FirebaseError.userNotFound
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
         }
         let db = Firestore.firestore()
         let userRef = db.collection("users").document(uid)
@@ -116,6 +117,23 @@ struct FirebasePostManager: PostManagable {
             }
         }
     }
+    
+    func addLikeToUserLikes(postID: String) throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        userRef.updateData([
+            "likedPosts": FieldValue.arrayUnion([postID])
+        ]) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    // TODO: firestore user 에서 포스트, 코멘트, 적선하기 포스트 제거 기능 추가
     
     func removePost(postID: String) async throws {
         try await postCollection.document(postID).delete()
@@ -193,6 +211,27 @@ struct FirebasePostManager: PostManagable {
         return posts
     }
     
+    func fetchUserLikedPosts() async throws -> [Post] {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        let userDocumentSnapshot = try await userRef.getDocument()
+        guard let postIDs = userDocumentSnapshot.get("likedPosts") as? [String] else {
+            throw FirebaseError.fieldNotFound
+        }
+        var posts = [Post]()
+        
+        for postID in postIDs {
+            let post = try await self.fetchPost(postID: postID)
+            posts.append(post)
+        }
+        
+        return posts
+    }
+    
     func fetchPost(postID: String) async throws -> Post {
         
         let documentSnapShot = try await postCollection.document(postID).getDocument()
@@ -236,8 +275,14 @@ struct FirebasePostManager: PostManagable {
             
             if likedUserIDs.contains(user.uid) {
                 likedUserIDs = likedUserIDs.filter { $0 != user.uid }
+                // TODO: liked list에서 제외하기
             } else {
                 likedUserIDs.append(user.uid)
+                do {
+                    try addLikeToUserLikes(postID: postID)
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
             
             postData[likedUserIDField] = likedUserIDs
@@ -582,6 +627,14 @@ struct MockPostManager: PostManagable {
         }
     }
     func fetchUserCommentedPosts() async throws -> [Post] {
+        return await withUnsafeContinuation { continuation in
+            DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
+                let posts = (0..<10).map { _ in Post.dummy() }
+                continuation.resume(returning: posts)
+            }
+        }
+    }
+    func fetchUserLikedPosts() async throws -> [Post] {
         return await withUnsafeContinuation { continuation in
             DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
                 let posts = (0..<10).map { _ in Post.dummy() }
