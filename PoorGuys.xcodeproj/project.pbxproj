@@ -57,6 +57,8 @@
 		60C5B1D12A4D2C1C0034E961 /* CurrencyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C5B1D02A4D2C1C0034E961 /* CurrencyTextField.swift */; };
 		60E5239F2A89576F00577227 /* LikedPostsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E5239E2A89576F00577227 /* LikedPostsViewModel.swift */; };
 		60E523A52A8B1C8900577227 /* LikedPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E523A42A8B1C8900577227 /* LikedPostsView.swift */; };
+		60EC86E42A8BD5B800245820 /* CommentedPostsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EC86E32A8BD5B800245820 /* CommentedPostsViewModel.swift */; };
+		60EC86E62A8BD5EB00245820 /* CommentedPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EC86E52A8BD5EB00245820 /* CommentedPostsView.swift */; };
 		D3013C202A6B03EF005E4A8A /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3013C1F2A6B03EF005E4A8A /* UIImage+Extensions.swift */; };
 		D3013C222A6D6EF0005E4A8A /* DivergeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3013C212A6D6EF0005E4A8A /* DivergeView.swift */; };
 		D3013C262A6D9A8C005E4A8A /* Publishers+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3013C252A6D9A8C005E4A8A /* Publishers+Extensions.swift */; };
@@ -152,6 +154,8 @@
 		60C5B1D02A4D2C1C0034E961 /* CurrencyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTextField.swift; sourceTree = "<group>"; };
 		60E5239E2A89576F00577227 /* LikedPostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedPostsViewModel.swift; sourceTree = "<group>"; };
 		60E523A42A8B1C8900577227 /* LikedPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedPostsView.swift; sourceTree = "<group>"; };
+		60EC86E32A8BD5B800245820 /* CommentedPostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentedPostsViewModel.swift; sourceTree = "<group>"; };
+		60EC86E52A8BD5EB00245820 /* CommentedPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentedPostsView.swift; sourceTree = "<group>"; };
 		D3013C1F2A6B03EF005E4A8A /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D3013C212A6D6EF0005E4A8A /* DivergeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivergeView.swift; sourceTree = "<group>"; };
 		D3013C252A6D9A8C005E4A8A /* Publishers+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publishers+Extensions.swift"; sourceTree = "<group>"; };
@@ -304,6 +308,7 @@
 			children = (
 				60228F922A84CA6F0083F28D /* UserPostsViewModel.swift */,
 				60E5239E2A89576F00577227 /* LikedPostsViewModel.swift */,
+				60EC86E32A8BD5B800245820 /* CommentedPostsViewModel.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -345,6 +350,7 @@
 				60A8E0972A3909D30026DA04 /* EditProfileView.swift */,
 				602ED8932A83B116009DA762 /* UserPostsView.swift */,
 				60E523A42A8B1C8900577227 /* LikedPostsView.swift */,
+				60EC86E52A8BD5EB00245820 /* CommentedPostsView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -707,6 +713,7 @@
 				D35939BF2A41F42B007263E8 /* DateFormatter.swift in Sources */,
 				D3013C222A6D6EF0005E4A8A /* DivergeView.swift in Sources */,
 				D35939F42A42056D007263E8 /* PostDetailLowerView.swift in Sources */,
+				60EC86E62A8BD5EB00245820 /* CommentedPostsView.swift in Sources */,
 				60279EBD2A492FA7000D9226 /* SaveHistoryViewModel.swift in Sources */,
 				D35939CF2A41F44C007263E8 /* View+Extensions.swift in Sources */,
 				D39A57AB2A41A67C0033DAD5 /* PoorGuysApp.swift in Sources */,
@@ -715,6 +722,7 @@
 				D35939F12A42056D007263E8 /* CommentView.swift in Sources */,
 				D35939E52A420561007263E8 /* ImagePickerView.swift in Sources */,
 				D35939F02A42056D007263E8 /* PostFillingCenterView.swift in Sources */,
+				60EC86E42A8BD5B800245820 /* CommentedPostsViewModel.swift in Sources */,
 				60279EC22A492FAF000D9226 /* SaveHistoryRow.swift in Sources */,
 				604F578D2A4BF13E00B9003D /* AddSaveHistoryView.swift in Sources */,
 				D37956C02A41A16C00E7724F /* SecretConstants.swift in Sources */,

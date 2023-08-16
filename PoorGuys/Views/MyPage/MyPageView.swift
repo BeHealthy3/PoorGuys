@@ -159,19 +159,21 @@ struct MyPageView: View {
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 24)
-            HStack(spacing: 8) {
-                Image("icon.message")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                Text("댓글 쓴 게시글")
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(Color("neutral_900"))
-                Spacer()
-                Image("arrow.right.gray")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
+            NavigationLink(destination: CommentedPostsView()) {
+                HStack(spacing: 8) {
+                    Image("icon.message")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                    Text("댓글 쓴 게시글")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(Color("neutral_900"))
+                    Spacer()
+                    Image("arrow.right.gray")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                }
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 24)
