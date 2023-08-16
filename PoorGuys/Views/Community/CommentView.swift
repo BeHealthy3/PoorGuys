@@ -119,7 +119,6 @@ struct CommentView: View {
                         switch result {
                         case .success(let isDeleted):
                             Task {
-                                try await FirebasePostManager().removePostFromCommentedPosts(postID: post.id)
                                 if isDeleted {
                                     withAnimation {
                                         comment.isDeletedComment = true
