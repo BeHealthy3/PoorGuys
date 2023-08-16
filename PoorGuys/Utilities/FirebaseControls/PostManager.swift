@@ -111,7 +111,6 @@ struct FirebasePostManager: PostManagable {
         ])
     }
     
-    // TODO: 함수가 잘 동작하는지 확인
     func addCommentToUserComments(postID: String) throws {
         guard let uid = Auth.auth().currentUser?.uid else {
             throw FirebaseError.userNotFound
@@ -168,8 +167,6 @@ struct FirebasePostManager: PostManagable {
     func removePost(postID: String) async throws {
         try await postCollection.document(postID).delete()
         try await removePostFromUserPosts(postID: postID)
-        try await removePostFromLikedPosts(postID: postID)
-        try await removePostFromCommentedPosts(postID: postID)
     }
     
     mutating func removeLocalPosts() {
@@ -407,6 +404,16 @@ struct FirebasePostManager: PostManagable {
                 }
                 return modifiedCommentData
             })
+            let isMyCommentExists = commentRemovedCommentsData?.contains(where: { commentData -> Bool in
+                commentData["userID"] as? ID == Auth.auth().currentUser?.uid && commentData["isDeletedComment"] as? Bool == false
+            }) ?? false
+            
+            if !isMyCommentExists {
+                Task {
+                    try await removePostFromCommentedPosts(postID: postID)
+                }
+            }
+            
             postData[commentsField] = commentRemovedCommentsData
             
             transaction.updateData(postData, forDocument: postRef)
