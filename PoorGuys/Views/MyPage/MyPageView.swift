@@ -186,7 +186,7 @@ struct MyPageView: View {
     func additionalInfos() -> some View {
         VStack(spacing: 0) {
             HStack {
-                Text("이용 약관")
+                Text("서비스 이용 약관")
                     .font(.system(size: 14, weight: .bold))
                     .foregroundColor(Color("neutral_800"))
                 Spacer()
