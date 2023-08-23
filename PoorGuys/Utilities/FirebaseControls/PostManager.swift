@@ -61,7 +61,7 @@ struct FirebasePostManager: PostManagable {
                 Post.codingKeys.id.rawValue : refId
             ]
             
-            try await postCollection.document(refId).updateData(data)
+            try await postsCollection.document(refId).updateData(data)
             try await addPostToUserPosts(postID: refId)
         } catch {
             throw error
@@ -166,7 +166,7 @@ struct FirebasePostManager: PostManagable {
     }
     
     func removePost(postID: String) async throws {
-        try await postCollection.document(postID).delete()
+        try await postsCollection.document(postID).delete()
         try await removePostFromUserPosts(postID: postID)
     }
     
