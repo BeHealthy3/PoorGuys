@@ -7,8 +7,33 @@
 
 import Foundation
 
-enum SaveCategory: String {
-    case transport, food, shopping, impulseBuy, dessert, hobby, subscribtion, mobileGame, coffee, present, drink, secondHandDealings
+struct SaveHistory: Identifiable, Codable {
+    let id: String
+    var category: ConsumptionCategory
+//    var state: SaveHistoryState
+    var price: Int
+    
+    static func dummy() -> Self {
+        SaveHistory(id: UUID().uuidString, category: ConsumptionCategory(rawValue: Int.random(in: (0...11)))!, price: Int.random(in: (-1000000...1000000)))
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id, category, price
+    }
+}
+
+extension SaveHistory {
+    func asDictionary() -> [String: Any] {
+        return [
+            "id": id,
+            "category": category.rawValue,
+            "price": price,
+        ]
+    }
+}
+
+enum ConsumptionCategory: Int, Codable {
+    case transport, food, shopping, flex, dessert, subscription, hobby, mobileGame, secondHandDealings, coffee, present, drink 
     
     var iconName: String {
         switch self {
@@ -18,14 +43,14 @@ enum SaveCategory: String {
             return "food"
         case .shopping:
             return "shopping"
-        case .impulseBuy:
-            return "impulseBuy"
+        case .flex:
+            return "flex"
         case .dessert:
             return "dessert"
         case .hobby:
             return "hobby"
-        case .subscribtion:
-            return "subscribtion"
+        case .subscription:
+            return "subscription"
         case .mobileGame:
             return "mobileGame"
         case .coffee:
@@ -47,14 +72,14 @@ enum SaveCategory: String {
             return "음식"
         case .shopping:
             return "쇼핑"
-        case .impulseBuy:
-            return "뽐뿌"
+        case .flex:
+            return "플렉스"
         case .dessert:
             return "간식"
         case .hobby:
             return "취미"
-        case .subscribtion:
-            return "구독"
+        case .subscription:
+            return "정기구독"
         case .mobileGame:
             return "현질"
         case .coffee:
@@ -69,13 +94,41 @@ enum SaveCategory: String {
     }
 }
 
-enum SaveHistoryState {
+enum SaveHistoryViewMode {
     case saved, wasted
 }
 
-struct SaveHistory: Identifiable {
-    let id = UUID().uuidString
-    var category: SaveCategory
-    var state: SaveHistoryState
-    var price: Int
+struct EncouragingWordsAndImage: Codable {
+    var score: ConsumptionScore
+    var words: [String]
+    var image: String
+    
+    enum CodingKeys: String, CodingKey {
+        case score, words, image
+    }
+}
+
+extension EncouragingWordsAndImage {
+    func asDictionary() -> [String : Any] {
+        return [
+            "score" : score.rawValue,
+            "words" : words,
+            "image" : image
+        ]
+    }
+}
+
+enum ConsumptionScore: String, Codable {
+    case spendOver100
+    case spendOver50
+    case spendOver20
+    case spendOver5
+    case spendSome
+    case zero
+    case saveSome
+    case saveOver5
+    case saveOver20
+    case saveOver50
+    case saveOver100
+    case unknownData
 }

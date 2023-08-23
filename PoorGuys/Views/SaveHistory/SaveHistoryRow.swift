@@ -8,22 +8,24 @@
 import SwiftUI
 
 struct SaveHistoryRow: View {
-    @State var saveHistory: SaveHistory
-    @State var iconColor = Color("primary_500")
-    @State var textColor = Color("red")
+    let consumptionCategory: ConsumptionCategory
+    let price: Int
+    
+    @State var iconColor = Color.appColor(.primary500)
+    @State var textColor = Color.appColor(.red)
     
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
-                CategoryIcon(saveHistory: saveHistory, saveState: $saveHistory.state, isSelected: .constant(false))
+                CategoryIcon(consumptionCategory: consumptionCategory, saveHistoryViewMode: .constant(price >= 0 ? .saved : .wasted), isSelected: .constant(false))
                 Spacer()
                 HStack(alignment: .bottom, spacing: 4) {
-                    Text("\(saveHistory.price)")
+                    Text(price > 0 ? "+" + price.formatToCurrency() : price.formatToCurrency())
                         .font(.system(size: 22, weight: .bold))
                         .foregroundColor(textColor)
                     Text("원")
                         .font(.system(size: 14))
-                        .foregroundColor(Color("neutral_900"))
+                        .foregroundColor(Color.appColor(.neutral900))
                 }
             }
             .padding(.vertical, 16)
@@ -31,17 +33,11 @@ struct SaveHistoryRow: View {
             Divider()
         }
         .onAppear {
-            if saveHistory.state == .saved {
-                textColor = Color("primary_500")
+            if price >= 0 {
+                textColor = Color.appColor(.primary500)
             } else {
-                textColor = Color("red")
+                textColor = Color.appColor(.red)
             }
         }
-    }
-}
-
-struct SaveHistoryRow_Previews: PreviewProvider {
-    static var previews: some View {
-        SaveHistoryRow(saveHistory: SaveHistory(category: .impulseBuy, state: .saved, price: -7000))
     }
 }
