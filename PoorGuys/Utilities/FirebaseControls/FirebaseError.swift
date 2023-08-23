@@ -9,6 +9,7 @@ import Foundation
 
 enum FirebaseError: Error {
     case documentNotFound
+    case fieldNotFound
     case imageNotConvertable
     case userNotFound
     case updateFailed
@@ -25,6 +26,8 @@ enum FirebaseError: Error {
         switch self {
         case .documentNotFound:
             return "Document not found."
+        case .fieldNotFound:
+            return "Field not found."
         case .imageNotConvertable:
             return "Image cannot be converted."
         case .userNotFound:
