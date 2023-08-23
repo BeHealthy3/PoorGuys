@@ -139,19 +139,6 @@ final class LoginViewModel: ObservableObject {
                         self.isUserInFirestore = true
                     }
                 }
-                
-                // user의 id를 이름으로하는 Collection 참조
-                let historyCollectionRef = db.collection(uid)
-
-                // 빈 Document를 생성하고 추가하지 않음
-                historyCollectionRef.addDocument(data: [:]) { error in
-                    if let error = error {
-                        // todo: 여기서 오류나면 어떡하지?
-                        print("Error adding document: \(error)")
-                    } else {
-                        print("Document added successfully.")
-                    }
-                }
             }
         }
     }
