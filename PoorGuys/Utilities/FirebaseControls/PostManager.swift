@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseAuth
 import FirebaseFirestoreSwift
 import FirebaseStorage
 
@@ -60,8 +61,8 @@ struct FirebasePostManager: PostManagable {
                 Post.codingKeys.id.rawValue : refId
             ]
             
-            try await postsCollection.document(refId).updateData(data)
-            
+            try await postCollection.document(refId).updateData(data)
+            try await addPostToUserPosts(postID: refId)
         } catch {
             throw error
         }
@@ -89,8 +90,84 @@ struct FirebasePostManager: PostManagable {
         )
     }
     
+    func addPostToUserPosts(postID: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        try await userRef.updateData( [
+            "posts": FieldValue.arrayUnion([postID])
+        ])
+    }
+    
+    func removePostFromUserPosts(postID: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        try await userRef.updateData([
+            "posts": FieldValue.arrayRemove([postID])
+        ])
+    }
+    
+    func addCommentToUserComments(postID: String) throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        userRef.updateData( [
+            "commentedPosts": FieldValue.arrayUnion([postID])
+        ]
+        ) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func removePostFromCommentedPosts(postID: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        try await userRef.updateData([
+            "commentedPosts": FieldValue.arrayRemove([postID])
+        ])
+    }
+    
+    func addLikeToUserLikes(postID: String) throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        userRef.updateData([
+            "likedPosts": FieldValue.arrayUnion([postID])
+        ]) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func removePostFromLikedPosts(postID: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        try await userRef.updateData([
+            "likedPosts": FieldValue.arrayRemove([postID])
+        ])
+    }
+    
     func removePost(postID: String) async throws {
-        try await postsCollection.document(postID).delete()
+        try await postCollection.document(postID).delete()
+        try await removePostFromUserPosts(postID: postID)
     }
     
     mutating func removeLocalPosts() {
@@ -122,6 +199,70 @@ struct FirebasePostManager: PostManagable {
         return posts
     }
     
+    // currentUser가 작성한 post들 가져오기
+    func fetchUserPosts() async throws -> [Post] {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        let userDocumentSnapshot = try await userRef.getDocument()
+        guard let postIDs = userDocumentSnapshot.get("posts") as? [String] else {
+            throw FirebaseError.fieldNotFound
+        }
+        var posts = [Post]()
+        
+        for postID in postIDs {
+            let post = try await self.fetchPost(postID: postID)
+            posts.append(post)
+        }
+        
+        return posts
+    }
+    
+    func fetchUserCommentedPosts() async throws -> [Post] {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        let userDocumentSnapshot = try await userRef.getDocument()
+        guard let postIDs = userDocumentSnapshot.get("commentedPosts") as? [String] else {
+            throw FirebaseError.fieldNotFound
+        }
+        var posts = [Post]()
+        
+        for postID in postIDs {
+            let post = try await self.fetchPost(postID: postID)
+            posts.append(post)
+        }
+        
+        return posts
+    }
+    
+    func fetchUserLikedPosts() async throws -> [Post] {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw FirebaseError.userNotFound
+        }
+        
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(uid)
+        let userDocumentSnapshot = try await userRef.getDocument()
+        guard let postIDs = userDocumentSnapshot.get("likedPosts") as? [String] else {
+            throw FirebaseError.fieldNotFound
+        }
+        var posts = [Post]()
+        
+        for postID in postIDs {
+            let post = try await self.fetchPost(postID: postID)
+            posts.append(post)
+        }
+        
+        return posts
+    }
+    
     func fetchPost(postID: String) async throws -> Post {
         
         let documentSnapShot = try await postsCollection.document(postID).getDocument()
@@ -129,6 +270,10 @@ struct FirebasePostManager: PostManagable {
         
         return post
     }
+    
+    //    func fetchUserPosts(userID: String) async throws -> [Post] {
+    //        // TODO: Firestore user로부터 posts 가져오기
+    //    }
     
     func toggleLike(about postID: ID, handler: @escaping (Result<Bool, Error>) -> Void ) throws {
         
@@ -161,8 +306,16 @@ struct FirebasePostManager: PostManagable {
             
             if likedUserIDs.contains(user.uid) {
                 likedUserIDs = likedUserIDs.filter { $0 != user.uid }
+                Task {
+                    try await removePostFromLikedPosts(postID: postID)
+                }
             } else {
                 likedUserIDs.append(user.uid)
+                do {
+                    try addLikeToUserLikes(postID: postID)
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
             
             postData[likedUserIDField] = likedUserIDs
@@ -212,6 +365,12 @@ struct FirebasePostManager: PostManagable {
             if let error = error {
                 handler(.failure(error))
             } else {
+                do {
+                    try addCommentToUserComments(postID: postID)
+                }
+                catch {
+                    print(error.localizedDescription)
+                }
                 handler(.success(true))
             }
         }
@@ -238,7 +397,7 @@ struct FirebasePostManager: PostManagable {
                 return nil
             }
             
-            var commentsData = postData[commentsField] as? [[String : Any]]
+            let commentsData = postData[commentsField] as? [[String : Any]]
             let commentRemovedCommentsData = commentsData?.map({ commentData -> [String : Any] in
                 var modifiedCommentData = commentData
                 if commentData["id"] as? ID == id {
@@ -246,6 +405,16 @@ struct FirebasePostManager: PostManagable {
                 }
                 return modifiedCommentData
             })
+            let isMyCommentExists = commentRemovedCommentsData?.contains(where: { commentData -> Bool in
+                commentData["userID"] as? ID == Auth.auth().currentUser?.uid && commentData["isDeletedComment"] as? Bool == false
+            }) ?? false
+            
+            if !isMyCommentExists {
+                Task {
+                    try await removePostFromCommentedPosts(postID: postID)
+                }
+            }
+            
             postData[commentsField] = commentRemovedCommentsData
             
             transaction.updateData(postData, forDocument: postRef)
@@ -327,7 +496,7 @@ struct FirebasePostManager: PostManagable {
         let db = Firestore.firestore()
         let reportedPostRef = db.collection("reportedPosts").document(id)
         let reportedUserIDsField = "reportedUserIDs"
-
+        
         db.runTransaction({ (transaction, errorPointer) -> Any? in
             var reportedPostDocument: DocumentSnapshot
             
@@ -349,7 +518,7 @@ struct FirebasePostManager: PostManagable {
                     transaction.updateData([reportedUserIDsField: reportedUsers], forDocument: reportedPostRef)
                     return true
                 }
-
+                
             } else {
                 let data: [String: Any] = [
                     "postID": id,
@@ -463,7 +632,6 @@ struct FirebasePostManager: PostManagable {
 }
 
 struct MockPostManager: PostManagable {
-    
     func updateComments(with updatedPost: Post) async throws {
         
     }
@@ -486,6 +654,30 @@ struct MockPostManager: PostManagable {
     func removePost(postID: String) async throws {}
     mutating func removeLocalPosts() {}
     func fetch10Posts() async throws -> [Post] {
+        return await withUnsafeContinuation { continuation in
+            DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
+                let posts = (0..<10).map { _ in Post.dummy() }
+                continuation.resume(returning: posts)
+            }
+        }
+    }
+    func fetchUserPosts() async throws -> [Post] {
+        return await withUnsafeContinuation { continuation in
+            DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
+                let posts = (0..<10).map { _ in Post.dummy() }
+                continuation.resume(returning: posts)
+            }
+        }
+    }
+    func fetchUserCommentedPosts() async throws -> [Post] {
+        return await withUnsafeContinuation { continuation in
+            DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
+                let posts = (0..<10).map { _ in Post.dummy() }
+                continuation.resume(returning: posts)
+            }
+        }
+    }
+    func fetchUserLikedPosts() async throws -> [Post] {
         return await withUnsafeContinuation { continuation in
             DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
                 let posts = (0..<10).map { _ in Post.dummy() }
