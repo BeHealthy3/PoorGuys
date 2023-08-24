@@ -92,6 +92,13 @@ struct PostDetailView: View {
                 scrollToComment(proxy: proxy)
             }
         }
+        .onTapGesture {
+            Task {
+                withAnimation {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+            }
+        }
     }
     
     @ViewBuilder

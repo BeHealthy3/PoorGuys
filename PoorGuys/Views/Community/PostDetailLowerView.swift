@@ -61,13 +61,8 @@ struct PostDetailLowerView: View {
                         Spacer(minLength: 0)
                             .frame(height: viewHeight - 50 > 0 ? viewHeight - 50 : 0)
                         
-                        Button {
-                            addNewComment()
-                            
-                        } label: {
-                            Image("sendButton")
-                                .padding(EdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 16))
-                        }
+                        DivergeView(if: text.isEmpty, true: deactivatedSendButton(), false: activatedSendButton())
+                        
                     }
                 }
                 .overlay(
@@ -85,6 +80,27 @@ struct PostDetailLowerView: View {
                 )
             }
         }
+    }
+    
+    @ViewBuilder
+    private func activatedSendButton() -> some View {
+        Button {
+            addNewComment()
+        } label: {
+            Image("sendButton_activated")
+                .padding(EdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 16))
+        }
+    }
+    
+    @ViewBuilder
+    private func deactivatedSendButton() -> some View {
+        Button {
+//            아무것도 하지 않음.
+        } label: {
+            Image("sendButton_deactivated")
+                .padding(EdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 16))
+        }
+        .disabled(true)
     }
     
     private func addNewComment() {

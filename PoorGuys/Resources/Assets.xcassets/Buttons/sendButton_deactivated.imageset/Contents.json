@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "sendButton_deactivated.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
