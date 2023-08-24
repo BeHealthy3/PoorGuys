@@ -197,15 +197,17 @@ struct MyPageView: View {
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 16)
-            HStack {
-                Text("개인정보 처리방침")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_800"))
-                Spacer()
-                Image("arrow.right.gray")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
+            NavigationLink(destination: PrivacyPolicyView()) {
+                HStack {
+                    Text("개인정보 처리방침")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color("neutral_800"))
+                    Spacer()
+                    Image("arrow.right.gray")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                }
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 16)
