@@ -40,6 +40,9 @@ struct LoginView: View {
                     if !loginViewModel.didSetNickName {
                         self.isPresentingSetNickNameView = true
                     }
+                } else {
+                    print("Error: error while signing in : \(String(describing: error))")
+                    // TODO: 추가적인 에러 처리 필요 (팝업 등)
                 }
             }
         } label: {
