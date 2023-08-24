@@ -16,6 +16,7 @@
 		6001EFEA2A13910B00A9A2EF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001EFE72A13910B00A9A2EF /* LoginViewModel.swift */; };
 		6001EFF22A1391BF00A9A2EF /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 6001EFF12A1391BF00A9A2EF /* GoogleSignIn */; };
 		6001EFF42A1391BF00A9A2EF /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6001EFF32A1391BF00A9A2EF /* GoogleSignInSwift */; };
+		600AFC2F2A97A53900B09F89 /* TermsOfServicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600AFC2E2A97A53900B09F89 /* TermsOfServicesView.swift */; };
 		601A6D572A1F74720066D5CD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601A6D562A1F74720066D5CD /* Constants.swift */; };
 		60228F932A84CA6F0083F28D /* UserPostsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60228F922A84CA6F0083F28D /* UserPostsViewModel.swift */; };
 		60279EBA2A492F99000D9226 /* SaveHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60279EB92A492F99000D9226 /* SaveHistory.swift */; };
@@ -133,6 +134,7 @@
 		6001EFDA2A1366BE00A9A2EF /* SignUpCompletedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCompletedView.swift; sourceTree = "<group>"; };
 		6001EFE72A13910B00A9A2EF /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		6001EFF52A1488E100A9A2EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		600AFC2E2A97A53900B09F89 /* TermsOfServicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServicesView.swift; sourceTree = "<group>"; };
 		601A6D562A1F74720066D5CD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		60228F922A84CA6F0083F28D /* UserPostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostsViewModel.swift; sourceTree = "<group>"; };
 		60279EB92A492F99000D9226 /* SaveHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveHistory.swift; sourceTree = "<group>"; };
@@ -369,6 +371,7 @@
 				60E523A42A8B1C8900577227 /* LikedPostsView.swift */,
 				60EC86E52A8BD5EB00245820 /* CommentedPostsView.swift */,
 				60FD36392A9497300073B882 /* PrivacyPolicyView.swift */,
+				600AFC2E2A97A53900B09F89 /* TermsOfServicesView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -798,6 +801,7 @@
 				D35939BD2A41F41F007263E8 /* ImageDownloadManager.swift in Sources */,
 				60E5239F2A89576F00577227 /* LikedPostsViewModel.swift in Sources */,
 				6001EFDB2A1366BE00A9A2EF /* SignUpCompletedView.swift in Sources */,
+				600AFC2F2A97A53900B09F89 /* TermsOfServicesView.swift in Sources */,
 				6093F7472A381904004F9D53 /* GIFView.swift in Sources */,
 				D3552E142A726A1C00F565AA /* Int+Extensions.swift in Sources */,
 				6001EFE82A13910B00A9A2EF /* LoginViewModel.swift in Sources */,

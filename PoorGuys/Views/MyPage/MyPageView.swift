@@ -185,15 +185,17 @@ struct MyPageView: View {
     @ViewBuilder
     func additionalInfos() -> some View {
         VStack(spacing: 0) {
-            HStack {
-                Text("서비스 이용 약관")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_800"))
-                Spacer()
-                Image("arrow.right.gray")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
+            NavigationLink(destination: TermsOfServicesView()) {
+                HStack {
+                    Text("서비스 이용 약관")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color("neutral_800"))
+                    Spacer()
+                    Image("arrow.right.gray")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                }
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 16)
