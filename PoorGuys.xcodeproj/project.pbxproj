@@ -59,6 +59,7 @@
 		60E523A52A8B1C8900577227 /* LikedPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E523A42A8B1C8900577227 /* LikedPostsView.swift */; };
 		60EC86E42A8BD5B800245820 /* CommentedPostsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EC86E32A8BD5B800245820 /* CommentedPostsViewModel.swift */; };
 		60EC86E62A8BD5EB00245820 /* CommentedPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EC86E52A8BD5EB00245820 /* CommentedPostsView.swift */; };
+		60FD363A2A9497300073B882 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD36392A9497300073B882 /* PrivacyPolicyView.swift */; };
 		D3013C202A6B03EF005E4A8A /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3013C1F2A6B03EF005E4A8A /* UIImage+Extensions.swift */; };
 		D3013C222A6D6EF0005E4A8A /* DivergeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3013C212A6D6EF0005E4A8A /* DivergeView.swift */; };
 		D3013C262A6D9A8C005E4A8A /* Publishers+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3013C252A6D9A8C005E4A8A /* Publishers+Extensions.swift */; };
@@ -156,6 +157,7 @@
 		60E523A42A8B1C8900577227 /* LikedPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedPostsView.swift; sourceTree = "<group>"; };
 		60EC86E32A8BD5B800245820 /* CommentedPostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentedPostsViewModel.swift; sourceTree = "<group>"; };
 		60EC86E52A8BD5EB00245820 /* CommentedPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentedPostsView.swift; sourceTree = "<group>"; };
+		60FD36392A9497300073B882 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		D3013C1F2A6B03EF005E4A8A /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D3013C212A6D6EF0005E4A8A /* DivergeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivergeView.swift; sourceTree = "<group>"; };
 		D3013C252A6D9A8C005E4A8A /* Publishers+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publishers+Extensions.swift"; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 				602ED8932A83B116009DA762 /* UserPostsView.swift */,
 				60E523A42A8B1C8900577227 /* LikedPostsView.swift */,
 				60EC86E52A8BD5EB00245820 /* CommentedPostsView.swift */,
+				60FD36392A9497300073B882 /* PrivacyPolicyView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -758,6 +761,7 @@
 				D38714B82A6284C0002DFA84 /* UINavigationController+Extensions.swift in Sources */,
 				60A8E09F2A3AABAF0026DA04 /* TabBarView.swift in Sources */,
 				D35939F82A42056D007263E8 /* TextEditorView.swift in Sources */,
+				60FD363A2A9497300073B882 /* PrivacyPolicyView.swift in Sources */,
 				D35939D52A41F4AE007263E8 /* AppColor.swift in Sources */,
 				D35939F22A42056D007263E8 /* PostView.swift in Sources */,
 				60228F932A84CA6F0083F28D /* UserPostsViewModel.swift in Sources */,
@@ -937,7 +941,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PoorGuys/Preview Content\"";
-				DEVELOPMENT_TEAM = 887U9L3L57;
+				DEVELOPMENT_TEAM = MV89SHQKF4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PoorGuys/Info.plist;
@@ -973,7 +977,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PoorGuys/Preview Content\"";
-				DEVELOPMENT_TEAM = 887U9L3L57;
+				DEVELOPMENT_TEAM = MV89SHQKF4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PoorGuys/Info.plist;
