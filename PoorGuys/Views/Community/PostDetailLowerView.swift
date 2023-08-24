@@ -30,10 +30,6 @@ struct PostDetailLowerView: View {
     
     var body: some View {
         VStack {
-            EmptyView()
-                .onlyIf(replyingCommentID != nil)
-                .frame(height: 8, alignment: .top)
-            
             HStack(spacing: 8) {
                 VStack {
                     Spacer(minLength: 0)
