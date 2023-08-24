@@ -124,7 +124,6 @@ final class LoginViewModel: ObservableObject {
                 }
             } else {
                 print("해당하는 유저 없음")
-                completion(false, nil)
                 // MARK: - 유저 firestore 추가
                 db.collection("users").document(uid).setData([
                     "nickName" : "",
@@ -134,9 +133,11 @@ final class LoginViewModel: ObservableObject {
                         /* TODO : 유저 등록 중 오류가 났을 때 앱에서 어떤 동작을 취해주어야 할까? */
                         print("유저 등록 중 오류 : \(error)")
                         self.isUserInFirestore = false
+                        completion(false, error)
                     } else {
                         print("새로운 유저 firestore에 등록 완료")
                         self.isUserInFirestore = true
+                        completion(true, nil)
                     }
                 }
             }
