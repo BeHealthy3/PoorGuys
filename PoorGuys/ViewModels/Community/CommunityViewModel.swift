@@ -7,17 +7,6 @@
 
 import Foundation
 
-protocol CommunityPostsManagable: ObservableObject {
-    
-    var postManager: PostManagable { get }
-    var isEndOfList: Bool { get set }
-    var posts: [Post] { get set }
-    
-    func fetch10Posts() async throws
-    func thisIsTheThirdLast(_ post: Post) -> Bool
-    func removePosts()
-}
-
 class CommunityViewModel: CommunityPostsManagable {
     
     var postManager: PostManagable = FirebasePostManager()

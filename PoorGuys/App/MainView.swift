@@ -8,14 +8,20 @@
 import SwiftUI
 import FirebaseAuth
 
-struct MainView: View {
+struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
+
     @EnvironmentObject var logInViewModel: LoginViewModel
-    @StateObject var saveHistoryViewModel = SaveHistoryViewModel()
+    @StateObject var saveHistoryViewModel: SaveHistoryViewModel
     
     @State private var isShowingLaunchScreen = true
     @State private var selection: String = "community"
     @State private var tabSelection: TabBarItem = .community
-    @State var isPresentingAddSaveHistoryView = false
+    @State private var isPresentingAddSaveHistoryView = false
+    @State private var isPresentingExportingHisotoryView = false
+    
+    init(saveHistoryViewModel: SaveHistoryViewModel) {
+        _saveHistoryViewModel = StateObject(wrappedValue: saveHistoryViewModel)
+    }
     
     var body: some View {
         Group {
@@ -55,7 +61,8 @@ struct MainView: View {
                             CommunityView(viewModel: CommunityViewModel())
                                 .tabBarItem(tab: .community, selection: $tabSelection)
                             
-                            SaveHistoryView(viewModel: saveHistoryViewModel, isPresenting: $isPresentingAddSaveHistoryView)
+                            SaveHistoryView<SaveHistoryViewModel>(isPresentingAddSaveHistoryView: $isPresentingAddSaveHistoryView, isPresentingExportingHistoryView: $isPresentingExportingHisotoryView)
+                                .environmentObject(saveHistoryViewModel)
                                 .tabBarItem(tab: .saveHistory, selection: $tabSelection)
                             
                             Text("알림 탭")
@@ -64,7 +71,39 @@ struct MainView: View {
                         .edgesIgnoringSafeArea(.bottom)
                         
                         if isPresentingAddSaveHistoryView {
-                            CustomBottomSheet(isPresenting: $isPresentingAddSaveHistoryView, content: AddSaveHistoryView(viewModel: saveHistoryViewModel))
+                            Color.black
+                                .opacity(0.5)
+                                .ignoresSafeArea()
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.5)) {
+                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        isPresentingAddSaveHistoryView = false
+                                    }
+                                }
+                            CustomBottomSheet(
+                                content: AddSaveHistoryView<SaveHistoryViewModel>(
+                                    isPresenting: $isPresentingAddSaveHistoryView
+                                )
+                            .environmentObject(saveHistoryViewModel), withNotchHeight: 500, withoutNotchheight: 490)
+                            .transition(.bottomToTop)
+                        }
+                        
+                        if isPresentingExportingHisotoryView {
+                            Color.black
+                                .opacity(0.5)
+                                .ignoresSafeArea()
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.5)) {
+                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        isPresentingExportingHisotoryView = false
+                                    }
+                                }
+                            
+                            CustomBottomSheet(content: ExportingSaveHistoryView<SaveHistoryViewModel>(
+                                isPresenting: $isPresentingExportingHisotoryView
+                            ), withNotchHeight: 653, withoutNotchheight: 628)
+                            .environmentObject(saveHistoryViewModel)
+                            .transition(.bottomToTop)
                         }
                     }
                 }
@@ -76,7 +115,7 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        MainView(saveHistoryViewModel: MockSaveHistoryViewModel())
             .environmentObject(LoginViewModel())
     }
 }

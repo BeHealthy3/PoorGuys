@@ -23,7 +23,7 @@ struct CurrencyTextField: View {
     
     var body: some View {
         TextField(title, text: $price)
-            .font(.system(size: 22, weight: .bold))
+            .font(.system(size: 16, weight: .bold))
             .keyboardType(.numberPad)
             .onReceive(Just(price)) { newValue in
                 // 입력된 금액 3자리마다 ,으로 나눠서 표시해주기
