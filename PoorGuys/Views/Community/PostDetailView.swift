@@ -93,11 +93,7 @@ struct PostDetailView: View {
             }
         }
         .onTapGesture {
-            Task {
-                withAnimation {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                }
-            }
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
     
