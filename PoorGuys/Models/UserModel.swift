@@ -13,7 +13,7 @@ enum AuthenticationMethod {
 }
 
 struct User {
-    static var currentUser: User?
+    static var currentUser: User? = User(uid: "SDAfasdf", nickName: "qwev", profileImageURL: nil, profileImage: nil, authenticationMethod: .google)
     
     var uid: String
     var nickName: String
