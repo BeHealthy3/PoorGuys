@@ -15,7 +15,7 @@ struct TermsOfServicesView: View {
             navigationHeader()
             ScrollView {
                 Text(Constants.termsOfService)
-                    .font(.system(.body))
+                    .font(.system(size: 14))
                     .padding(.horizontal, 16)
             }
         }

@@ -15,7 +15,7 @@ struct PrivacyPolicyView: View {
             navigationHeader()
             ScrollView {
                 Text(Constants.privacyPolicy)
-                    .font(.system(.body))
+                    .font(.system(size: 14))
                     .padding(.horizontal, 16)
             }
         }
