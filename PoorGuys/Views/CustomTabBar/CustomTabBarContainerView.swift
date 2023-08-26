@@ -7,16 +7,12 @@
 
 import SwiftUI
 
-protocol ContentViews: View {
-    var isTabBarHidden: Bool { get set }
-}
-
 struct CustomTabBarContainerView<Content: View>: View {
     let content: Content
     @Binding var selection: TabBarItem
     @State private var tabs: [TabBarItem] = [.community, .saveHistory, .alert]
     @Binding private var isHidden: Bool
-    
+//    탭바 감추기 적용, 노티와 마이페이지아이콘 및 페이지 변경
     init(selection: Binding<TabBarItem>, isHidden: Binding<Bool> ,@ViewBuilder content: () -> Content) {
         self._selection = selection
         self.content = content()
@@ -25,7 +21,7 @@ struct CustomTabBarContainerView<Content: View>: View {
     
     var body: some View {
         ZStack() {
-            content
+            content //🚨todo: 뷰의 크기를 Vstack 위로 올라와서 아랫부분까지 보이게해야
             VStack {
                 Spacer()
                 CustomTabBarView(tabs: tabs, selection: $selection, isHidden: $isHidden, localSelection: selection)

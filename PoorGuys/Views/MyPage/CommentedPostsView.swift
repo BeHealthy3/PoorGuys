@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct CommentedPostsView: View {
+struct CommentedPostsView: ContentView {
     @Environment(\.dismiss) private var dismiss
+    @Binding var isTabBarHidden: Bool
     @State private var isViewLoaded = false
     @State private var isModalPresented = false
     @State private var isDetailViewActive = false
@@ -45,6 +46,9 @@ struct CommentedPostsView: View {
                 } else {
                     await refresh()
                 }
+            }
+            withAnimation(.easeInOut) {
+                isTabBarHidden = true
             }
         }
         .onChange(of: needsRefresh, perform: { needsRefresh in
@@ -113,11 +117,5 @@ struct CommentedPostsView: View {
         } catch {
             print("포스팅 패치 실패")
         }
-    }
-}
-
-struct CommentedPostsView_Previews: PreviewProvider {
-    static var previews: some View {
-        CommentedPostsView()
     }
 }

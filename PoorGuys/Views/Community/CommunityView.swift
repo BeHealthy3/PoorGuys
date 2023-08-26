@@ -91,7 +91,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: ContentView {
                     .foregroundColor(.accentColor)
             }
             
-            NavigationLink(destination: MyPageView()) {
+            NavigationLink(destination: NotificationView(isTabBarHidden: $isTabBarHidden)) {
                 Image("profile")
                     .imageScale(.large)
                     .foregroundColor(.accentColor)

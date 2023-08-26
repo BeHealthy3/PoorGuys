@@ -12,5 +12,10 @@ struct NotificationView: ContentView {
     
     var body: some View {
         Text("알림 탭")
+            .onAppear {
+                withAnimation(.easeInOut) {
+                    isTabBarHidden = true
+                }
+            }
     }
 }

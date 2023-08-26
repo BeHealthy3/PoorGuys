@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct MyPageView: View {
+struct MyPageView: ContentView {
     @EnvironmentObject var loginViewModel: LoginViewModel
     @Environment(\.dismiss) private var dismiss
-    
+    @Binding var isTabBarHidden: Bool
     @State private var currentUser: User = User(uid: "", nickName: "", authenticationMethod: .google)
     
     var body: some View {
@@ -29,10 +29,14 @@ struct MyPageView: View {
                     }
                 }
             }
-        }
-        .onAppear {
-            if let user = User.currentUser {
-                self.currentUser = user
+            .onAppear {
+                if let user = User.currentUser {
+                    self.currentUser = user
+                }
+                
+                withAnimation(.easeInOut) {
+                    isTabBarHidden = false
+                }
             }
         }
         
@@ -123,7 +127,7 @@ struct MyPageView: View {
     @ViewBuilder
     func myRelatedPosts() -> some View {
         VStack(spacing: 0) {
-            NavigationLink(destination: UserPostsView()) {
+            NavigationLink(destination: UserPostsView(isTabBarHidden: $isTabBarHidden)) {
                 HStack(spacing: 8) {
                     Image("icon.document")
                         .resizable()
@@ -141,7 +145,7 @@ struct MyPageView: View {
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 24)
-            NavigationLink(destination: LikedPostsView()) {
+            NavigationLink(destination: LikedPostsView(isTabBarHidden: $isTabBarHidden)) {
                 HStack(spacing: 8) {
                     Image("icon.like")
                         .resizable()
@@ -159,7 +163,7 @@ struct MyPageView: View {
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 24)
-            NavigationLink(destination: CommentedPostsView()) {
+            NavigationLink(destination: CommentedPostsView(isTabBarHidden: $isTabBarHidden)) {
                 HStack(spacing: 8) {
                     Image("icon.message")
                         .resizable()
@@ -247,13 +251,5 @@ struct MyPageView: View {
             Divider()
         } // end of VStack
         .padding(.horizontal, 16)
-    }
-}
-
-struct MyPageView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        MyPageView()
-            .environmentObject(LoginViewModel())
     }
 }
