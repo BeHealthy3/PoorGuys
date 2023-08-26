@@ -92,9 +92,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: ContentView {
             }
             
             NavigationLink(destination: NotificationView(isTabBarHidden: $isTabBarHidden)) {
-                Image("profile")
-                    .imageScale(.large)
-                    .foregroundColor(.accentColor)
+                Image("notification")
             }
             .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 16))
         }

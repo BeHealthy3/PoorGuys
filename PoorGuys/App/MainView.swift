@@ -66,10 +66,8 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
                                 .environmentObject(saveHistoryViewModel)
                                 .tabBarItem(tab: .saveHistory, selection: $tabSelection)
                             
-                            
-//                            NotificationView(isTabBarHidden: $isTabBarHidden)
                             MyPageView(isTabBarHidden: $isTabBarHidden)
-                                .tabBarItem(tab: .alert, selection: $tabSelection)
+                                .tabBarItem(tab: .myPage, selection: $tabSelection)
                         }
                         .edgesIgnoringSafeArea(.bottom)
                         

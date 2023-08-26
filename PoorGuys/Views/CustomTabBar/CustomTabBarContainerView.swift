@@ -10,9 +10,9 @@ import SwiftUI
 struct CustomTabBarContainerView<Content: View>: View {
     let content: Content
     @Binding var selection: TabBarItem
-    @State private var tabs: [TabBarItem] = [.community, .saveHistory, .alert]
+    @State private var tabs: [TabBarItem] = [.community, .saveHistory, .myPage]
     @Binding private var isHidden: Bool
-//    탭바 감추기 적용, 노티와 마이페이지아이콘 및 페이지 변경
+
     init(selection: Binding<TabBarItem>, isHidden: Binding<Bool> ,@ViewBuilder content: () -> Content) {
         self._selection = selection
         self.content = content()
