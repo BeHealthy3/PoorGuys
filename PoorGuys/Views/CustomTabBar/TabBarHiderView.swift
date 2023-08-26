@@ -7,6 +7,6 @@
 
 import SwiftUI
 
-protocol ContentView: View {
+protocol TabBarHiderView: View {
     var isTabBarHidden: Bool { get set }
 }

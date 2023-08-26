@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LikedPostsView: ContentView {
+struct LikedPostsView: TabBarHiderView {
     @Environment(\.dismiss) private var dismiss
     @Binding var isTabBarHidden: Bool
     @State private var isViewLoaded = false

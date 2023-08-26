@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PostDetailView: ContentView {
+struct PostDetailView: TabBarHiderView {
     let postID: String
     
     @Binding var isTabBarHidden: Bool

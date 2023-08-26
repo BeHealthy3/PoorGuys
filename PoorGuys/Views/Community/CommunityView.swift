@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-struct CommunityView<ViewModel: CommunityPostsManagable>: ContentView {
+struct CommunityView<ViewModel: CommunityPostsManagable>: TabBarHiderView {
     @Binding var isTabBarHidden: Bool
     @StateObject private var viewModel: ViewModel
     @State private var isViewDidLoad: Bool = false

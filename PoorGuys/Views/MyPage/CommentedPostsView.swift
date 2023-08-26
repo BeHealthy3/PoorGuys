@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CommentedPostsView: ContentView {
+struct CommentedPostsView: TabBarHiderView {
     @Environment(\.dismiss) private var dismiss
     @Binding var isTabBarHidden: Bool
     @State private var isViewLoaded = false

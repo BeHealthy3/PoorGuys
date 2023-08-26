@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NotificationView: ContentView {
+struct NotificationView: TabBarHiderView {
     @Binding var isTabBarHidden: Bool
     
     var body: some View {

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MyPageView: ContentView {
+struct MyPageView: TabBarHiderView {
     @EnvironmentObject var loginViewModel: LoginViewModel
     @Environment(\.dismiss) private var dismiss
     @Binding var isTabBarHidden: Bool

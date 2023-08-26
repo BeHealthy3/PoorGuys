@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UserPostsView: ContentView {
+struct UserPostsView: TabBarHiderView {
     @Environment(\.dismiss) private var dismiss
     @Binding var isTabBarHidden: Bool
     @State private var isViewLoaded = false
