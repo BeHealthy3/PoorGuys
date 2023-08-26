@@ -31,10 +31,13 @@ enum TabBarItem: Hashable {
 struct CustomTabBarView: View {
     let tabs: [TabBarItem]
     @Binding var selection: TabBarItem
+    @Binding var isHidden: Bool
     @State var localSelection: TabBarItem
     
     var body: some View {
         tabbar
+            .onlyIf(!isHidden)
+            .transition(.bottomToTop)
             .onChange(of: selection) { newValue in
                 withAnimation(.easeInOut) {
                     localSelection = newValue
@@ -47,7 +50,7 @@ struct CustomTabBarView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Spacer()
-            CustomTabBarView(tabs: [.community, .saveHistory, .alert], selection: .constant(.saveHistory), localSelection: .saveHistory)
+            CustomTabBarView(tabs: [.community, .saveHistory, .alert], selection: .constant(.saveHistory), isHidden: .constant(false), localSelection: .saveHistory)
         }
         .edgesIgnoringSafeArea(.bottom)
     }

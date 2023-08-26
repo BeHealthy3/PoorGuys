@@ -7,14 +7,20 @@
 
 import SwiftUI
 
+protocol ContentViews: View {
+    var isTabBarHidden: Bool { get set }
+}
+
 struct CustomTabBarContainerView<Content: View>: View {
     let content: Content
     @Binding var selection: TabBarItem
     @State private var tabs: [TabBarItem] = [.community, .saveHistory, .alert]
+    @Binding private var isHidden: Bool
     
-    init(selection: Binding<TabBarItem>, @ViewBuilder content: () -> Content) {
+    init(selection: Binding<TabBarItem>, isHidden: Binding<Bool> ,@ViewBuilder content: () -> Content) {
         self._selection = selection
         self.content = content()
+        self._isHidden = isHidden
     }
     
     var body: some View {
@@ -22,25 +28,12 @@ struct CustomTabBarContainerView<Content: View>: View {
             content
             VStack {
                 Spacer()
-                CustomTabBarView(tabs: tabs, selection: $selection, localSelection: selection)
+                CustomTabBarView(tabs: tabs, selection: $selection, isHidden: $isHidden, localSelection: selection)
             }
         }
         .onPreferenceChange(TabBarItemsPreferenceKey.self, perform: { value in
             self.tabs = value
         })
-    }
-}
-
-struct CustomTabBarContainerView_Previews: PreviewProvider {
-    
-    static let tabs: [TabBarItem] = [
-        .community, .saveHistory, .alert
-    ]
-    
-    static var previews: some View {
-        CustomTabBarContainerView(selection: .constant(tabs.first!)) {
-            Color(.red)
-        }
     }
 }
 

@@ -62,6 +62,8 @@
 		D3013C222A6D6EF0005E4A8A /* DivergeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3013C212A6D6EF0005E4A8A /* DivergeView.swift */; };
 		D3013C262A6D9A8C005E4A8A /* Publishers+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3013C252A6D9A8C005E4A8A /* Publishers+Extensions.swift */; };
 		D31775D92A84F9AC00FCDBCB /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31775D82A84F9AC00FCDBCB /* RoundButton.swift */; };
+		D319E1822A99035B0097885E /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D319E1812A99035B0097885E /* NotificationView.swift */; };
+		D319E1842A99FD970097885E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D319E1832A99FD970097885E /* ContentView.swift */; };
 		D32363BD2A2C73D200857135 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D32363BC2A2C73D200857135 /* Kingfisher */; };
 		D32770222A50369A002C34C6 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32770212A50369A002C34C6 /* Typealias.swift */; };
 		D34D528B2A86003C00BDC52F /* KeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34D528A2A86003C00BDC52F /* KeyboardHandler.swift */; };
@@ -168,6 +170,8 @@
 		D3013C212A6D6EF0005E4A8A /* DivergeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivergeView.swift; sourceTree = "<group>"; };
 		D3013C252A6D9A8C005E4A8A /* Publishers+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publishers+Extensions.swift"; sourceTree = "<group>"; };
 		D31775D82A84F9AC00FCDBCB /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
+		D319E1812A99035B0097885E /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		D319E1832A99FD970097885E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D32770212A50369A002C34C6 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D34D528A2A86003C00BDC52F /* KeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHandler.swift; sourceTree = "<group>"; };
 		D3552E0C2A6F077000F565AA /* AnyTransition+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyTransition+Extensions.swift"; sourceTree = "<group>"; };
@@ -255,6 +259,7 @@
 		6001EFCE2A135FF200A9A2EF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D319E1802A9903470097885E /* Notifcation */,
 				60279EBE2A492FAF000D9226 /* SaveHistory */,
 				D35939B92A41AD09007263E8 /* Components */,
 				D35939B82A41AC97007263E8 /* Community */,
@@ -480,9 +485,18 @@
 			isa = PBXGroup;
 			children = (
 				60A8E09A2A39D0E00026DA04 /* CustomTabBarView.swift */,
+				D319E1832A99FD970097885E /* ContentView.swift */,
 				60A8E09C2A39DA5E0026DA04 /* CustomTabBarContainerView.swift */,
 			);
 			path = CustomTabBar;
+			sourceTree = "<group>";
+		};
+		D319E1802A9903470097885E /* Notifcation */ = {
+			isa = PBXGroup;
+			children = (
+				D319E1812A99035B0097885E /* NotificationView.swift */,
+			);
+			path = Notifcation;
 			sourceTree = "<group>";
 		};
 		D3552E0E2A704CB800F565AA /* Community */ = {
@@ -738,6 +752,7 @@
 				D35939CF2A41F44C007263E8 /* View+Extensions.swift in Sources */,
 				D39A57AB2A41A67C0033DAD5 /* PoorGuysApp.swift in Sources */,
 				D32770222A50369A002C34C6 /* Typealias.swift in Sources */,
+				D319E1822A99035B0097885E /* NotificationView.swift in Sources */,
 				D35939CE2A41F44C007263E8 /* Debounce+View+Extension.swift in Sources */,
 				D3C98FDF2A7B66C800461DBF /* Date+Extensions.swift in Sources */,
 				D38E90EB2A83D9740077CCAE /* SaveHistoryCardView.swift in Sources */,
@@ -754,6 +769,7 @@
 				604F578F2A4BF3B700B9003D /* CategoryIcon.swift in Sources */,
 				D3013C202A6B03EF005E4A8A /* UIImage+Extensions.swift in Sources */,
 				6074FE342A27AC090020FBF2 /* PhotoPicker.swift in Sources */,
+				D319E1842A99FD970097885E /* ContentView.swift in Sources */,
 				60279EC32A492FAF000D9226 /* SaveHistoryViewFullScroll.swift in Sources */,
 				D35939E42A420561007263E8 /* BackButton.swift in Sources */,
 				D35939CD2A41F44C007263E8 /* Shape+Extensions.swift in Sources */,

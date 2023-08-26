@@ -85,10 +85,10 @@ struct LikedPostsView: View {
     private func postView(for post: Post) -> some View {
         if post.isWeirdPost {
             PostView(post: post)
-        } else {
-            NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh, communityViewNeedsRefresh: $needsRefresh)) {
-                PostView(post: post)
-            }
+//        } else {
+//            NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh, communityViewNeedsRefresh: $needsRefresh)) {
+//                PostView(post: post)
+//            }
         }
     }
     

@@ -8,8 +8,8 @@
 import SwiftUI
 import Combine
 
-struct CommunityView<ViewModel: CommunityPostsManagable>: View {
-    
+struct CommunityView<ViewModel: CommunityPostsManagable>: ContentView {
+    @Binding var isTabBarHidden: Bool
     @StateObject private var viewModel: ViewModel
     @State private var isViewDidLoad: Bool = false
     @State private var isModalPresented = false
@@ -18,7 +18,8 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     @State private var detailViewNeedsRefresh = false
     @State private var nowLookingPostID = ""
     
-    init(viewModel: ViewModel) {
+    init(isTabBarHidden: Binding<Bool>, viewModel: ViewModel) {
+        _isTabBarHidden = isTabBarHidden
         _viewModel = StateObject(wrappedValue: viewModel)
     }
     
@@ -47,15 +48,18 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
                 }
             }
             .onAppear {
-//                Task {
-//                    if !isViewDidLoad {
-////                    for _ in (1...3) {
-////                        try await FirebasePostManager().uploadNewPost(Post.dummy(), with: nil)
-////                    }
-//                        await fetch10Posts()
-//                        isViewDidLoad = true
+                Task {
+                    if !isViewDidLoad {
+//                    for _ in (1...3) {
+//                        try await FirebasePostManager().uploadNewPost(Post.dummy(), with: nil)
 //                    }
-//                }
+                        await fetch10Posts()
+                        isViewDidLoad = true
+                    }
+                }
+                withAnimation(.easeInOut) {
+                    isTabBarHidden = false
+                }
             }
             .onChange(of: needsRefresh) { needsRefresh in
                 Task {
@@ -101,7 +105,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
         if post.isWeirdPost {
             PostView(post: post)
         } else {
-            NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh, communityViewNeedsRefresh: $needsRefresh)) {
+            NavigationLink(destination: PostDetailView(postID: post.id, isTabBarHidden: $isTabBarHidden, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh, communityViewNeedsRefresh: $needsRefresh)) {
                 PostView(post: post)
             }
         }
@@ -136,10 +140,9 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: View {
     }
 }
 
-
 struct CommunityView_Previews: PreviewProvider {
     static var previews: some View {
-        CommunityView(viewModel: CommunityViewModel())
+        CommunityView(isTabBarHidden: .constant(false), viewModel: CommunityViewModel())
     }
 }
 
