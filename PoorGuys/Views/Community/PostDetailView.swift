@@ -68,12 +68,12 @@ struct PostDetailView: View {
                     .padding(.horizontal, 18)
                     .padding(.vertical, 0)
                     
-                    if let replyingNickname = replyingNickname {
+                    if let replyingNickname = replyingNickname, replyingCommentID != nil {
                         isReplyingView(to: replyingNickname)
                     }
                     
                     PostDetailLowerView(post: post, comments: $comments, replyingCommentID: $replyingCommentID, replyingNickname: $replyingNickname, newlyAddedComment: $newlyAddedComment)
-                        .padding(EdgeInsets(top: 0, leading: 18, bottom: 16, trailing: 18))
+                        .padding(EdgeInsets(top: replyingCommentID == nil ? 0 : 16, leading: 18, bottom: 16, trailing: 18))
                 } else {
                     ProgressView()
                 }
@@ -91,6 +91,9 @@ struct PostDetailView: View {
                 rearrangeComments()
                 scrollToComment(proxy: proxy)
             }
+        }
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
     
