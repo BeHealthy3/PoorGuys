@@ -46,7 +46,7 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
                 }
                 
                 savedHistoryList()
-                Spacer()
+//                Spacer()
             }
         }
         .onAppear {
@@ -137,12 +137,7 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
             .listStyle(.plain)
             .scrollIndicators(.hidden)
             .padding(.horizontal, 32)
-            .if(UIDevice.current.hasNotch) { view in
-                view.padding(.bottom, 104)
-            }
-            .if(!UIDevice.current.hasNotch) { view in
-                view.padding(.bottom, 84)
-            }
+            .giveBottomPaddingForTabBar()
         } else {
             List(viewModel.saveHistories) { saveHistory in
                 SaveHistoryRow(consumptionCategory: saveHistory.category, price: saveHistory.price)
@@ -162,12 +157,7 @@ struct SaveHistoryView<ViewModel: SaveHistoryViewModelProtocol>: View {
             }
             .listStyle(.plain)
             .padding(.horizontal, 32)
-            .if(UIDevice.current.hasNotch) { view in
-                view.padding(.bottom, 104)
-            }
-            .if(!UIDevice.current.hasNotch) { view in
-                view.padding(.bottom, 84)
-            }
+            .giveBottomPaddingForTabBar()
         }
     }
 }

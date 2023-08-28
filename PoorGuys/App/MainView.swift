@@ -18,6 +18,7 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
     @State private var tabSelection: TabBarItem = .community
     @State private var isPresentingAddSaveHistoryView = false
     @State private var isPresentingExportingHisotoryView = false
+    @State private var isTabBarHidden = false
     
     init(saveHistoryViewModel: SaveHistoryViewModel) {
         _saveHistoryViewModel = StateObject(wrappedValue: saveHistoryViewModel)
@@ -57,16 +58,16 @@ struct MainView<SaveHistoryViewModel: SaveHistoryViewModelProtocol>: View {
                     LoginView()
                 } else {
                     ZStack {
-                        CustomTabBarContainerView(selection: $tabSelection) {
-                            CommunityView(viewModel: CommunityViewModel())
+                        CustomTabBarContainerView(selection: $tabSelection, isHidden: $isTabBarHidden) {
+                            CommunityView(isTabBarHidden: $isTabBarHidden ,viewModel: CommunityViewModel())
                                 .tabBarItem(tab: .community, selection: $tabSelection)
                             
                             SaveHistoryView<SaveHistoryViewModel>(isPresentingAddSaveHistoryView: $isPresentingAddSaveHistoryView, isPresentingExportingHistoryView: $isPresentingExportingHisotoryView)
                                 .environmentObject(saveHistoryViewModel)
                                 .tabBarItem(tab: .saveHistory, selection: $tabSelection)
                             
-                            Text("알림 탭")
-                                .tabBarItem(tab: .alert, selection: $tabSelection)
+                            MyPageView(isTabBarHidden: $isTabBarHidden)
+                                .tabBarItem(tab: .myPage, selection: $tabSelection)
                         }
                         .edgesIgnoringSafeArea(.bottom)
                         

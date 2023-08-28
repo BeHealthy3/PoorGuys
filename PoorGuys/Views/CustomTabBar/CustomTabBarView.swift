@@ -9,13 +9,13 @@ import SwiftUI
 import UIKit
 
 enum TabBarItem: Hashable {
-    case community, saveHistory, alert
+    case community, saveHistory, myPage
     
     var defaultIconName: String {
         switch self {
         case .community: return "tabbar.community.default"
         case .saveHistory: return "tabbar.savehistory.default"
-        case .alert: return "tabbar.alert.default"
+        case .myPage: return "tabbar.mypage.default"
         }
     }
     
@@ -23,7 +23,7 @@ enum TabBarItem: Hashable {
         switch self {
         case .community: return "tabbar.community.selected"
         case .saveHistory: return "tabbar.savehistory.selected"
-        case .alert: return "tabbar.alert.selected"
+        case .myPage: return "tabbar.mypage.selected"
         }
     }
 }
@@ -31,10 +31,13 @@ enum TabBarItem: Hashable {
 struct CustomTabBarView: View {
     let tabs: [TabBarItem]
     @Binding var selection: TabBarItem
+    @Binding var isHidden: Bool
     @State var localSelection: TabBarItem
     
     var body: some View {
         tabbar
+            .onlyIf(!isHidden)
+            .transition(.bottomToTop)
             .onChange(of: selection) { newValue in
                 withAnimation(.easeInOut) {
                     localSelection = newValue
@@ -47,7 +50,7 @@ struct CustomTabBarView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Spacer()
-            CustomTabBarView(tabs: [.community, .saveHistory, .alert], selection: .constant(.saveHistory), localSelection: .saveHistory)
+            CustomTabBarView(tabs: [.community, .saveHistory, .myPage], selection: .constant(.saveHistory), isHidden: .constant(false), localSelection: .saveHistory)
         }
         .edgesIgnoringSafeArea(.bottom)
     }

@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct PostDetailView: View {
+struct PostDetailView: TabBarHiderView {
     let postID: String
     
+    @Binding var isTabBarHidden: Bool
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var post: Post?
     @State private var comments = [Comment]()
@@ -23,8 +24,9 @@ struct PostDetailView: View {
     @Binding private var needsUpperViewRefresh:Bool
     @Binding private var communityViewNeedsRefresh: Bool
     
-    init(postID: String, isModalPresented: Binding<Bool>, nowLookingPostID: Binding<ID>, needsUpperViewRefresh: Binding<Bool>, communityViewNeedsRefresh: Binding<Bool>) {
+    init(postID: String, isTabBarHidden: Binding<Bool> ,isModalPresented: Binding<Bool>, nowLookingPostID: Binding<ID>, needsUpperViewRefresh: Binding<Bool>, communityViewNeedsRefresh: Binding<Bool>) {
         self.postID = postID
+        _isTabBarHidden = isTabBarHidden
         _isModalPresented = isModalPresented
         _nowLookingPostID = nowLookingPostID
         _needsUpperViewRefresh = needsUpperViewRefresh
@@ -83,8 +85,12 @@ struct PostDetailView: View {
             .onAppear {
                 Task {
                     post = try await FirebasePostManager().fetchPost(postID: postID)
-                    comments = post?.comments ?? []
-                    nowLookingPostID = postID
+                    
+                    withAnimation(.easeInOut) {
+                        isTabBarHidden = true
+                        comments = post?.comments ?? []
+                        nowLookingPostID = postID
+                    }
                 }
             }
             .onChange(of: comments) { _ in

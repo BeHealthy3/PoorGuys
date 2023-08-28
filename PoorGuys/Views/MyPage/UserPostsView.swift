@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct UserPostsView: View {
+struct UserPostsView: TabBarHiderView {
     @Environment(\.dismiss) private var dismiss
+    @Binding var isTabBarHidden: Bool
     @State private var isViewLoaded = false
     @State private var isModalPresented = false
     @State private var isDetailViewActive = false
@@ -44,6 +45,9 @@ struct UserPostsView: View {
                     isViewLoaded = true
                 }
             }
+            withAnimation(.easeInOut) {
+                isTabBarHidden = true
+            }
         }
         .onChange(of: needsRefresh, perform: { needsRefresh in
             Task {
@@ -53,7 +57,6 @@ struct UserPostsView: View {
                 }
             }
         })
-        
         .navigationBarHidden(true)
         .navigationViewStyle(StackNavigationViewStyle())
     }
@@ -83,10 +86,10 @@ struct UserPostsView: View {
     private func postView(for post: Post) -> some View {
         if post.isWeirdPost {
             PostView(post: post)
-        } else {
-            NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh, communityViewNeedsRefresh: $needsRefresh)) {
-                PostView(post: post)
-            }
+//        } else {
+//            NavigationLink(destination: PostDetailView(postID: post.id, isModalPresented: $isModalPresented, nowLookingPostID: $nowLookingPostID, needsUpperViewRefresh: $detailViewNeedsRefresh, communityViewNeedsRefresh: $needsRefresh)) {
+//                PostView(post: post)
+//            }
         }
     }
     
@@ -111,11 +114,5 @@ struct UserPostsView: View {
         } catch {
             print("포스팅 패치 실패")
         }
-    }
-}
-
-struct UserPostsView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserPostsView()
     }
 }
