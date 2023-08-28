@@ -85,11 +85,12 @@ struct PostDetailView: TabBarHiderView {
             .onAppear {
                 Task {
                     post = try await FirebasePostManager().fetchPost(postID: postID)
-                    comments = post?.comments ?? []
-                    nowLookingPostID = postID
-                }
-                withAnimation(.easeInOut) {
-                    isTabBarHidden = true
+                    
+                    withAnimation(.easeInOut) {
+                        isTabBarHidden = true
+                        comments = post?.comments ?? []
+                        nowLookingPostID = postID
+                    }
                 }
             }
             .onChange(of: comments) { _ in

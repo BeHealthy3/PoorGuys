@@ -39,7 +39,7 @@ struct MyPageView: TabBarHiderView {
                 }
             }
         }
-        
+        .giveBottomPaddingForTabBar()
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
     }

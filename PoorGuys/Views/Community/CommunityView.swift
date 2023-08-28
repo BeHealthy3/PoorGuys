@@ -46,6 +46,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: TabBarHiderView {
                 .refreshable {
                     await refresh()
                 }
+                
             }
             .onAppear {
                 Task {
@@ -72,6 +73,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: TabBarHiderView {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
         }
+        .giveBottomPaddingForTabBar()
         .navigationViewStyle(StackNavigationViewStyle())
         .fullScreenCover(isPresented: $isModalPresented) {
             PostFillingView(postID: $nowLookingPostID, isPresented: $isModalPresented, communityViewNeedsRefresh: $needsRefresh, detailViewNeedsRefresh: $detailViewNeedsRefresh)
@@ -110,7 +112,7 @@ struct CommunityView<ViewModel: CommunityPostsManagable>: TabBarHiderView {
     }
 
     private func postShadowColor(for post: Post) -> Color {
-        return post.isAboutMoney ? Color("primary500").opacity(0.1) : Color.black.opacity(0.1)
+        return post.isAboutMoney ? Color.appColor(.primary500).opacity(0.1) : Color.black.opacity(0.1)
     }
     
     private func showPostFillingView() {
