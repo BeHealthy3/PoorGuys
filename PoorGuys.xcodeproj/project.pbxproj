@@ -25,6 +25,8 @@
 		60279EC32A492FAF000D9226 /* SaveHistoryViewFullScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60279EC02A492FAF000D9226 /* SaveHistoryViewFullScroll.swift */; };
 		60279EC42A492FAF000D9226 /* SaveHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60279EC12A492FAF000D9226 /* SaveHistoryView.swift */; };
 		60279EC72A49EA74000D9226 /* CustomBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60279EC62A49EA74000D9226 /* CustomBottomSheet.swift */; };
+		602D67202AA2D7530021E45A /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602D671F2AA2D7530021E45A /* ContactView.swift */; };
+		602D67222AA2D7810021E45A /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602D67212AA2D7810021E45A /* CustomNavigationBar.swift */; };
 		602ED8942A83B116009DA762 /* UserPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602ED8932A83B116009DA762 /* UserPostsView.swift */; };
 		60405D5C2A2EF5BB0053BEC9 /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60405D5B2A2EF5BB0053BEC9 /* LaunchScreen.swift */; };
 		604F578D2A4BF13E00B9003D /* AddSaveHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604F578C2A4BF13E00B9003D /* AddSaveHistoryView.swift */; };
@@ -143,6 +145,8 @@
 		60279EC02A492FAF000D9226 /* SaveHistoryViewFullScroll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveHistoryViewFullScroll.swift; sourceTree = "<group>"; };
 		60279EC12A492FAF000D9226 /* SaveHistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveHistoryView.swift; sourceTree = "<group>"; };
 		60279EC62A49EA74000D9226 /* CustomBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBottomSheet.swift; sourceTree = "<group>"; };
+		602D671F2AA2D7530021E45A /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
+		602D67212AA2D7810021E45A /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 		602ED8932A83B116009DA762 /* UserPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostsView.swift; sourceTree = "<group>"; };
 		60405D5B2A2EF5BB0053BEC9 /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		604F578C2A4BF13E00B9003D /* AddSaveHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSaveHistoryView.swift; sourceTree = "<group>"; };
@@ -362,9 +366,18 @@
 			path = SaveHistory;
 			sourceTree = "<group>";
 		};
+		602D67232AA339770021E45A /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				602D67212AA2D7810021E45A /* CustomNavigationBar.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		60558D042A14BA11007581AD /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				602D67232AA339770021E45A /* Components */,
 				60558D052A14BA2C007581AD /* MyPageView.swift */,
 				60A8E0972A3909D30026DA04 /* EditProfileView.swift */,
 				602ED8932A83B116009DA762 /* UserPostsView.swift */,
@@ -372,6 +385,7 @@
 				60EC86E52A8BD5EB00245820 /* CommentedPostsView.swift */,
 				60FD36392A9497300073B882 /* PrivacyPolicyView.swift */,
 				600AFC2E2A97A53900B09F89 /* TermsOfServicesView.swift */,
+				602D671F2AA2D7530021E45A /* ContactView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -790,6 +804,7 @@
 				60C5B1D12A4D2C1C0034E961 /* CurrencyTextField.swift in Sources */,
 				D31775D92A84F9AC00FCDBCB /* RoundButton.swift in Sources */,
 				D38714B82A6284C0002DFA84 /* UINavigationController+Extensions.swift in Sources */,
+				602D67222AA2D7810021E45A /* CustomNavigationBar.swift in Sources */,
 				D35939F82A42056D007263E8 /* TextEditorView.swift in Sources */,
 				60FD363A2A9497300073B882 /* PrivacyPolicyView.swift in Sources */,
 				D35939D52A41F4AE007263E8 /* AppColor.swift in Sources */,
@@ -802,6 +817,7 @@
 				60E5239F2A89576F00577227 /* LikedPostsViewModel.swift in Sources */,
 				6001EFDB2A1366BE00A9A2EF /* SignUpCompletedView.swift in Sources */,
 				600AFC2F2A97A53900B09F89 /* TermsOfServicesView.swift in Sources */,
+				602D67202AA2D7530021E45A /* ContactView.swift in Sources */,
 				6093F7472A381904004F9D53 /* GIFView.swift in Sources */,
 				D3552E142A726A1C00F565AA /* Int+Extensions.swift in Sources */,
 				6001EFE82A13910B00A9A2EF /* LoginViewModel.swift in Sources */,
