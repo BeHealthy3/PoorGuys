@@ -9,14 +9,13 @@ import SwiftUI
 
 struct MyPageView: View {
     @EnvironmentObject var loginViewModel: LoginViewModel
-    @Environment(\.dismiss) private var dismiss
     
     @State private var currentUser: User = User(uid: "", nickName: "", authenticationMethod: .google)
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                navigationHeader()
+                CustomNavigationBar(title: "마이페이지")
                 ScrollView {
                     VStack(spacing: 0) {
                         profileCard()
@@ -38,26 +37,6 @@ struct MyPageView: View {
         
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
-    }
-    
-    @ViewBuilder
-    func navigationHeader() -> some View {
-        ZStack {
-            HStack {
-                Button {
-                    dismiss()
-                } label: {
-                    Image("arrow.left")
-                }
-                .padding(.leading, 16)
-                .padding(.vertical, 12)
-                Spacer()
-            }
-            Text("마이페이지")
-                .font(.system(size: 18, weight: .bold))
-                .foregroundColor(Color("neutral_900"))
-                .padding(.vertical, 12)
-        }
     }
     
     @ViewBuilder
