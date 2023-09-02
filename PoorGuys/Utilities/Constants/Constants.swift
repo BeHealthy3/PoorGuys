@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 
+// MARK: - 일반 constants
 enum Constants {
     static let maxNickNameLength = 14
     static let screenHeight = UIScreen.main.bounds.height
@@ -27,6 +28,16 @@ enum Constants {
     }()
 }
 
+// MARK: - 문의하기 관련 constants
+extension Constants {
+    static let contactNotice: LocalizedStringKey = """
+    어푸어푸를 찾아주셔서 감사합니다.
+    어푸어푸 서비스에 대한 문의사항이 있으시다면,
+    아래의 이메일 주소를 클릭하여 복사한 후, 닉네임을 첨부하여 문의 내용을 메일로 보내주세요!
+    """
+}
+
+// MARK: - 개인정보 처리방침 관련 constants
 extension Constants {
     static let termsOfService: LocalizedStringKey = """
     **제1조 약관의 적용 범위**
