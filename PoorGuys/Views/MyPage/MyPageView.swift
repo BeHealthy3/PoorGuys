@@ -206,18 +206,20 @@ struct MyPageView: View {
                 .padding(.horizontal, 8)
                 .padding(.vertical, 16)
             }
-            HStack {
-                Text("공지사항")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_800"))
-                Spacer()
-                Image("arrow.right.gray")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
+            NavigationLink(destination: NoticeView()) {
+                HStack {
+                    Text("공지사항")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color("neutral_800"))
+                    Spacer()
+                    Image("arrow.right.gray")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 16)
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 16)
             HStack {
                 Text("앱 버전")
                     .font(.system(size: 14, weight: .bold))
