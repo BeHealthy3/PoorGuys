@@ -17,7 +17,7 @@ struct NoticeView: View {
             ScrollView {
                 LazyVStack {
                     ForEach(viewModel.notices, id: \.id) { notice in
-                        Text(notice.title)
+                        noticeDetail(notice: notice)
                     }
                 }
                 .padding(.vertical, 8)
@@ -37,6 +37,52 @@ struct NoticeView: View {
                 }
             }
         }
+        
+        .navigationBarHidden(true)
+    }
+    
+    @ViewBuilder
+    private func noticeDetail(notice: Notice) -> some View {
+        NavigationLink(destination: NoticeDetailView(notice: notice)) {
+            HStack {
+                Text(notice.title)
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(Color("neutral_900"))
+                Spacer()
+            }
+            .padding(.vertical, 26)
+            .padding(.leading, 16)
+            .background {
+                RoundedRectangle(cornerRadius: 12)
+                    .foregroundColor(Color("white"))
+                    .shadow(color: .black.opacity(0.07), radius: 5, x: 0, y: 0)
+            }
+            .overlay {
+                HStack {
+                    Spacer()
+                    VStack {
+                        timeStamp(notice.timeStamp)
+                            .padding(.top, 8)
+                            .padding(.trailing, 8)
+                        Spacer()
+                    }
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func timeStamp(_ date: Date) -> some View {
+        Text(formattedDate(date))
+            .font(.system(size: 12))
+            .foregroundColor(Color("neutral_500"))
+    }
+    
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yy.MM.dd"
+        
+        return formatter.string(from: date)
     }
     
     private func fetchNotices() async {
