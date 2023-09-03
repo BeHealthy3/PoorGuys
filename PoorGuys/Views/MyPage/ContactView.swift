@@ -56,6 +56,10 @@ struct ContactView: View {
                         .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 0)
                 }
                 .padding(.horizontal, 16)
+                .onTapGesture {
+                    // TODO: 리얼 디바이스에서 클립보드로 복사 잘 되는지 확인
+                    UIPasteboard.general.setValue("0000@naver.com", forPasteboardType: "public.plain-text")
+                }
         }
     }
     
