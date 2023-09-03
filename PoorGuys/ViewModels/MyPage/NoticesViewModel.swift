@@ -21,7 +21,9 @@ final class NoticeViewModel: ObservableObject {
             newNotices.append(notice)
         }
         
-        self.notices = newNotices
+        DispatchQueue.main.async {
+            self.notices = newNotices
+        }
     }
     
     func removeNotices() {
