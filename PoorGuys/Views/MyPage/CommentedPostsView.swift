@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CommentedPostsView: View {
-    @Environment(\.dismiss) private var dismiss
     @State private var isViewLoaded = false
     @State private var isModalPresented = false
     @State private var isDetailViewActive = false
@@ -19,7 +18,7 @@ struct CommentedPostsView: View {
     
     var body: some View {
         VStack {
-            navigationHeader()
+            CustomNavigationBar(title: "댓글 쓴 게시글")
             ScrollView {
                 LazyVStack {
                     ForEach(viewModel.posts, id: \.id) { post in
@@ -58,27 +57,6 @@ struct CommentedPostsView: View {
         
         .navigationBarHidden(true)
         .navigationViewStyle(StackNavigationViewStyle())
-    }
-    
-    
-    @ViewBuilder
-    func navigationHeader() -> some View {
-        ZStack {
-            HStack {
-                Button {
-                    dismiss()
-                } label: {
-                    Image("arrow.left")
-                }
-                .padding(.leading, 16)
-                .padding(.vertical, 12)
-                Spacer()
-            }
-            Text("댓글 쓴 게시글")
-                .font(.system(size: 18, weight: .bold))
-                .foregroundColor(Color("neutral_900"))
-                .padding(.vertical, 12)
-        }
     }
     
     @ViewBuilder

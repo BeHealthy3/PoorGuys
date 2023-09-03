@@ -9,14 +9,13 @@ import SwiftUI
 
 struct MyPageView: View {
     @EnvironmentObject var loginViewModel: LoginViewModel
-    @Environment(\.dismiss) private var dismiss
     
     @State private var currentUser: User = User(uid: "", nickName: "", authenticationMethod: .google)
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                navigationHeader()
+                CustomNavigationBar(title: "마이페이지")
                 ScrollView {
                     VStack(spacing: 0) {
                         profileCard()
@@ -38,26 +37,6 @@ struct MyPageView: View {
         
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
-    }
-    
-    @ViewBuilder
-    func navigationHeader() -> some View {
-        ZStack {
-            HStack {
-                Button {
-                    dismiss()
-                } label: {
-                    Image("arrow.left")
-                }
-                .padding(.leading, 16)
-                .padding(.vertical, 12)
-                Spacer()
-            }
-            Text("마이페이지")
-                .font(.system(size: 18, weight: .bold))
-                .foregroundColor(Color("neutral_900"))
-                .padding(.vertical, 12)
-        }
     }
     
     @ViewBuilder
@@ -185,54 +164,62 @@ struct MyPageView: View {
     @ViewBuilder
     func additionalInfos() -> some View {
         VStack(spacing: 0) {
-            HStack {
-                Text("서비스 이용 약관")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_800"))
-                Spacer()
-                Image("arrow.right.gray")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
+            NavigationLink(destination: TermsOfServicesView()) {
+                HStack {
+                    Text("서비스 이용 약관")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color("neutral_800"))
+                    Spacer()
+                    Image("arrow.right.gray")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                }
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 16)
-            HStack {
-                Text("개인정보 처리방침")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_800"))
-                Spacer()
-                Image("arrow.right.gray")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
+            NavigationLink(destination: PrivacyPolicyView()) {
+                HStack {
+                    Text("개인정보 처리방침")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color("neutral_800"))
+                    Spacer()
+                    Image("arrow.right.gray")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                }
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 16)
-            HStack {
-                Text("문의하기")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_800"))
-                Spacer()
-                Image("arrow.right.gray")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
+            NavigationLink(destination: ContactView()) {
+                HStack {
+                    Text("문의하기")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color("neutral_800"))
+                    Spacer()
+                    Image("arrow.right.gray")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 16)
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 16)
-            HStack {
-                Text("공지사항")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color("neutral_800"))
-                Spacer()
-                Image("arrow.right.gray")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
+            NavigationLink(destination: NoticeView()) {
+                HStack {
+                    Text("공지사항")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color("neutral_800"))
+                    Spacer()
+                    Image("arrow.right.gray")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 16)
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 16)
             HStack {
                 Text("앱 버전")
                     .font(.system(size: 14, weight: .bold))
