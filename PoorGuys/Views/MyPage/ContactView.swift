@@ -57,8 +57,8 @@ struct ContactView: View {
                 }
                 .padding(.horizontal, 16)
                 .onTapGesture {
-                    // TODO: 리얼 디바이스에서 클립보드로 복사 잘 되는지 확인
                     UIPasteboard.general.setValue("0000@naver.com", forPasteboardType: "public.plain-text")
+                    // TODO: 클립보드 복사 완료되었다는 Toast 또는 메시지 창 필요
                 }
         }
     }
